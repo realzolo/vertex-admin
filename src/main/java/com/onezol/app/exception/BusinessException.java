@@ -1,7 +1,7 @@
 package com.onezol.app.exception;
 
 
-import com.onezol.app.constant.HttpStatus;
+import com.onezol.app.constant.enums.HttpStatus;
 
 /**
  * 业务异常，用于抛出业务相关的异常。此异常信息需要反馈给前端展示

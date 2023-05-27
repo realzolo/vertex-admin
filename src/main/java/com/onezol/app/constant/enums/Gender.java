@@ -1,20 +1,19 @@
-package com.onezol.app.constant;
+package com.onezol.app.constant.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.onezol.app.constant.EnumService;
 
 /**
- * 账户状态枚举
+ * 性别枚举
  */
-public enum AccountStatus implements EnumService {
-    NORMAL(0, "正常"),
-    LOCKED(1, "锁定"),
-    DISABLED(2, "禁用");
-
+public enum Gender implements EnumService {
+    MALE(0, "男"),
+    FEMALE(1, "女");
     @EnumValue
     private final int code;
     private final String value;
 
-    AccountStatus(int code, String value) {
+    Gender(int code, String value) {
         this.code = code;
         this.value = value;
     }

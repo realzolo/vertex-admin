@@ -1,4 +1,6 @@
-package com.onezol.app.constant;
+package com.onezol.app.constant.enums;
+
+import com.onezol.app.constant.EnumService;
 
 public enum HttpStatus implements EnumService {
     SUCCESS("成功", 10000),

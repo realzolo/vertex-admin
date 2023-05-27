@@ -2,7 +2,7 @@ package com.onezol.app.aspect;
 
 import com.onezol.app.annotation.Valid;
 import com.onezol.app.annotation.Validator;
-import com.onezol.app.constant.HttpStatus;
+import com.onezol.app.constant.enums.HttpStatus;
 import com.onezol.app.exception.BusinessException;
 import com.onezol.app.util.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

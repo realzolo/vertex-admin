@@ -2,8 +2,8 @@ package com.onezol.app.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.onezol.app.constant.AccountStatus;
-import com.onezol.app.constant.Gender;
+import com.onezol.app.constant.enums.AccountStatus;
+import com.onezol.app.constant.enums.Gender;
 
 import java.time.LocalDateTime;
 import java.util.Date;

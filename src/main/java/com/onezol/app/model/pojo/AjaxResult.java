@@ -2,7 +2,7 @@ package com.onezol.app.model.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.onezol.app.constant.HttpStatus;
+import com.onezol.app.constant.enums.HttpStatus;
 
 import java.io.Serializable;
 
