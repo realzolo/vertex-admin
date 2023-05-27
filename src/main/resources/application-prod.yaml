@@ -1,0 +1,5 @@
+# 当前配置文件环境为：prod
+spring:
+  config:
+    activate:
+      on-profile: prod
