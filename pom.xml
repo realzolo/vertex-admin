@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.onezol.base</groupId>
-    <artifactId>java-base-project</artifactId>
+    <artifactId>web-base-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>java-base-project</name>
-    <description>java-base-project</description>
+    <name>web-base-project</name>
+    <description>web-base-project</description>
     <properties>
         <java.version>8</java.version>
     </properties>
