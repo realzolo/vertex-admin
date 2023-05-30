@@ -36,6 +36,10 @@ spring:
         max-idle: 8
         min-idle: 0
 
+# 类路径配置
+path:
+  entity: com.onezol.app.model.entity
+
 # 日志配置
 logging:
   level:
