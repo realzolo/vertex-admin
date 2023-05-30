@@ -6,6 +6,8 @@ server:
     session:
       timeout: 30m
 spring:
+  application:
+    name: app
   config:
     activate:
       on-profile: dev
@@ -39,6 +41,10 @@ spring:
 # 类路径配置
 path:
   entity: com.onezol.app.model.entity
+
+# Frp配置
+frp:
+  enable: true
 
 # 日志配置
 logging:
