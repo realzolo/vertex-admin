@@ -32,6 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
+/src/main/resources/static/
+
 /web/node_modules/
 /web/.env.local
 /web/.umirc.local.ts
