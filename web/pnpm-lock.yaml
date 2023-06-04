@@ -5,8 +5,8 @@ dependencies:
     specifier: ^5.1.4
     version: registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
   '@ant-design/pro-components':
-    specifier: ^2.5.2
-    version: registry.npmjs.org/@ant-design/pro-components@2.5.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.5.5
+    version: registry.npmjs.org/@ant-design/pro-components@2.5.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
   '@umijs/max':
     specifier: ^4.0.69
     version: registry.npmjs.org/@umijs/max@4.0.69(@babel/core@7.22.1)(@types/react-dom@18.2.4)(@types/react@18.2.7)(dva@2.5.0-beta.2)(postcss@8.4.24)(prettier@2.8.8)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)(styled-components@5.3.11)(typescript@5.0.4)(webpack@5.84.1)
@@ -21,9 +21,6 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.2.4
     version: registry.npmjs.org/@types/react-dom@18.2.4
-  husky:
-    specifier: ^8.0.3
-    version: registry.npmjs.org/husky@8.0.3
   lint-staged:
     specifier: ^13.2.2
     version: registry.npmjs.org/lint-staged@13.2.2
@@ -157,18 +154,18 @@ packages:
     version: 0.0.3
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-uY3IpQ0YBF/IuJp4ujiWSl5+nQKRvtQ4cSMa1RHYTbiL4gDbbUJPvY6SwI/Os5KUZ6QSlnZ/4VFMfdSSMYbKvg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-card/-/pro-card-2.4.11.tgz }
-    id: registry.npmjs.org/@ant-design/pro-card/2.4.11
+  registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-V+vmRH3/4u+ybwZi9crSDdJzzoGj7PM4vJyPIZxS0jrT+7GxBP2LTrZXgXAlmS83yvOzEz3R+Xq6nsCB2EwLhA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-card/-/pro-card-2.4.13.tgz }
+    id: registry.npmjs.org/@ant-design/pro-card/2.4.13
     name: '@ant-design/pro-card'
-    version: 2.4.11
+    version: 2.4.13
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -180,18 +177,18 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-uY3IpQ0YBF/IuJp4ujiWSl5+nQKRvtQ4cSMa1RHYTbiL4gDbbUJPvY6SwI/Os5KUZ6QSlnZ/4VFMfdSSMYbKvg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-card/-/pro-card-2.4.11.tgz }
-    id: registry.npmjs.org/@ant-design/pro-card/2.4.11
+  registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-V+vmRH3/4u+ybwZi9crSDdJzzoGj7PM4vJyPIZxS0jrT+7GxBP2LTrZXgXAlmS83yvOzEz3R+Xq6nsCB2EwLhA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-card/-/pro-card-2.4.13.tgz }
+    id: registry.npmjs.org/@ant-design/pro-card/2.4.13
     name: '@ant-design/pro-card'
-    version: 2.4.11
+    version: 2.4.13
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -203,26 +200,26 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-components@2.5.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-eAG8mkMUXV8A/HONmdoaPSM57Xill9bzRyMBtQhq46jYlyJLk2VrV6SzHg+oXL54W32rPEws0FdvwGk/duuJzQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-components/-/pro-components-2.5.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-components/2.5.2
+  registry.npmjs.org/@ant-design/pro-components@2.5.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-1DBiq1SL2hlGZ9EQVhtdMgwW/vXvLyzwqQFPqaRyt4i9m48LyVltXrl/hj9J5L3awPr46XZgfBdlqmVHz1HBAA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-components/-/pro-components-2.5.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-components/2.5.5
     name: '@ant-design/pro-components'
-    version: 2.5.2
+    version: 2.5.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-descriptions': registry.npmjs.org/@ant-design/pro-descriptions@2.3.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-layout': registry.npmjs.org/@ant-design/pro-layout@7.14.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-list': registry.npmjs.org/@ant-design/pro-list@2.4.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-descriptions': registry.npmjs.org/@ant-design/pro-descriptions@2.3.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-layout': registry.npmjs.org/@ant-design/pro-layout@7.14.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-list': registry.npmjs.org/@ant-design/pro-list@2.4.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
       react: registry.npmjs.org/react@18.2.0
@@ -232,26 +229,26 @@ packages:
       - rc-field-form
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-components@2.5.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-eAG8mkMUXV8A/HONmdoaPSM57Xill9bzRyMBtQhq46jYlyJLk2VrV6SzHg+oXL54W32rPEws0FdvwGk/duuJzQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-components/-/pro-components-2.5.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-components/2.5.2
+  registry.npmjs.org/@ant-design/pro-components@2.5.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-1DBiq1SL2hlGZ9EQVhtdMgwW/vXvLyzwqQFPqaRyt4i9m48LyVltXrl/hj9J5L3awPr46XZgfBdlqmVHz1HBAA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-components/-/pro-components-2.5.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-components/2.5.5
     name: '@ant-design/pro-components'
-    version: 2.5.2
+    version: 2.5.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-descriptions': registry.npmjs.org/@ant-design/pro-descriptions@2.3.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-layout': registry.npmjs.org/@ant-design/pro-layout@7.14.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-list': registry.npmjs.org/@ant-design/pro-list@2.4.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-descriptions': registry.npmjs.org/@ant-design/pro-descriptions@2.3.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-layout': registry.npmjs.org/@ant-design/pro-layout@7.14.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-list': registry.npmjs.org/@ant-design/pro-list@2.4.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
       react: registry.npmjs.org/react@18.2.0
@@ -261,19 +258,19 @@ packages:
       - rc-field-form
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-descriptions@2.3.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-bq2rLjlHFG3wiSTludqcP88hUiCo0Mz3RC6z5TULnHkhOdZNJt4EELyFPz8kccLnQPeNV6Yxr7CQTciKS7Ji+g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-descriptions/-/pro-descriptions-2.3.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-descriptions/2.3.2
+  registry.npmjs.org/@ant-design/pro-descriptions@2.3.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-l00AESg/d6UUZisxLLE6xRdbaEI69TCuCfhP03lVoFNoVChqIeJEQa74rNUWk3Fe1xdAvCH3uHNlpCU7hYb1VQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-descriptions/-/pro-descriptions-2.3.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-descriptions/2.3.5
     name: '@ant-design/pro-descriptions'
-    version: 2.3.2
+    version: 2.3.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: registry.npmjs.org/rc-resize-observer@0.2.6(react-dom@18.2.0)(react@18.2.0)
@@ -286,19 +283,19 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-descriptions@2.3.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-bq2rLjlHFG3wiSTludqcP88hUiCo0Mz3RC6z5TULnHkhOdZNJt4EELyFPz8kccLnQPeNV6Yxr7CQTciKS7Ji+g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-descriptions/-/pro-descriptions-2.3.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-descriptions/2.3.2
+  registry.npmjs.org/@ant-design/pro-descriptions@2.3.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-l00AESg/d6UUZisxLLE6xRdbaEI69TCuCfhP03lVoFNoVChqIeJEQa74rNUWk3Fe1xdAvCH3uHNlpCU7hYb1VQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-descriptions/-/pro-descriptions-2.3.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-descriptions/2.3.5
     name: '@ant-design/pro-descriptions'
-    version: 2.3.2
+    version: 2.3.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-skeleton': registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: registry.npmjs.org/rc-resize-observer@0.2.6(react-dom@18.2.0)(react@18.2.0)
@@ -311,18 +308,18 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-Nw2zVm3Mr6djOlYX9xWg+wmEOb8gVRIW1H1iQsX9HvQs9Uc/hTLwfvgeSboi46gNaEzsZyCY56/ZdIAsr6YZuQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-field/-/pro-field-2.9.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-field/2.9.2
+  registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-yPWR5u5rkIqC2rRjng0NJwLqcrC//DpMny5wowcdzA/5l/X988jtR8TGXGUjjfTMPJjczc8FUxIPDcRVRFfsow==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-field/-/pro-field-2.9.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-field/2.9.5
     name: '@ant-design/pro-field'
-    version: 2.9.2
+    version: 2.9.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@chenshuai2144/sketch-color': registry.npmjs.org/@chenshuai2144/sketch-color@1.0.9(react@18.2.0)
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
@@ -337,18 +334,18 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-Nw2zVm3Mr6djOlYX9xWg+wmEOb8gVRIW1H1iQsX9HvQs9Uc/hTLwfvgeSboi46gNaEzsZyCY56/ZdIAsr6YZuQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-field/-/pro-field-2.9.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-field/2.9.2
+  registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-yPWR5u5rkIqC2rRjng0NJwLqcrC//DpMny5wowcdzA/5l/X988jtR8TGXGUjjfTMPJjczc8FUxIPDcRVRFfsow==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-field/-/pro-field-2.9.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-field/2.9.5
     name: '@ant-design/pro-field'
-    version: 2.9.2
+    version: 2.9.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@chenshuai2144/sketch-color': registry.npmjs.org/@chenshuai2144/sketch-color@1.0.9(react@18.2.0)
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
@@ -363,11 +360,11 @@ packages:
       - react-dom
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-RCGwllORKk5ZCtTiw5G/dFD+tsAdYk+dCVVrNQoz8vXz/SDqIDsU9Yw/qzEDuUizgzOz+wJJhpBdijjdmEc7Gw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-form/-/pro-form-2.13.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-form/2.13.2
+  registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-VV+xOZ3VEWncGscMKil2qHBx2EXxZm17QxK7w/wS6B4AE1jeoBp5rbh95Why9JzVqA+yq0UHy5NgQU2sHb/r5A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-form/-/pro-form-2.13.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-form/2.13.5
     name: '@ant-design/pro-form'
-    version: 2.13.2
+    version: 2.13.5
     peerDependencies:
       '@types/lodash.merge': ^4.6.7
       antd: '>=4.23.0'
@@ -379,9 +376,9 @@ packages:
         optional: true
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@chenshuai2144/sketch-color': registry.npmjs.org/@chenshuai2144/sketch-color@1.0.9(react@18.2.0)
       '@umijs/use-params': registry.npmjs.org/@umijs/use-params@1.0.9(react@18.2.0)
@@ -398,11 +395,11 @@ packages:
       use-media-antd-query: registry.npmjs.org/use-media-antd-query@1.1.0(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-RCGwllORKk5ZCtTiw5G/dFD+tsAdYk+dCVVrNQoz8vXz/SDqIDsU9Yw/qzEDuUizgzOz+wJJhpBdijjdmEc7Gw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-form/-/pro-form-2.13.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-form/2.13.2
+  registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-VV+xOZ3VEWncGscMKil2qHBx2EXxZm17QxK7w/wS6B4AE1jeoBp5rbh95Why9JzVqA+yq0UHy5NgQU2sHb/r5A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-form/-/pro-form-2.13.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-form/2.13.5
     name: '@ant-design/pro-form'
-    version: 2.13.2
+    version: 2.13.5
     peerDependencies:
       '@types/lodash.merge': ^4.6.7
       antd: '>=4.23.0'
@@ -414,9 +411,9 @@ packages:
         optional: true
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@chenshuai2144/sketch-color': registry.npmjs.org/@chenshuai2144/sketch-color@1.0.9(react@18.2.0)
       '@umijs/use-params': registry.npmjs.org/@umijs/use-params@1.0.9(react@18.2.0)
@@ -433,19 +430,19 @@ packages:
       use-media-antd-query: registry.npmjs.org/use-media-antd-query@1.1.0(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-layout@7.14.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-k2Yz7dofXgoIT48NFzzxVMmhuokvGANl8+YErf0NKyzaOc4HppuHImrP876Afn8DdxZOpVeLc58ENxPahkZtTg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-layout/-/pro-layout-7.14.1.tgz }
-    id: registry.npmjs.org/@ant-design/pro-layout/7.14.1
+  registry.npmjs.org/@ant-design/pro-layout@7.14.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-FcKj23f/laod2hfSSYfBbkjb9r74lZLgan8dylI+tngQnZKQc1o1a1f9If7CggkrhEdgDyIkIyFl9Ii/tfDa+A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-layout/-/pro-layout-7.14.3.tgz }
+    id: registry.npmjs.org/@ant-design/pro-layout/7.14.3
     name: '@ant-design/pro-layout'
-    version: 7.14.1
+    version: 7.14.3
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@umijs/route-utils': registry.npmjs.org/@umijs/route-utils@4.0.1
       '@umijs/use-params': registry.npmjs.org/@umijs/use-params@1.0.9(react@18.2.0)
@@ -464,19 +461,19 @@ packages:
       warning: registry.npmjs.org/warning@4.0.3
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-layout@7.14.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-k2Yz7dofXgoIT48NFzzxVMmhuokvGANl8+YErf0NKyzaOc4HppuHImrP876Afn8DdxZOpVeLc58ENxPahkZtTg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-layout/-/pro-layout-7.14.1.tgz }
-    id: registry.npmjs.org/@ant-design/pro-layout/7.14.1
+  registry.npmjs.org/@ant-design/pro-layout@7.14.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-FcKj23f/laod2hfSSYfBbkjb9r74lZLgan8dylI+tngQnZKQc1o1a1f9If7CggkrhEdgDyIkIyFl9Ii/tfDa+A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-layout/-/pro-layout-7.14.3.tgz }
+    id: registry.npmjs.org/@ant-design/pro-layout/7.14.3
     name: '@ant-design/pro-layout'
-    version: 7.14.1
+    version: 7.14.3
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@umijs/route-utils': registry.npmjs.org/@umijs/route-utils@4.0.1
       '@umijs/use-params': registry.npmjs.org/@umijs/use-params@1.0.9(react@18.2.0)
@@ -495,21 +492,21 @@ packages:
       warning: registry.npmjs.org/warning@4.0.3
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-list@2.4.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-3/QT6czwylFKrt5QW8eXT51VX6SuKnWS/qcwetkX4EhXhsAEx+T6f1Vut88hxvGCJ0KlKyNKnaOaQcO2I0Ze/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-list/-/pro-list-2.4.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-list/2.4.2
+  registry.npmjs.org/@ant-design/pro-list@2.4.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-PhPaABFGLid1T5WILlOXAr5oXxa3QFrN7nlgppu1QjD02hxIqjL5LGfF9vmlbhh7s1Fyh+VPxGl76Qi7/XDiVg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-list/-/pro-list-2.4.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-list/2.4.5
     name: '@ant-design/pro-list'
-    version: 2.4.2
+    version: 2.4.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -524,21 +521,21 @@ packages:
       - rc-field-form
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-list@2.4.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-3/QT6czwylFKrt5QW8eXT51VX6SuKnWS/qcwetkX4EhXhsAEx+T6f1Vut88hxvGCJ0KlKyNKnaOaQcO2I0Ze/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-list/-/pro-list-2.4.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-list/2.4.2
+  registry.npmjs.org/@ant-design/pro-list@2.4.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-PhPaABFGLid1T5WILlOXAr5oXxa3QFrN7nlgppu1QjD02hxIqjL5LGfF9vmlbhh7s1Fyh+VPxGl76Qi7/XDiVg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-list/-/pro-list-2.4.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-list/2.4.5
     name: '@ant-design/pro-list'
-    version: 2.4.2
+    version: 2.4.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-table': registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -553,11 +550,11 @@ packages:
       - rc-field-form
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-ztX4TBDBJOfuKV3VpLna+5989aEd5YgHxR7c2+MvR04w1oBvdpZEctL70RsStZldx9wSDo3m9mlxuO6MZqZpvA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-provider/-/pro-provider-2.10.0.tgz }
-    id: registry.npmjs.org/@ant-design/pro-provider/2.10.0
+  registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-I0wfnP/fJUgGrl/9P5haMtITg8oHe2NOm83QKFVjqQWGYnA2V4O5rVqD+vdWveuaJ6rtCW8mEoeelfHF6nOnxw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-provider/-/pro-provider-2.10.2.tgz }
+    id: registry.npmjs.org/@ant-design/pro-provider/2.10.2
     name: '@ant-design/pro-provider'
-    version: 2.10.0
+    version: 2.10.2
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
@@ -573,11 +570,11 @@ packages:
       swr: registry.npmjs.org/swr@2.1.5(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-ztX4TBDBJOfuKV3VpLna+5989aEd5YgHxR7c2+MvR04w1oBvdpZEctL70RsStZldx9wSDo3m9mlxuO6MZqZpvA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-provider/-/pro-provider-2.10.0.tgz }
-    id: registry.npmjs.org/@ant-design/pro-provider/2.10.0
+  registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-I0wfnP/fJUgGrl/9P5haMtITg8oHe2NOm83QKFVjqQWGYnA2V4O5rVqD+vdWveuaJ6rtCW8mEoeelfHF6nOnxw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-provider/-/pro-provider-2.10.2.tgz }
+    id: registry.npmjs.org/@ant-design/pro-provider/2.10.2
     name: '@ant-design/pro-provider'
-    version: 2.10.0
+    version: 2.10.2
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
@@ -593,11 +590,11 @@ packages:
       swr: registry.npmjs.org/swr@2.1.5(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-Vp1PW9E6DVBa9Udf6la/8Kgk+rVTjTybZLk4y0CyNLa7hx+tqGiNSgQtk6Ps8ssyurY78OvTc2Cs8GHMFIVY3Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-skeleton/-/pro-skeleton-2.1.3.tgz }
-    id: registry.npmjs.org/@ant-design/pro-skeleton/2.1.3
+  registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-zWi22D6d3neTftBG9+H9Gu3m2jYwd7EPR3Vz/OmlNDLfurFALkPUD3mmNDyDB14i46ZpD1yh4+M6XBgWkI9Prg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-skeleton/-/pro-skeleton-2.1.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-skeleton/2.1.5
     name: '@ant-design/pro-skeleton'
-    version: 2.1.3
+    version: 2.1.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
@@ -610,11 +607,11 @@ packages:
       use-media-antd-query: registry.npmjs.org/use-media-antd-query@1.1.0(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-skeleton@2.1.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-Vp1PW9E6DVBa9Udf6la/8Kgk+rVTjTybZLk4y0CyNLa7hx+tqGiNSgQtk6Ps8ssyurY78OvTc2Cs8GHMFIVY3Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-skeleton/-/pro-skeleton-2.1.3.tgz }
-    id: registry.npmjs.org/@ant-design/pro-skeleton/2.1.3
+  registry.npmjs.org/@ant-design/pro-skeleton@2.1.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-zWi22D6d3neTftBG9+H9Gu3m2jYwd7EPR3Vz/OmlNDLfurFALkPUD3mmNDyDB14i46ZpD1yh4+M6XBgWkI9Prg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-skeleton/-/pro-skeleton-2.1.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-skeleton/2.1.5
     name: '@ant-design/pro-skeleton'
-    version: 2.1.3
+    version: 2.1.5
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
@@ -627,11 +624,11 @@ packages:
       use-media-antd-query: registry.npmjs.org/use-media-antd-query@1.1.0(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-49fuQYWKE/oCFM12619EwEinVsIpuh5B7qrhBQgk2RWP5xtGWjabIQM+ZAKYdFBkR1a0nNbazdNPQWuAbqmBug==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-table/-/pro-table-3.7.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-table/3.7.2
+  registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-RiHRoKKWOXPBSNoM07P00OnX6/TcMYYFle68Mo+WJcOohFAAN9NvQ2tbsFoVEfkL8Baok7JdyitHb3f3l0VFzg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-table/-/pro-table-3.7.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-table/3.7.5
     name: '@ant-design/pro-table'
-    version: 3.7.2
+    version: 3.7.5
     peerDependencies:
       antd: '>=4.23.0'
       rc-field-form: ^1.22.0
@@ -639,11 +636,11 @@ packages:
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@dnd-kit/core': registry.npmjs.org/@dnd-kit/core@6.0.8(react-dom@18.2.0)(react@18.2.0)
       '@dnd-kit/sortable': registry.npmjs.org/@dnd-kit/sortable@7.0.2(@dnd-kit/core@6.0.8)(react@18.2.0)
@@ -662,11 +659,11 @@ packages:
       - '@types/lodash.merge'
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-table@3.7.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-49fuQYWKE/oCFM12619EwEinVsIpuh5B7qrhBQgk2RWP5xtGWjabIQM+ZAKYdFBkR1a0nNbazdNPQWuAbqmBug==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-table/-/pro-table-3.7.2.tgz }
-    id: registry.npmjs.org/@ant-design/pro-table/3.7.2
+  registry.npmjs.org/@ant-design/pro-table@3.7.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-RiHRoKKWOXPBSNoM07P00OnX6/TcMYYFle68Mo+WJcOohFAAN9NvQ2tbsFoVEfkL8Baok7JdyitHb3f3l0VFzg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-table/-/pro-table-3.7.5.tgz }
+    id: registry.npmjs.org/@ant-design/pro-table/3.7.5
     name: '@ant-design/pro-table'
-    version: 3.7.2
+    version: 3.7.5
     peerDependencies:
       antd: '>=4.23.0'
       rc-field-form: ^1.22.0
@@ -674,11 +671,11 @@ packages:
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.11(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.2(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-card': registry.npmjs.org/@ant-design/pro-card@2.4.13(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-field': registry.npmjs.org/@ant-design/pro-field@2.9.5(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-form': registry.npmjs.org/@ant-design/pro-form@2.13.5(antd@5.5.2)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-utils': registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       '@dnd-kit/core': registry.npmjs.org/@dnd-kit/core@6.0.8(react-dom@18.2.0)(react@18.2.0)
       '@dnd-kit/sortable': registry.npmjs.org/@dnd-kit/sortable@7.0.2(@dnd-kit/core@6.0.8)(react@18.2.0)
@@ -697,18 +694,18 @@ packages:
       - '@types/lodash.merge'
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-MYejumljTHm4QHc6ZneM47R4bd7jFK3yWecL6qnI2yMLzpuiH3E+h2TJf9pnYrI/sQkVitkGk0A2xMJM1L20/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-utils/-/pro-utils-2.11.1.tgz }
-    id: registry.npmjs.org/@ant-design/pro-utils/2.11.1
+  registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-Sd2oHzhQlSJ0svaD3Ih3v2VeXPnYWwJ05ul+ek8i9GWAGnFWD0yDTawGj7pDZwCQwJYaLpAzPHhfNvq3Led0/w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-utils/-/pro-utils-2.11.3.tgz }
+    id: registry.npmjs.org/@ant-design/pro-utils/2.11.3
     name: '@ant-design/pro-utils'
-    version: 2.11.1
+    version: 2.11.3
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@4.24.10)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@4.24.10(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -719,18 +716,18 @@ packages:
       swr: registry.npmjs.org/swr@2.1.5(react@18.2.0)
     dev: false
 
-  registry.npmjs.org/@ant-design/pro-utils@2.11.1(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: { integrity: sha512-MYejumljTHm4QHc6ZneM47R4bd7jFK3yWecL6qnI2yMLzpuiH3E+h2TJf9pnYrI/sQkVitkGk0A2xMJM1L20/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-utils/-/pro-utils-2.11.1.tgz }
-    id: registry.npmjs.org/@ant-design/pro-utils/2.11.1
+  registry.npmjs.org/@ant-design/pro-utils@2.11.3(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: { integrity: sha512-Sd2oHzhQlSJ0svaD3Ih3v2VeXPnYWwJ05ul+ek8i9GWAGnFWD0yDTawGj7pDZwCQwJYaLpAzPHhfNvq3Led0/w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@ant-design/pro-utils/-/pro-utils-2.11.3.tgz }
+    id: registry.npmjs.org/@ant-design/pro-utils/2.11.3
     name: '@ant-design/pro-utils'
-    version: 2.11.1
+    version: 2.11.3
     peerDependencies:
       antd: '>=4.23.0'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@5.1.4(react-dom@18.2.0)(react@18.2.0)
-      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.0(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-provider': registry.npmjs.org/@ant-design/pro-provider@2.10.2(antd@5.5.2)(react-dom@18.2.0)(react@18.2.0)
       '@babel/runtime': registry.npmjs.org/@babel/runtime@7.22.3
       antd: registry.npmjs.org/antd@5.5.2(react-dom@18.2.0)(react@18.2.0)
       classnames: registry.npmjs.org/classnames@2.3.2
@@ -4292,7 +4289,7 @@ packages:
     version: 5.0.0
     deprecated: This is a stub types definition. history provides its own type definitions, so you do not need this installed.
     dependencies:
-      history: registry.npmjs.org/history@4.10.1
+      history: registry.npmjs.org/history@5.3.0
     dev: false
 
   registry.npmjs.org/@types/hoist-non-react-statics@3.3.1:
@@ -4404,7 +4401,7 @@ packages:
       '@types/history': registry.npmjs.org/@types/history@4.7.11
       '@types/react': registry.npmjs.org/@types/react@18.2.7
       '@types/react-router': registry.npmjs.org/@types/react-router@5.1.20
-      redux: registry.npmjs.org/redux@3.7.2
+      redux: registry.npmjs.org/redux@4.2.1
     dev: false
 
   registry.npmjs.org/@types/react-router@5.1.20:
@@ -5077,7 +5074,7 @@ packages:
       '@ant-design/antd-theme-variable': registry.npmjs.org/@ant-design/antd-theme-variable@1.0.0
       '@ant-design/icons': registry.npmjs.org/@ant-design/icons@4.8.0(react-dom@18.2.0)(react@18.2.0)
       '@ant-design/moment-webpack-plugin': registry.npmjs.org/@ant-design/moment-webpack-plugin@0.0.3
-      '@ant-design/pro-components': registry.npmjs.org/@ant-design/pro-components@2.5.2(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
+      '@ant-design/pro-components': registry.npmjs.org/@ant-design/pro-components@2.5.5(antd@4.24.10)(rc-field-form@1.32.0)(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': registry.npmjs.org/@tanstack/react-query@4.29.12(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query-devtools': registry.npmjs.org/@tanstack/react-query-devtools@4.29.12(@tanstack/react-query@4.29.12)(react-dom@18.2.0)(react@18.2.0)
       '@umijs/bundler-utils': registry.npmjs.org/@umijs/bundler-utils@4.0.69
@@ -8694,14 +8691,6 @@ packages:
     name: human-signals
     version: 4.3.1
     engines: { node: '>=14.18.0' }
-
-  registry.npmjs.org/husky@8.0.3:
-    resolution: { integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/husky/-/husky-8.0.3.tgz }
-    name: husky
-    version: 8.0.3
-    engines: { node: '>=14' }
-    hasBin: true
-    dev: true
 
   registry.npmjs.org/iconv-lite@0.6.3:
     resolution: { integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.6.3.tgz }
