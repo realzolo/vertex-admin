@@ -2,6 +2,8 @@ package com.onezol.platform.model.param;
 
 import com.onezol.platform.annotation.Validator;
 
+import java.util.Map;
+
 public class CommonRequestParam {
     // 服务名(模块名)
     @Validator(required = true)
@@ -23,16 +25,20 @@ public class CommonRequestParam {
     // 查询字段
     private String[] fields;
 
+    // 数据
+    private Map<String, Object> data;
+
     public CommonRequestParam() {
     }
 
-    public CommonRequestParam(String service, Integer pageSize, Integer page, String orderBy, String condition, String[] fields) {
+    public CommonRequestParam(String service, Integer pageSize, Integer page, String orderBy, String condition, String[] fields, Map<String, Object> data) {
         this.service = service;
         this.pageSize = pageSize;
         this.page = page;
         this.orderBy = orderBy;
         this.condition = condition;
         this.fields = fields;
+        this.data = data;
     }
 
     public String getService() {
@@ -81,5 +87,13 @@ public class CommonRequestParam {
 
     public void setFields(String[] fields) {
         this.fields = fields;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
     }
 }

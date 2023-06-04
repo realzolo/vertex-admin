@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.onezol.AppStarter;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.param.CommonRequestParam;
@@ -11,24 +12,40 @@ import com.onezol.platform.model.pojo.ListQueryResult;
 import com.onezol.platform.service.CommonService;
 import com.onezol.platform.util.StringUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("service")
-public class CommonServiceImpl implements CommonService {
+public class CommonServiceImpl implements CommonService, InitializingBean {
     @Autowired
     private ApplicationContext context;
 
-    @Value("${path.entity}")
-    private String entityPath;
+    private List<String> entityPath;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // 获取启动类所在的包名
+        String basePackage = AppStarter.class.getPackage().getName();
+        // 获取路径
+        String path = Objects.requireNonNull(AppStarter.class.getResource("/")).getPath();
+        String[] entityDirs = findAllEntityDirs(path);
+        String[] entityPackages = new String[entityDirs.length];
+        for (int i = 0; i < entityDirs.length; i++) {
+            // 将路径转换为包名
+            entityPackages[i] = entityDirs[i].replace("/", ".");
+            int index = entityPackages[i].indexOf(basePackage);
+            entityPackages[i] = entityPackages[i].substring(index);
+        }
+        entityPath = Arrays.asList(entityPackages);
+    }
 
     /**
      * 根据服务名获取bean对象
@@ -127,28 +144,17 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public long createOrUpdate(CommonRequestParam param) {
+    public boolean createOrUpdate(CommonRequestParam param) {
         String serviceName = param.getService();
         IService<Object> service = getBeanByName(serviceName);
         Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
 
-        // 设置字段
-        String[] fields = param.getFields();
-        if (Objects.isNull(fields) || fields.length == 0) {
-            throw new BusinessException("字段不能为空");
-        }
-        // 利用反射设置字段，如果字段不存在则忽略
-        for (String field : fields) {
-            String[] vars = field.split("=");
-            if (vars.length != 2) {
-                throw new BusinessException("字段格式错误");
-            }
-            try {
-                entityClass.getDeclaredMethod("set" + StringUtils.capitalize(vars[0]), String.class);
-            } catch (NoSuchMethodException ignored) {
-            }
+        Map<String, Object> data = param.getData();
+        if (Objects.isNull(data) || data.isEmpty()) {
+            throw new BusinessException("数据不能为空");
         }
 
+        // 利用反射设置字段，如果字段不存在则忽略
         BaseEntity entity;
         try {
             entity = entityClass.getDeclaredConstructor().newInstance();
@@ -156,13 +162,22 @@ public class CommonServiceImpl implements CommonService {
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            try {
+                Method method = entity.getClass().getDeclaredMethod("set" + StringUtils.capitalize(entry.getKey()), String.class);
+                method.invoke(entity, entry.getValue());
+            } catch (NoSuchMethodException ignored) {
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // 保存
         boolean ok = service.saveOrUpdate(entity);
         if (!ok) {
             throw new BusinessException("创建失败");
         }
-        return entity.getId();
+        return true;
     }
 
     /**
@@ -198,27 +213,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     /**
-     * 获取entity
-     *
-     * @param serviceName 服务名
-     * @return entity
-     */
-    private BaseEntity getEntity(String serviceName) {
-        String entityName = serviceName + "Entity";
-        Object entity;
-        try {
-            entity = Class.forName(entityPath + "." + entityName).getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException e) {
-            throw new RuntimeException("实体类 " + entityName + " 不存在");
-        }
-        if (!(entity instanceof BaseEntity)) {
-            throw new RuntimeException("实体类 " + entityName + " 不是BaseEntity的子类");
-        }
-        return (BaseEntity) entity;
-    }
-
-    /**
      * 获取entityClass
      *
      * @param serviceName 服务名
@@ -226,17 +220,16 @@ public class CommonServiceImpl implements CommonService {
      */
     @SuppressWarnings("unchecked")
     private Class<? extends BaseEntity> getEntityClass(String serviceName) {
-        String entityName = serviceName + "Entity";
+        String entityName = StringUtils.capitalize(serviceName) + "Entity";
         Class<? extends BaseEntity> entityClass;
-        try {
-            entityClass = (Class<? extends BaseEntity>) Class.forName(entityPath + "." + entityName);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("实体类 " + entityName + " 不存在");
+        for (String ep : entityPath) {
+            try {
+                entityClass = (Class<? extends BaseEntity>) Class.forName(ep + "." + entityName);
+                return entityClass;
+            } catch (ClassNotFoundException ignored) {
+            }
         }
-        if (!(BaseEntity.class.isAssignableFrom(entityClass))) {
-            throw new RuntimeException("实体类 " + entityName + " 不是BaseEntity的子类");
-        }
-        return entityClass;
+        throw new RuntimeException("实体类 " + entityName + " 不存在");
     }
 
     /**
@@ -256,5 +249,29 @@ public class CommonServiceImpl implements CommonService {
         }
         pageSize = Math.min(pageSize, 100);
         return new Page<>(page, pageSize);
+    }
+
+    /**
+     * 查找所有entity目录
+     *
+     * @param basePath 基础路径
+     * @return entity目录
+     */
+    private String[] findAllEntityDirs(String basePath) {
+        List<String> entityDirs = new ArrayList<>();
+        File baseDir = new File(basePath);
+        if (baseDir.isDirectory()) {
+            File[] files = baseDir.listFiles();
+            assert files != null;
+            for (File file : files) {
+                if (file.isDirectory() && "entity".equals(file.getName())) {
+                    entityDirs.add(file.getAbsolutePath());
+                } else if (file.isDirectory()) {
+                    String[] subDirs = findAllEntityDirs(file.getAbsolutePath());
+                    Collections.addAll(entityDirs, subDirs);
+                }
+            }
+        }
+        return entityDirs.toArray(new String[0]);
     }
 }

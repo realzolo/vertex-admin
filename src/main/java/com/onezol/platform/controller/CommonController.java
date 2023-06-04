@@ -45,7 +45,7 @@ public class CommonController {
     }
 
     @PostMapping("/create-or-update")
-    public Object add(@RequestBody @Valid CommonRequestParam param) {
+    public Object createOrUpdate(@RequestBody @Valid CommonRequestParam param) {
         return service.createOrUpdate(param);
     }
 }

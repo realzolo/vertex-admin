@@ -13,5 +13,5 @@ public interface CommonService {
 
     boolean update(CommonRequestParam param);
 
-    long createOrUpdate(CommonRequestParam param);
+    boolean createOrUpdate(CommonRequestParam param);
 }
