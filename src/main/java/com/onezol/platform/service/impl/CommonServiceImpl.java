@@ -38,13 +38,16 @@ public class CommonServiceImpl implements CommonService {
      */
     @SuppressWarnings("unchecked,rawtypes")
     public IService<Object> getBeanByName(String serviceName) {
-        serviceName = serviceName + "Service";
-        Object bean = context.getBean(serviceName);
+        serviceName = serviceName + "ServiceImpl";
         IService serviceBean;
         try {
             serviceBean = context.getBean(serviceName, IService.class);
         } catch (BeansException e) {
-            throw new RuntimeException("服务名不存在");
+            try {
+                serviceBean = context.getBean(serviceName.substring(0, serviceName.length() - 4), IService.class);
+            } catch (RuntimeException ex) {
+                throw new RuntimeException("服务名不存在");
+            }
         }
         return serviceBean;
     }
@@ -53,9 +56,7 @@ public class CommonServiceImpl implements CommonService {
     public Object query(CommonRequestParam param) {
         IService<Object> service = getBeanByName(param.getService());
         QueryWrapper<Object> wrapper = getQueryWrapper(param);
-
-        service.getOne(wrapper);
-        return null;
+        return service.getOne(wrapper);
     }
 
     @Override

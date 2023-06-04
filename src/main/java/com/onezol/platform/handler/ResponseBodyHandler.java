@@ -11,6 +11,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Objects;
+
 @ControllerAdvice
 public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
 
@@ -46,6 +48,18 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
         }
         if (body instanceof String) {
             return JsonUtils.toJson(AjaxResult.success(body));
+        }
+        String bodyString = body.toString();
+        if (bodyString.startsWith("{") && bodyString.endsWith("}")) {
+            String[] vars = bodyString.split(",");
+            for (String var : vars) {
+                String[] kv = var.split("=");
+                String k = (kv[0].startsWith("{") ? kv[0].substring(1).trim() : kv[0]).trim();
+                String v = (kv[1].endsWith("}") ? kv[1].substring(0, kv[1].length() - 1) : kv[1]).trim();
+                if (Objects.equals(k, "status") && !Objects.equals(v, "200")) {
+                    return body;
+                }
+            }
         }
         return AjaxResult.success(body);
     }
