@@ -1,6 +1,6 @@
 package com.onezol.platform.config;
 
-import com.onezol.platform.fillter.GlobalInterceptor;
+import com.onezol.platform.fillter.JwtAuthenticationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,12 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
-    private GlobalInterceptor globalInterceptor;
+    private JwtAuthenticationInterceptor jwtAuthenticationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry
-                .addInterceptor(globalInterceptor)
+                .addInterceptor(jwtAuthenticationInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/user/sign*")
         ;
     }
 

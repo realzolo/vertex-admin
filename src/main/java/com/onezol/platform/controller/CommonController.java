@@ -1,6 +1,6 @@
 package com.onezol.platform.controller;
 
-import com.onezol.platform.annotation.Valid;
+import com.onezol.platform.annotation.Validated;
 import com.onezol.platform.model.param.CommonRequestParam;
 import com.onezol.platform.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +14,17 @@ public class CommonController {
     private CommonService service;
 
     @PostMapping("/query")
-    public Object queryOne(@RequestBody @Valid CommonRequestParam param) {
+    public Object queryOne(@RequestBody @Validated CommonRequestParam param) {
         return service.query(param);
     }
 
     @PostMapping("/query-list")
-    public Object queryList(@RequestBody @Valid CommonRequestParam param) {
+    public Object queryList(@RequestBody @Validated CommonRequestParam param) {
         return service.queryList(param);
     }
 
     @DeleteMapping("/delete/{id}")
-    public Object delete(@RequestBody @Valid CommonRequestParam param, @PathVariable("id") long id) {
+    public Object delete(@RequestBody @Validated CommonRequestParam param, @PathVariable("id") long id) {
         if (id < 1) {
             return false;
         }
@@ -32,7 +32,7 @@ public class CommonController {
     }
 
     @DeleteMapping("/delete-list/{ids}")
-    public Object deleteList(@RequestBody @Valid CommonRequestParam param, @PathVariable("ids") long[] ids) {
+    public Object deleteList(@RequestBody @Validated CommonRequestParam param, @PathVariable("ids") long[] ids) {
         if (ids.length < 1) {
             return false;
         }
@@ -40,12 +40,12 @@ public class CommonController {
     }
 
     @PutMapping("/update")
-    public Object update(@RequestBody @Valid CommonRequestParam param) {
+    public Object update(@RequestBody @Validated CommonRequestParam param) {
         return service.update(param);
     }
 
     @PostMapping("/create-or-update")
-    public Object createOrUpdate(@RequestBody @Valid CommonRequestParam param) {
+    public Object createOrUpdate(@RequestBody @Validated CommonRequestParam param) {
         return service.createOrUpdate(param);
     }
 }

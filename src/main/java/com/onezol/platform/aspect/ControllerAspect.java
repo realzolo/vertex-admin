@@ -1,18 +1,26 @@
 package com.onezol.platform.aspect;
 
-import com.onezol.platform.annotation.Valid;
+import com.onezol.platform.annotation.Authorized;
+import com.onezol.platform.annotation.Validated;
 import com.onezol.platform.annotation.Validator;
+import com.onezol.platform.common.UserContextHolder;
 import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.exception.BusinessException;
+import com.onezol.platform.service.PermissionService;
 import com.onezol.platform.util.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Controller切面
@@ -20,7 +28,10 @@ import java.util.Objects;
 @Aspect
 @Component
 public class ControllerAspect {
-    @Pointcut("execution(* com.onezol.app.controller..*.*(..))")
+    @Autowired
+    private PermissionService permissionService;
+
+    @Pointcut("execution(public * com.onezol..controller..*.*(..))")
     public void pointcut() {
     }
 
@@ -31,10 +42,39 @@ public class ControllerAspect {
      */
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        // 校验权限
+        validateAuthority(joinPoint.getSignature());
+
         // 校验请求参数
         validateRequestParams(joinPoint.getArgs());
 
         return joinPoint.proceed();
+    }
+
+    /**
+     * 校验权限
+     *
+     * @param signature signature
+     */
+    private void validateAuthority(Signature signature) {
+        // 获取自定义注解中的值
+        Method method = ((MethodSignature) signature).getMethod();
+        Authorized annotation = method.getAnnotation(Authorized.class);
+        if (Objects.isNull(annotation)) {
+            return;
+        }
+        String permissionName = annotation.value();
+
+        // 获取用户权限
+        Long uid = UserContextHolder.getUser().getId();
+        Set<String> permissionKeys = permissionService.getKeysByUserId(uid);
+
+        // 校验权限(支持通配符，如：user:*，表示user模块下的所有权限)
+        if (StringUtils.isNotEmpty(permissionName)) {
+            if (!permissionKeys.contains(permissionName) && !permissionKeys.contains(permissionName + ":*")) {
+                throw new BusinessException(HttpStatus.FORBIDDEN, "没有权限");
+            }
+        }
     }
 
     /**
@@ -55,8 +95,8 @@ public class ControllerAspect {
                     break;
                 }
                 // 2. 如果参数上有 @Valid 注解，表示这个字段是一个对象，需要校验这个对象的所有字段
-                Valid valid = field.getAnnotation(Valid.class);
-                if (Objects.nonNull(valid)) {
+                Validated validated = field.getAnnotation(Validated.class);
+                if (Objects.nonNull(validated)) {
                     field.setAccessible(true);
                     Object object = field.get(arg);
                     if (Objects.nonNull(object)) {

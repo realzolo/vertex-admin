@@ -11,12 +11,15 @@ spring:
   config:
     activate:
       on-profile: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   # 数据源基本配置
   datasource:
-    username: postgres
-    password: poZX0912<>?
-    url: jdbc:postgresql://110.42.133.216:5432/app?useSSL=false
-    driver-class-name: org.postgresql.Driver
+    username: wbp
+    password: wbp
+    url: jdbc:mysql://db.onezol.com:3306/wbp?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     # Druid配置
     druid:
@@ -26,7 +29,7 @@ spring:
       max-wait: 60000
   # redis配置
   redis:
-    host: 110.42.133.216
+    host: redis.onezol.com
     port: 6379
     password: 123456
     database: 0
@@ -38,16 +41,18 @@ spring:
         max-idle: 8
         min-idle: 0
 
-# 类路径配置
-path:
-  entity: com.onezol.app.model.entity
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # Frp配置
 frp:
-  enable: true
+  enable: false
 
-# 日志配置
-logging:
-  level:
-    root: info
-    com.baomidou.mybatisplus.core.metadata.TableInfoHelper: error
+# 加密配置
+encryption:
+  jwt:
+    secret: C61270901C4A455A89A0196CBCED9803
+    expire: 7200
+  password: FA1F437D388544B8B848F1AAD8BF52F0
+  iterations: 1000

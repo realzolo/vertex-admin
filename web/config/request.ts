@@ -1,4 +1,4 @@
-import {RequestConfig} from "@umijs/max";
+import {AxiosError, RequestConfig} from "@umijs/max";
 import {message} from "antd";
 
 message.config({
@@ -10,7 +10,17 @@ message.config({
  */
 const requestInterceptors: any[] = [
     (url: string, options: any) => {
-        // do something
+        // 携带 token
+        const token = localStorage.getItem('token');
+        if (token) {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+            return {
+                url,
+                options: {...options, headers},
+            };
+        }
         return {url, options}
     }
 ];
@@ -20,7 +30,11 @@ const requestInterceptors: any[] = [
  */
 const responseInterceptors: any[] = [
     (response: any) => {
-        const {data = {} as any, config} = response;
+        const {status, data = {}, config} = response;
+        console.log(response)
+        if (status === 200) {
+            return data;
+        }
         return response
     },
 ];
@@ -28,9 +42,24 @@ const responseInterceptors: any[] = [
 /**
  * 异常处理
  */
-const errorConfig = {
-    errorHandler: (error: any) => {
-        message.error(error.message || '请求失败');
+const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
+    errorHandler: async (error: AxiosError) => {
+        const {response} = error;
+        switch (response?.status) {
+            case 401:
+                message.error('未登录或登录已过期，请重新登录。');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+                break;
+            case 403:
+                message.error('您没有权限访问，请联系管理员。');
+                break;
+            default:
+                message.error(error.message || '请求失败');
+                break;
+        }
+        return response;
     },
     errorThrower: (error: any) => {
         throw error;

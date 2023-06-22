@@ -4,55 +4,23 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.onezol.platform.model.pojo.DictType;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Set;
 
 public class User extends BaseDTO {
-    private Long id;
     private String username;
     private String nickname;
     private String name;
     private String introduction;
     private String avatar;
     private DictType gender;
-    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
-    private Date birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime birthday;
     private String phone;
     private String email;
-    private DictType role;
+    private Set<String> roles;
+    private Set<String> permissions;
     private DictType status;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private LocalDateTime createdAt;
-
-    public User() {
-    }
-
-    public User(Long id, Long id1, String username, String nickname, String name, String introduction, String avatar, DictType gender, Date birthday, String phone, String email, DictType role, DictType status, LocalDateTime createdAt) {
-        super(id);
-        this.id = id1;
-        this.username = username;
-        this.nickname = nickname;
-        this.name = name;
-        this.introduction = introduction;
-        this.avatar = avatar;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.phone = phone;
-        this.email = email;
-        this.role = role;
-        this.status = status;
-        this.createdAt = createdAt;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -102,11 +70,11 @@ public class User extends BaseDTO {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public LocalDateTime getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDateTime birthday) {
         this.birthday = birthday;
     }
 
@@ -126,12 +94,20 @@ public class User extends BaseDTO {
         this.email = email;
     }
 
-    public DictType getRole() {
-        return role;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(DictType role) {
-        this.role = role;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
+    public Set<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<String> permissions) {
+        this.permissions = permissions;
     }
 
     public DictType getStatus() {

@@ -1,53 +1,40 @@
 package com.onezol.platform.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.platform.constant.enums.AccountStatus;
 import com.onezol.platform.constant.enums.Gender;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
-@TableName(value = "USER")
+@TableName(value = "pf_user")
 public class UserEntity extends BaseEntity {
-    @TableField("USERNAME")
     private String username;
 
-    @TableField("PASSWORD")
     private String password;
 
-    @TableField("NICKNAME")
     private String nickname;
 
-    @TableField("NAME")
     private String name;
 
-    @TableField("INTRODUCTION")
     private String introduction;
 
-    @TableField("AVATAR")
     private String avatar;
 
-    @TableField("GENDER")
     private Gender gender;
 
-    @TableField("BIRTHDAY")
-    private Date birthday;
+    private LocalDateTime birthday;
 
-    @TableField("PHONE")
     private String phone;
 
-    @TableField("EMAIL")
     private String email;
 
-    @TableField("STATUS")
     private AccountStatus status;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, boolean deleted, String username, String password, String nickname, String name, String introduction, String avatar, Gender gender, Date birthday, String phone, String email, AccountStatus status) {
+    public UserEntity(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, boolean deleted, String username, String password, String nickname, String name, String introduction, String avatar, Gender gender, LocalDateTime birthday, String phone, String email, AccountStatus status) {
         super(id, createdAt, updatedAt, deleted);
         this.username = username;
         this.password = password;
@@ -118,11 +105,11 @@ public class UserEntity extends BaseEntity {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public LocalDateTime getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDateTime birthday) {
         this.birthday = birthday;
     }
 

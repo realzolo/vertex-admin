@@ -1,0 +1,88 @@
+-- pf_user
+DROP TABLE IF EXISTS pf_user;
+CREATE TABLE pf_user
+(
+    id           BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    username     VARCHAR(50)         DEFAULT NULL COMMENT '用户名',
+    password     VARCHAR(255)        DEFAULT NULL COMMENT '密码',
+    nickname     VARCHAR(50)         DEFAULT NULL COMMENT '昵称',
+    name         VARCHAR(50)         DEFAULT NULL COMMENT '姓名',
+    introduction VARCHAR(500)        DEFAULT NULL COMMENT '用户简介',
+    avatar       VARCHAR(1024)       DEFAULT NULL COMMENT '头像链接',
+    gender       TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '性别',
+    birthday     DATETIME            DEFAULT NULL COMMENT '生日',
+    phone        VARCHAR(20)         DEFAULT NULL COMMENT '手机号',
+    email        VARCHAR(50)         DEFAULT NULL COMMENT '邮箱',
+    status       TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '账号状态',
+    created_at   DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at   DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted      TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    UNIQUE KEY idx_pf_user_username (username)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='用户表';
+
+-- pf_role
+DROP TABLE IF EXISTS pf_role;
+CREATE TABLE pf_role
+(
+    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    name        VARCHAR(50)         DEFAULT NULL COMMENT '角色名称',
+    `key`       VARCHAR(50)         DEFAULT NULL COMMENT '角色key',
+    permissions TEXT COMMENT '权限列表',
+    description VARCHAR(500)        DEFAULT NULL COMMENT '角色描述',
+    created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    KEY idx_pf_role_name (name)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='角色表';
+
+-- pf_permission
+DROP TABLE IF EXISTS pf_permission;
+CREATE TABLE pf_permission
+(
+    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    name        VARCHAR(50)         DEFAULT NULL COMMENT '权限名称',
+    `key`       VARCHAR(50)         DEFAULT NULL COMMENT '权限key',
+    description TEXT COMMENT '权限描述',
+    created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    KEY idx_pf_permission_name (name)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='权限表';
+
+-- pf_user_role
+DROP TABLE IF EXISTS pf_user_role;
+CREATE TABLE pf_user_role
+(
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    user_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '用户ID',
+    role_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
+    created_at DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    KEY idx_pf_user_role_user_id (user_id),
+    KEY idx_pf_user_role_role_id (role_id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='用户角色关联表';
+
+-- pf_role_permission
+DROP TABLE IF EXISTS pf_role_permission;
+CREATE TABLE pf_role_permission
+(
+    id            BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    role_id       BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
+    permission_id BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '权限ID',
+    created_at    DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at    DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted       TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    KEY idx_pf_role_permission_role_id (role_id),
+    KEY idx_pf_role_permission_permission_id (permission_id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='角色权限关联表';

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.onezol.platform.constant.Constant.PROTOCOL_HTTP;
+import static com.onezol.platform.constant.Constant.P_PROTOCOL_HTTP;
 
 @Configuration
 @ConditionalOnProperty(prefix = "frp", name = "enable", havingValue = "true")
@@ -122,7 +122,7 @@ public class FrpConfig implements ApplicationListener<AvailabilityChangeEvent<Re
         String serverAddr = getMapValue(configMap, "common.server_addr");
         String remotePort = getMapValue(configMap, "server.remote_port");
         serverAddr = this.getIpAddrByDomain(serverAddr);
-        String testUrl = String.format("%s%s:%s%s/network/ping", PROTOCOL_HTTP, serverAddr, remotePort, contextPath);
+        String testUrl = String.format("%s%s:%s%s/network/ping", P_PROTOCOL_HTTP, serverAddr, remotePort, contextPath);
         boolean success = false;
         while (MAX_TEST_TIMES-- > 0) {
             try {
@@ -153,9 +153,9 @@ public class FrpConfig implements ApplicationListener<AvailabilityChangeEvent<Re
         remoteAddr = this.getIpAddrByDomain(remoteAddr);
         String serverRemotePort = getMapValue(configMap, "server.remote_port");
         String webRemotePort = getMapValue(configMap, "web.remote_port");
-        logger.info("访问地址：{}{}:{}{}", PROTOCOL_HTTP, remoteAddr, serverRemotePort, contextPath);
+        logger.info("访问地址：{}{}:{}{}", P_PROTOCOL_HTTP, remoteAddr, serverRemotePort, contextPath);
         if (StringUtils.hasText(webRemotePort)) {
-            logger.info("web访问地址：{}{}:{}", PROTOCOL_HTTP, remoteAddr, webRemotePort);
+            logger.info("web访问地址：{}{}:{}", P_PROTOCOL_HTTP, remoteAddr, webRemotePort);
         }
     }
 

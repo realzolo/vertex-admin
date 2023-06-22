@@ -185,4 +185,14 @@ public class StringUtils extends org.springframework.util.StringUtils {
         }
         return true;
     }
+
+    /**
+     * 字符串是否不为空
+     *
+     * @param s 字符串
+     * @return 是否不为空
+     */
+    public static boolean isNotEmpty(String s) {
+        return !hasText(s);
+    }
 }
