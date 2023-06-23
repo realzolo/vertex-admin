@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.onezol.platform.constant.Constant.P_AUTHORIZATION_HEADER;
-import static com.onezol.platform.constant.Constant.P_RK_USER;
 
 /**
  * JWT 认证拦截器
@@ -54,13 +53,14 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor, Ordered
                 if (JwtUtils.validateToken(token)) {
                     String username = JwtUtils.getUsernameFromToken(token);
                     // 从Redis中获取用户信息
-                    User user = (User) redisTemplate.opsForValue().get(P_RK_USER + username);
-                    if (user != null) {
-                        UserContextHolder.setUser(user);
-                        return true;
-                    }
+                    // FIXME: 2023/6/23 从Redis中获取用户信息, 返回的是LinkedHashMap, 转换为User对象时有问题
+//                    User user = (User) redisTemplate.opsForValue().get(P_RK_USER + username);
+//                    if (user != null) {
+//                        UserContextHolder.setUser(user);
+//                        return true;
+//                    }
                     // 从数据库中获取用户信息
-                    user = userService.getUserByUsername(username);
+                    User user = userService.getUserByUsername(username);
                     if (user != null) {
                         UserContextHolder.setUser(user);
                         return true;
