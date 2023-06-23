@@ -1,7 +1,6 @@
 package com.onezol.platform.model.pojo;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.onezol.platform.constant.enums.HttpStatus;
 
 import java.io.Serializable;
@@ -13,7 +12,6 @@ public class AjaxResult<T> implements Serializable {
     private int code;
     private boolean success;
     private String message;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public AjaxResult(int code, boolean success, String message, T data) {

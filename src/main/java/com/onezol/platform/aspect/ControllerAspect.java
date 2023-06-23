@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.onezol.platform.constant.Constant.S_CONTROLLER_NULL_RESP;
+
 /**
  * Controller切面
  */
@@ -48,7 +50,11 @@ public class ControllerAspect {
         // 校验请求参数
         validateRequestParams(joinPoint.getArgs());
 
-        return joinPoint.proceed();
+        // 执行方法
+        Object proceed = joinPoint.proceed();
+
+        // 处理结果: 如果返回值为null, 返回S_CONTROLLER_NULL_RESP, 用于ResponseBodyAdvice捕获
+        return Objects.isNull(proceed) ? S_CONTROLLER_NULL_RESP : proceed;
     }
 
     /**

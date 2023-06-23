@@ -21,4 +21,7 @@ public class Constant {
 
     // Redis key: 用户信息前缀
     public static final String P_RK_USER = "user:";
+
+    // NULL值标识符
+    public static final String S_CONTROLLER_NULL_RESP = "::SYMBOL::4CCA07368BEB40DA0DB2101421C9E46B::";
 }
