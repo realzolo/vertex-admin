@@ -1,6 +1,7 @@
 package com.onezol.platform.controller;
 
 import com.onezol.platform.annotation.Validated;
+import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.param.CommonRequestParam;
 import com.onezol.platform.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,28 +25,28 @@ public class CommonController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Object delete(@RequestBody @Validated CommonRequestParam param, @PathVariable("id") long id) {
+    public void delete(@RequestBody @Validated CommonRequestParam param, @PathVariable("id") long id) {
         if (id < 1) {
-            return false;
+            throw new BusinessException("无效的id");
         }
-        return service.delete(param.getService(), id);
+        service.delete(param.getService(), id);
     }
 
     @DeleteMapping("/delete-list/{ids}")
-    public Object deleteList(@RequestBody @Validated CommonRequestParam param, @PathVariable("ids") long[] ids) {
+    public void deleteList(@RequestBody @Validated CommonRequestParam param, @PathVariable("ids") long[] ids) {
         if (ids.length < 1) {
-            return false;
+            throw new IllegalArgumentException("参数错误");
         }
-        return service.deleteList(param.getService(), ids);
+        service.deleteList(param.getService(), ids);
     }
 
     @PutMapping("/update")
     public Object update(@RequestBody @Validated CommonRequestParam param) {
-        return service.update(param);
+        return service.createOrUpdate(param);
     }
 
-    @PostMapping("/create-or-update")
-    public Object createOrUpdate(@RequestBody @Validated CommonRequestParam param) {
+    @PostMapping("/save")
+    public Object save(@RequestBody @Validated CommonRequestParam param) {
         return service.createOrUpdate(param);
     }
 }

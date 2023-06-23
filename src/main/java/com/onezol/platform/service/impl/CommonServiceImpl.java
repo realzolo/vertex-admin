@@ -1,7 +1,6 @@
 package com.onezol.platform.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.onezol.AppStarter;
@@ -11,15 +10,17 @@ import com.onezol.platform.model.param.CommonRequestParam;
 import com.onezol.platform.model.pojo.ListQueryResult;
 import com.onezol.platform.service.CommonService;
 import com.onezol.platform.util.StringUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,57 +95,31 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
     }
 
     @Override
-    public boolean delete(String serviceName, long id) {
+    public void delete(String serviceName, long id) {
         IService<Object> service = getBeanByName(serviceName);
-        return service.removeById(id);
+        Object o = service.getById(id);
+        if (Objects.isNull(o)) {
+            throw new BusinessException("删除失败，数据不存在");
+        }
+        boolean ok = service.removeById(id);
+        if (!ok) {
+            throw new BusinessException("删除失败");
+        }
     }
 
     @Override
-    public boolean deleteList(String serviceName, long[] ids) {
+    @Transactional
+    public void deleteList(String serviceName, long[] ids) {
         IService<Object> service = getBeanByName(serviceName);
         List<Long> idList = Arrays.stream(ids).filter(id -> id > 0).distinct().boxed().collect(Collectors.toList());
-        return service.removeBatchByIds(idList);
+        boolean ok = service.removeBatchByIds(idList);
+        if (!ok) {
+            throw new BusinessException("删除失败");
+        }
     }
 
     @Override
-    public boolean update(CommonRequestParam param) {
-        IService<Object> service = getBeanByName(param.getService());
-        UpdateWrapper<Object> wrapper = new UpdateWrapper<>();
-
-        // 更新字段
-        String[] fields = param.getFields();
-        if (Objects.isNull(fields) || fields.length == 0) {
-            throw new BusinessException("更新字段不能为空");
-        }
-        Arrays.stream(fields).forEach(item -> {
-            String[] fieldItem = item.split("=");
-            if (fieldItem.length == 1) {
-                throw new BusinessException("更新字段格式错误");
-            } else {
-                wrapper.set(fieldItem[0], fieldItem[1]);
-            }
-        });
-
-        // 更新条件
-        String condition = param.getCondition();
-        StringBuilder conditionStr = new StringBuilder();
-        if (StringUtils.hasText(condition)) {
-            String[] conditionArr = condition.split(",");
-            for (int i = 0; i < conditionArr.length; i++) {
-                if (i == 0) {
-                    conditionStr.append(conditionArr[i]);
-                } else {
-                    conditionStr.append(" and ").append(conditionArr[i]);
-                }
-            }
-        }
-        wrapper.last(StringUtils.hasText(conditionStr), "where " + conditionStr);
-
-        return service.update(wrapper);
-    }
-
-    @Override
-    public boolean createOrUpdate(CommonRequestParam param) {
+    public Object createOrUpdate(CommonRequestParam param) {
         String serviceName = param.getService();
         IService<Object> service = getBeanByName(serviceName);
         Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
@@ -154,7 +129,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             throw new BusinessException("数据不能为空");
         }
 
-        // 利用反射设置字段，如果字段不存在则忽略
+        // 创建实例并设置字段
         BaseEntity entity;
         try {
             entity = entityClass.getDeclaredConstructor().newInstance();
@@ -162,22 +137,23 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            try {
-                Method method = entity.getClass().getDeclaredMethod("set" + StringUtils.capitalize(entry.getKey()), String.class);
-                method.invoke(entity, entry.getValue());
-            } catch (NoSuchMethodException ignored) {
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            BeanUtils.populate(entity, data);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
 
         // 保存
-        boolean ok = service.saveOrUpdate(entity);
-        if (!ok) {
-            throw new BusinessException("创建失败");
+        boolean ok;
+        try {
+            ok = service.saveOrUpdate(entity);
+        } catch (DuplicateKeyException e) {
+            throw new BusinessException("保存失败，数据已存在");
         }
-        return true;
+        if (!ok) {
+            throw new BusinessException("保存失败");
+        }
+        return entity;
     }
 
     /**

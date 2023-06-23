@@ -7,11 +7,9 @@ public interface CommonService {
 
     Object queryList(CommonRequestParam param);
 
-    boolean delete(String serviceName, long id);
+    void delete(String serviceName, long id);
 
-    boolean deleteList(String serviceName, long[] ids);
+    void deleteList(String serviceName, long[] ids);
 
-    boolean update(CommonRequestParam param);
-
-    boolean createOrUpdate(CommonRequestParam param);
+    Object createOrUpdate(CommonRequestParam param);
 }
