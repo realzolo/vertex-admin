@@ -16,13 +16,22 @@ public interface UserService extends BaseService<UserEntity> {
     User signup(UserSignupParam param);
 
     /**
-     * 用户登录
+     * 通过用户名密码登录
      *
      * @param username 用户名
      * @param password 密码
      * @return 用户信息(包含token)
      */
-    Map<String, Object> signin(String username, String password);
+    Map<String, Object> signinByAccount(String username, String password);
+
+    /**
+     * 通过邮箱验证码登录
+     *
+     * @param email 邮箱
+     * @param code  验证码
+     * @return 用户信息(包含token)
+     */
+    Map<String, Object> signinByEmail(String email, String code);
 
     /**
      * 根据用户名获取用户信息

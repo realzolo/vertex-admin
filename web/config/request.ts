@@ -32,27 +32,40 @@ const responseInterceptors: any[] = [
   (response: any) => {
     const {status, data = {}, config} = response;
     if (status === 200) {
-      if (data.code === 10101) {
-        message.error(data.message || '请求失败');
-        return response;
+      switch (data.code) {
+        // 所有非特殊业务异常处理
+        case 10001:
+          message.error(data.message || '请求失败');
+          break;
+        // 特殊异常处理(登录失败): data.success = false, 会触发errorHandler。next step: errorHandler
+        case 10002:
+          return response;
+        default:
+          return data;
       }
-      return data;
     }
     return response
   },
 ];
 
 /**
- * 异常处理
+ * 异常处理: 当data.success为false时，会进入errorHandler (response.status一定为200)
  */
 const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
   errorHandler: async (error: AxiosError) => {
-    const {response} = error;
+    const {response, code} = error;
+
+    // 登录失败: data.success = false, 触发errorHandler。(此处不做处理, 交给登录页面处理)
+    if (code && parseInt(code) === 10002) {
+      return response;
+    }
+
+    // 其他异常处理, 非200状态码
     switch (response?.status) {
       case 401:
         message.error('未登录或登录已过期，请重新登录。');
         setTimeout(() => {
-          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.href);
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
         }, 1000);
         break;
       case 403:
@@ -73,9 +86,6 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
     }
     return response;
   },
-  errorThrower: (error: any) => {
-    throw error;
-  }
 };
 
 

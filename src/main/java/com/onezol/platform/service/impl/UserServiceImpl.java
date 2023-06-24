@@ -2,6 +2,7 @@ package com.onezol.platform.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.nimbusds.jose.JOSEException;
+import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.mapper.UserMapper;
 import com.onezol.platform.model.dto.User;
@@ -80,19 +81,19 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
      * @return 用户信息(包含token)
      */
     @Override
-    public Map<String, Object> signin(String username, String password) {
+    public Map<String, Object> signinByAccount(String username, String password) {
         if (StringUtils.isAnyBlank(username, password)) {
-            throw new BusinessException("用户名或密码不能为空");
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码不能为空");
         }
         // 校验用户名密码
         UserEntity userEntity = this.getOne(Wrappers.<UserEntity>lambdaQuery().eq(UserEntity::getUsername, username));
         if (userEntity == null) {
-            throw new BusinessException("用户名或密码错误");
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
         }
         String key = this.getKey(username, password);
         password = EncryptionUtils.encryptSha512(key);
         if (!userEntity.getPassword().equals(password)) {
-            throw new BusinessException("用户名或密码错误");
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
         }
 
         // 将用户信息转换为User对象
@@ -119,6 +120,19 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                 put("expire", JwtUtils.EXPIRE);
             }});
         }};
+    }
+
+    /**
+     * 通过邮箱验证码登录
+     *
+     * @param email 邮箱
+     * @param code  验证码
+     * @return 用户信息(包含token)
+     */
+    @Override
+    public Map<String, Object> signinByEmail(String email, String code) {
+        // TODO: 通过邮箱验证码登录
+        return null;
     }
 
     /**

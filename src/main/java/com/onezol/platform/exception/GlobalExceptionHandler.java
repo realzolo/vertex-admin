@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public AjaxResult<?> businessExceptionHandler(BusinessException e) {
-        return AjaxResult.failure(10500, e.getMessage());
+        return AjaxResult.failure(e.getCode(), e.getMessage());
     }
 
     /**

@@ -4,7 +4,8 @@ import com.onezol.platform.constant.EnumService;
 
 public enum HttpStatus implements EnumService {
     SUCCESS("ok", 10000),
-    FAILURE("failure", 10001);
+    FAILURE("failure", 10001),
+    LOGIN_FAILURE("登录失败", 10002);
 
     private final String value;
     private final int code;
