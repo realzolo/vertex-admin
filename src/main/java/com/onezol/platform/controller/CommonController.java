@@ -7,6 +7,7 @@ import com.onezol.platform.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,7 +23,7 @@ public class CommonController {
      * @param param 服务名(必填), 字段, 排序, 页码, 页大小
      * @return 查询结果
      */
-    @PostMapping("/request")
+    @PostMapping("/query")
     public Object query(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         String[] fields = param.getFields();
@@ -42,10 +43,10 @@ public class CommonController {
         }
         Object o = data.get("id");
         long[] ids;
-        if (o instanceof Long) {
+        if (o instanceof Number) {
             ids = new long[]{Long.parseLong(o.toString())};
-        } else if (o instanceof long[]) {
-            ids = (long[]) o;
+        } else if (o instanceof List) {
+            ids = ((List<?>) o).stream().mapToLong(i -> Long.parseLong(i.toString())).toArray();
         } else {
             throw new BusinessException("参数id类型错误, 请传入long或long[]");
         }

@@ -73,7 +73,9 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         }
 
         // 条件
-        ConditionUtils.withCondition(wrapper, condition);
+        if (Objects.nonNull(condition) && !condition.isEmpty()) {
+            ConditionUtils.withCondition(wrapper, condition);
+        }
 
         // 排序
         if (Objects.nonNull(orderBy)) {

@@ -1,10 +1,12 @@
 package com.onezol.platform.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("pf_permission")
 public class PermissionEntity extends BaseEntity {
     private String name;
+    @TableField("`key`")
     private String key;
     private String description;
 
