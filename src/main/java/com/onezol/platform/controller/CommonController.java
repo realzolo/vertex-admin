@@ -22,7 +22,7 @@ public class CommonController {
      * @param param 服务名(必填), 字段, 排序, 页码, 页大小
      * @return 查询结果
      */
-    @PostMapping("/query")
+    @PostMapping("/request")
     public Object query(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         String[] fields = param.getFields();
@@ -33,7 +33,7 @@ public class CommonController {
         return service.query(serviceName, fields, condition, orderBy, page, pageSize);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/request")
     public void delete(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         Map<String, Object> data = param.getData();
@@ -52,7 +52,7 @@ public class CommonController {
         service.delete(serviceName, ids);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/request")
     public Object update(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         Map<String, Object> data = param.getData();
@@ -62,7 +62,7 @@ public class CommonController {
         return service.save(serviceName, data);
     }
 
-    @PostMapping("/save")
+    @PostMapping("/request")
     public Object save(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         Map<String, Object> data = param.getData();
