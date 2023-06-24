@@ -1,6 +1,9 @@
 package com.onezol.platform.util;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Zolo(Lixm)
  * @date 2022/12/21 12:23
@@ -194,5 +197,23 @@ public class StringUtils extends org.springframework.util.StringUtils {
      */
     public static boolean isNotEmpty(String s) {
         return !hasText(s);
+    }
+
+    /**
+     * 从字符串中根据正则表达式获取匹配到的字符串
+     * 使用方式：getSubUtil("a123b", "a(.*)b") -> 123
+     *
+     * @param message 源字符串
+     * @param s       正则表达式
+     * @return 匹配到的字符串
+     */
+    public static String getSubUtilSimple(String message, String s) {
+        String rgex = s + "(.*?)";
+        Pattern pattern = Pattern.compile(rgex);
+        Matcher m = pattern.matcher(message);
+        while (m.find()) {
+            return m.group(1);
+        }
+        return "";
     }
 }

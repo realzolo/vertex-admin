@@ -26,10 +26,11 @@ public class CommonController {
     public Object query(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         String[] fields = param.getFields();
+        Map<String, Map<String, Object>> condition = param.getCondition();
         String orderBy = param.getOrderBy();
         Integer page = param.getPage();
         Integer pageSize = param.getPageSize();
-        return service.query(serviceName, fields, orderBy, page, pageSize);
+        return service.query(serviceName, fields, condition, orderBy, page, pageSize);
     }
 
     @DeleteMapping("/delete")

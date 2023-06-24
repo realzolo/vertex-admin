@@ -8,6 +8,7 @@ import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.CommonService;
+import com.onezol.platform.util.ConditionUtils;
 import com.onezol.platform.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -55,13 +56,14 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      *
      * @param serviceName 服务名
      * @param fields      字段
+     * @param condition   条件
      * @param orderBy     排序
      * @param page        页码
      * @param pageSize    页大小
      * @return 查询结果
      */
     @Override
-    public Object query(String serviceName, String[] fields, String orderBy, Integer page, Integer pageSize) {
+    public Object query(String serviceName, String[] fields, Map<String, Map<String, Object>> condition, String orderBy, Integer page, Integer pageSize) {
         IService<Object> service = getBeanByName(serviceName);
         QueryWrapper<Object> wrapper = new QueryWrapper<>();
 
@@ -69,6 +71,9 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         if (Objects.nonNull(fields) && fields.length > 0) {
             wrapper.select(fields);
         }
+
+        // 条件
+        ConditionUtils.withCondition(wrapper, condition);
 
         // 排序
         if (Objects.nonNull(orderBy)) {
@@ -86,7 +91,16 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         // 分页
         Page<Object> objectPage = getPage(page, pageSize);
 
-        Page<Object> resultPage = service.page(objectPage, wrapper);
+        Page<Object> resultPage;
+        try {
+            resultPage = service.page(objectPage, wrapper);
+        } catch (Exception e) {
+            if (e.getMessage().contains("Cause: java.sql.SQLSyntaxErrorException: Unknown column")) {
+                String column = StringUtils.getSubUtilSimple(e.getMessage(), "Unknown column '(.+?)' in 'where clause'");
+                throw new BusinessException("查询失败, 无效的字段: " + column);
+            }
+            throw new RuntimeException(e);
+        }
         Object[] items = resultPage.getRecords().toArray();
         long total = resultPage.getTotal();
 

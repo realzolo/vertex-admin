@@ -8,12 +8,13 @@ public interface CommonService {
      *
      * @param serviceName 服务名
      * @param fields      字段
+     * @param condition   条件
      * @param orderBy     排序
      * @param page        页码
      * @param pageSize    页大小
      * @return 查询结果
      */
-    Object query(String serviceName, String[] fields, String orderBy, Integer page, Integer pageSize);
+    Object query(String serviceName, String[] fields, Map<String, Map<String, Object>> condition, String orderBy, Integer page, Integer pageSize);
 
     /**
      * 通用删除

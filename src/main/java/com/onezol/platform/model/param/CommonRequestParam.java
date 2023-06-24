@@ -26,6 +26,9 @@ public class CommonRequestParam {
     // 数据
     private Map<String, Object> data;
 
+    // 条件表达式
+    private Map<String, Map<String, Object>> condition;
+
     public String getServiceName() {
         return serviceName;
     }
@@ -72,5 +75,13 @@ public class CommonRequestParam {
 
     public void setData(Map<String, Object> data) {
         this.data = data;
+    }
+
+    public Map<String, Map<String, Object>> getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Map<String, Map<String, Object>> condition) {
+        this.condition = condition;
     }
 }
