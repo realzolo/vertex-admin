@@ -137,7 +137,7 @@ export default class CommonRequest {
     const params = {
       serviceName: serviceName,
       data: {
-        ids: ids
+        id: ids
       }
     }
     return request<API.AjaxResult<void>>('/api/common/request', {

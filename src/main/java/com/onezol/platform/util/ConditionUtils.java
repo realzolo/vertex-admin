@@ -21,8 +21,11 @@ public class ConditionUtils {
             String operator = entry.getKey();
             Map<String, Object> entryValue = entry.getValue();
             // 如果key或者field或者value为空，则抛出异常
-            if (!StringUtils.hasText(operator) || entryValue == null || entryValue.isEmpty()) {
+            if (!StringUtils.hasText(operator) || entryValue == null) {
                 throw new BusinessException("condition解析失败");
+            }
+            if (entryValue.isEmpty()) {
+                continue;
             }
             for (Map.Entry<String, Object> objectEntry : entryValue.entrySet()) {
                 String field = objectEntry.getKey();
