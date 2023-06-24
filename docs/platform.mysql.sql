@@ -95,7 +95,6 @@ CREATE TABLE pf_dict_key
     name        VARCHAR(50)         DEFAULT NULL COMMENT '字典名称',
     `key`       VARCHAR(50)         DEFAULT NULL COMMENT '字典key',
     description VARCHAR(500)        DEFAULT NULL COMMENT '字典描述',
-    parent_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '父级字典key ID',
     created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',

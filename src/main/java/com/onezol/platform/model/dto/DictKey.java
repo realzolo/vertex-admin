@@ -13,10 +13,6 @@ public class DictKey extends BaseDTO {
      * 字典描述
      */
     private String description;
-    /**
-     * 父ID
-     */
-    private String parentId;
 
     public String getName() {
         return name;
@@ -40,13 +36,5 @@ public class DictKey extends BaseDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 }

@@ -34,7 +34,9 @@ public class ConditionUtils {
                 if (!StringUtils.hasText(field) || value == null) {
                     throw new BusinessException("condition解析失败");
                 }
-
+                // 将驼峰转为下划线
+                field = StringUtils.toUnderScoreCase(field);
+                // 将字段名加上``, 防止和数据库关键字冲突
                 field = String.format("`%s`", field);
                 switch (operator) {
                     case "eq":

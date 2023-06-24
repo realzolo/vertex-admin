@@ -12,8 +12,6 @@ public class DictKeyParam {
 
     private String description;
 
-    private String parentId;
-
     public String getName() {
         return name;
     }
@@ -36,13 +34,5 @@ public class DictKeyParam {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 }

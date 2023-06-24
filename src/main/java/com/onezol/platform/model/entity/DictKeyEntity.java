@@ -2,14 +2,12 @@ package com.onezol.platform.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.onezol.platform.annotation.DictDefinition;
 
 @TableName("pf_dict_key")
 public class DictKeyEntity extends BaseEntity {
     /**
      * 字典名称，如：性别
      */
-    @DictDefinition("gender")
     private String name;
     /**
      * 字典键，如：GENDER
@@ -20,10 +18,6 @@ public class DictKeyEntity extends BaseEntity {
      * 字典描述
      */
     private String description;
-    /**
-     * 父ID
-     */
-    private String parentId;
 
     public String getName() {
         return name;
@@ -47,13 +41,5 @@ public class DictKeyEntity extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 }

@@ -41,4 +41,9 @@ export default [
             // },
         ]
     },
+    {
+        name: '字典管理',
+        path: '/dictionary',
+        component: '@/pages/dictionary',
+    },
 ]
