@@ -100,7 +100,12 @@ public class JwtUtils {
      * @throws ParseException 解析异常
      */
     public static boolean validateToken(String token) throws JOSEException, ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
+        SignedJWT signedJWT;
+        try {
+            signedJWT = SignedJWT.parse(token);
+        } catch (ParseException e) {
+            return false;
+        }
         JWSVerifier verifier = new MACVerifier(SECRET);
         return signedJWT.verify(verifier);
     }
