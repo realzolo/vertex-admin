@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.onezol.AppStarter;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.entity.BaseEntity;
-import com.onezol.platform.model.param.CommonRequestParam;
-import com.onezol.platform.model.pojo.ListQueryResult;
+import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.CommonService;
 import com.onezol.platform.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -31,8 +30,11 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
 
     private List<String> entityPath;
 
+    /**
+     * 扫描所有实体类，获取实体类所在的包名
+     */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         // 获取启动类所在的包名
         String basePackage = AppStarter.class.getPackage().getName();
         // 获取路径
@@ -46,6 +48,109 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             entityPackages[i] = entityPackages[i].substring(index);
         }
         entityPath = Arrays.asList(entityPackages);
+    }
+
+    /**
+     * 通用查询
+     *
+     * @param serviceName 服务名
+     * @param fields      字段
+     * @param orderBy     排序
+     * @param page        页码
+     * @param pageSize    页大小
+     * @return 查询结果
+     */
+    @Override
+    public Object query(String serviceName, String[] fields, String orderBy, Integer page, Integer pageSize) {
+        IService<Object> service = getBeanByName(serviceName);
+        QueryWrapper<Object> wrapper = new QueryWrapper<>();
+
+        // 查询字段
+        if (Objects.nonNull(fields) && fields.length > 0) {
+            wrapper.select(fields);
+        }
+
+        // 排序
+        if (Objects.nonNull(orderBy)) {
+            String[] orderByArr = orderBy.split(",");
+            Arrays.stream(orderByArr).forEach(item -> {
+                String[] orderByItem = item.split(" ");
+                if (orderByItem.length == 1) { // 升序
+                    wrapper.orderByAsc(orderByItem[0]);
+                } else { // 降序
+                    wrapper.orderByDesc(orderByItem[0]);
+                }
+            });
+        }
+
+        // 分页
+        Page<Object> objectPage = getPage(page, pageSize);
+
+        Page<Object> resultPage = service.page(objectPage, wrapper);
+        Object[] items = resultPage.getRecords().toArray();
+        long total = resultPage.getTotal();
+
+        return new ListResultWrapper<>(items, total);
+    }
+
+    /**
+     * 通用删除
+     *
+     * @param serviceName 服务名
+     * @param ids         id数组
+     */
+    @Override
+    @Transactional
+    public void delete(String serviceName, long[] ids) {
+        IService<Object> service = getBeanByName(serviceName);
+        List<Long> idList = Arrays.stream(ids).filter(id -> id > 0).distinct().boxed().collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            throw new BusinessException("删除失败, 无效的id");
+        }
+        boolean ok = service.removeBatchByIds(idList);
+        if (!ok) {
+            throw new BusinessException("删除失败");
+        }
+    }
+
+
+    /**
+     * 通用保存/更新
+     *
+     * @param serviceName 服务名
+     * @param data        数据
+     * @return 保存/更新结果
+     */
+    @Override
+    public Object save(String serviceName, Map<String, Object> data) {
+        IService<Object> service = getBeanByName(serviceName);
+        Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
+
+        if (Objects.isNull(data) || data.isEmpty()) {
+            throw new BusinessException("缺失参数data");
+        }
+
+        // 创建实例并设置字段
+        BaseEntity entity;
+        try {
+            entity = entityClass.getDeclaredConstructor().newInstance();
+            BeanUtils.populate(entity, data);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 保存
+        boolean ok;
+        try {
+            ok = service.saveOrUpdate(entity);
+        } catch (DuplicateKeyException e) {
+            throw new BusinessException("保存失败，数据已存在");
+        }
+        if (!ok) {
+            throw new BusinessException("保存失败");
+        }
+        return entity;
     }
 
     /**
@@ -68,124 +173,6 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             }
         }
         return serviceBean;
-    }
-
-    @Override
-    public Object query(CommonRequestParam param) {
-        IService<Object> service = getBeanByName(param.getService());
-        QueryWrapper<Object> wrapper = getQueryWrapper(param);
-        return service.getOne(wrapper);
-    }
-
-    @Override
-    public Object queryList(CommonRequestParam param) {
-        IService<Object> service = getBeanByName(param.getService());
-
-        QueryWrapper<Object> wrapper = getQueryWrapper(param);
-
-        Page<Object> page = getPage(param);
-
-        Page<Object> resultPage = service.page(page, wrapper);
-        Object[] items = resultPage.getRecords().toArray();
-        long total = resultPage.getTotal();
-        return new ListQueryResult<Object>() {{
-            setItems(items);
-            setTotal(total);
-        }};
-    }
-
-    @Override
-    public void delete(String serviceName, long id) {
-        IService<Object> service = getBeanByName(serviceName);
-        Object o = service.getById(id);
-        if (Objects.isNull(o)) {
-            throw new BusinessException("删除失败，数据不存在");
-        }
-        boolean ok = service.removeById(id);
-        if (!ok) {
-            throw new BusinessException("删除失败");
-        }
-    }
-
-    @Override
-    @Transactional
-    public void deleteList(String serviceName, long[] ids) {
-        IService<Object> service = getBeanByName(serviceName);
-        List<Long> idList = Arrays.stream(ids).filter(id -> id > 0).distinct().boxed().collect(Collectors.toList());
-        boolean ok = service.removeBatchByIds(idList);
-        if (!ok) {
-            throw new BusinessException("删除失败");
-        }
-    }
-
-    @Override
-    public Object createOrUpdate(CommonRequestParam param) {
-        String serviceName = param.getService();
-        IService<Object> service = getBeanByName(serviceName);
-        Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
-
-        Map<String, Object> data = param.getData();
-        if (Objects.isNull(data) || data.isEmpty()) {
-            throw new BusinessException("数据不能为空");
-        }
-
-        // 创建实例并设置字段
-        BaseEntity entity;
-        try {
-            entity = entityClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            BeanUtils.populate(entity, data);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-
-        // 保存
-        boolean ok;
-        try {
-            ok = service.saveOrUpdate(entity);
-        } catch (DuplicateKeyException e) {
-            throw new BusinessException("保存失败，数据已存在");
-        }
-        if (!ok) {
-            throw new BusinessException("保存失败");
-        }
-        return entity;
-    }
-
-    /**
-     * 获取QueryWrapper
-     *
-     * @param param 请求参数
-     * @return QueryWrapper
-     */
-    private QueryWrapper<Object> getQueryWrapper(CommonRequestParam param) {
-        QueryWrapper<Object> wrapper = new QueryWrapper<>();
-
-        // 查询字段
-        String[] fields = param.getFields();
-        if (Objects.nonNull(fields) && fields.length > 0) {
-            wrapper.select(fields);
-        }
-
-        // 排序
-        String orderBy = param.getOrderBy();
-        if (Objects.nonNull(orderBy)) {
-            String[] orderByArr = orderBy.split(",");
-            Arrays.stream(orderByArr).forEach(item -> {
-                String[] orderByItem = item.split(" ");
-                if (orderByItem.length == 1) { // 升序
-                    wrapper.orderByAsc(orderByItem[0]);
-                } else { // 降序
-                    wrapper.orderByDesc(orderByItem[0]);
-                }
-            });
-        }
-
-        return wrapper;
     }
 
     /**
@@ -211,19 +198,19 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
     /**
      * 获取分页
      *
-     * @param param 请求参数
+     * @param page     页码
+     * @param pageSize 每页数量
      * @return page 页码
      */
-    private Page<Object> getPage(CommonRequestParam param) {
-        Integer page = param.getPage();
-        Integer pageSize = param.getPageSize();
+    private Page<Object> getPage(Integer page, Integer pageSize) {
         if (Objects.isNull(page) || page < 1) {
             page = 1;
         }
-        if (Objects.isNull(pageSize)) {
+        if (Objects.isNull(pageSize) || pageSize < 1) {
             pageSize = 10;
         }
-        pageSize = Math.min(pageSize, 100);
+        // 限制最大查询数量
+        pageSize = Math.min(pageSize, 300);
         return new Page<>(page, pageSize);
     }
 

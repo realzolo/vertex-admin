@@ -7,6 +7,8 @@ import com.onezol.platform.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/common")
 public class CommonController {
@@ -14,39 +16,58 @@ public class CommonController {
     @Autowired
     private CommonService service;
 
+    /**
+     * 通用查询: 通过服务名(必填), 字段, 排序, 页码, 页大小查询
+     *
+     * @param param 服务名(必填), 字段, 排序, 页码, 页大小
+     * @return 查询结果
+     */
     @PostMapping("/query")
-    public Object queryOne(@RequestBody @Validated CommonRequestParam param) {
-        return service.query(param);
+    public Object query(@RequestBody @Validated CommonRequestParam param) {
+        String serviceName = param.getServiceName();
+        String[] fields = param.getFields();
+        String orderBy = param.getOrderBy();
+        Integer page = param.getPage();
+        Integer pageSize = param.getPageSize();
+        return service.query(serviceName, fields, orderBy, page, pageSize);
     }
 
-    @PostMapping("/query-list")
-    public Object queryList(@RequestBody @Validated CommonRequestParam param) {
-        return service.queryList(param);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void delete(@RequestBody @Validated CommonRequestParam param, @PathVariable("id") long id) {
-        if (id < 1) {
-            throw new BusinessException("无效的id");
+    @DeleteMapping("/delete")
+    public void delete(@RequestBody @Validated CommonRequestParam param) {
+        String serviceName = param.getServiceName();
+        Map<String, Object> data = param.getData();
+        if (data == null || !data.containsKey("id")) {
+            throw new BusinessException("缺失参数id");
         }
-        service.delete(param.getService(), id);
-    }
-
-    @DeleteMapping("/delete-list/{ids}")
-    public void deleteList(@RequestBody @Validated CommonRequestParam param, @PathVariable("ids") long[] ids) {
-        if (ids.length < 1) {
-            throw new IllegalArgumentException("参数错误");
+        Object o = data.get("id");
+        long[] ids;
+        if (o instanceof Long) {
+            ids = new long[]{Long.parseLong(o.toString())};
+        } else if (o instanceof long[]) {
+            ids = (long[]) o;
+        } else {
+            throw new BusinessException("参数id类型错误, 请传入long或long[]");
         }
-        service.deleteList(param.getService(), ids);
+        service.delete(serviceName, ids);
     }
 
     @PutMapping("/update")
     public Object update(@RequestBody @Validated CommonRequestParam param) {
-        return service.createOrUpdate(param);
+        String serviceName = param.getServiceName();
+        Map<String, Object> data = param.getData();
+        if (data == null || !data.containsKey("id")) {
+            throw new BusinessException("缺失参数id");
+        }
+        return service.save(serviceName, data);
     }
 
     @PostMapping("/save")
     public Object save(@RequestBody @Validated CommonRequestParam param) {
-        return service.createOrUpdate(param);
+        String serviceName = param.getServiceName();
+        Map<String, Object> data = param.getData();
+        if (data == null || data.isEmpty()) {
+            throw new BusinessException("缺失参数data");
+        }
+        return service.save(serviceName, data);
     }
 }

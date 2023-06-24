@@ -2,17 +2,17 @@ package com.onezol.platform.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-/**
- * @author Zolo(Lixm)
- * @date 2022/12/4 18:06
- * @description ...
- */
-public class ListQueryResult<T> {
+public class ListResultWrapper<T> {
     private T[] items;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long total;
 
-    public ListQueryResult() {
+    public ListResultWrapper() {
+    }
+
+    public ListResultWrapper(T[] items, Long total) {
+        this.items = items;
+        this.total = total;
     }
 
     public T[] getItems() {

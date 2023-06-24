@@ -1,6 +1,6 @@
 package com.onezol.platform.controller;
 
-import com.onezol.platform.model.pojo.ListQueryResult;
+import com.onezol.platform.model.pojo.ListResultWrapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +33,7 @@ public class TestController {
 
     @RequestMapping("/return-object")
     public Object returnObject() {
-        ListQueryResult<Object> result = new ListQueryResult<>();
+        ListResultWrapper<Object> result = new ListResultWrapper<>();
         result.setItems(Arrays.asList("Zolo", "Li", "T", 123).toArray());
         result.setTotal(999L);
         return result;
