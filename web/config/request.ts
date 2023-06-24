@@ -2,76 +2,88 @@ import {AxiosError, RequestConfig} from "@umijs/max";
 import {message} from "antd";
 
 message.config({
-    maxCount: 2,
+  maxCount: 2,
 });
 
 /**
  * 请求拦截器
  */
 const requestInterceptors: any[] = [
-    (url: string, options: any) => {
-        // 携带 token
-        const token = localStorage.getItem('token');
-        if (token) {
-            const headers = {
-                Authorization: `Bearer ${token}`,
-            };
-            return {
-                url,
-                options: {...options, headers},
-            };
-        }
-        return {url, options}
+  (url: string, options: any) => {
+    // 携带 token
+    const token = localStorage.getItem('token');
+    if (token) {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      return {
+        url,
+        options: {...options, headers},
+      };
     }
+    return {url, options}
+  }
 ];
 
 /**
  * 响应拦截器
  */
 const responseInterceptors: any[] = [
-    (response: any) => {
-        const {status, data = {}, config} = response;
-        console.log(response)
-        if (status === 200) {
-            return data;
-        }
-        return response
-    },
+  (response: any) => {
+    const {status, data = {}, config} = response;
+    if (status === 200) {
+      if (data.code === 10101) {
+        message.error(data.message || '请求失败');
+        return response;
+      }
+      return data;
+    }
+    return response
+  },
 ];
 
 /**
  * 异常处理
  */
 const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
-    errorHandler: async (error: AxiosError) => {
-        const {response} = error;
-        switch (response?.status) {
-            case 401:
-                message.error('未登录或登录已过期，请重新登录。');
-                setTimeout(() => {
-                    window.location.href = '/login';
-                }, 1000);
-                break;
-            case 403:
-                message.error('您没有权限访问，请联系管理员。');
-                break;
-            default:
-                message.error(error.message || '请求失败');
-                break;
-        }
-        return response;
-    },
-    errorThrower: (error: any) => {
-        throw error;
+  errorHandler: async (error: AxiosError) => {
+    const {response} = error;
+    switch (response?.status) {
+      case 401:
+        message.error('未登录或登录已过期，请重新登录。');
+        setTimeout(() => {
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.href);
+        }, 1000);
+        break;
+      case 403:
+        message.error('您没有权限访问，请联系管理员。');
+        break;
+      case 404:
+        message.error('请求的资源不存在。');
+        break;
+      case 500:
+        message.error('服务器错误，请稍后重试。');
+        break;
+      case 504:
+        message.error('网络连接超时，请稍后重试。');
+        break;
+      default:
+        message.error(error.message || '请求失败');
+        break;
     }
+    return response;
+  },
+  errorThrower: (error: any) => {
+    throw error;
+  }
 };
 
 
 const requestConfig: RequestConfig = {
-    timeout: 1000,
-    errorConfig,
-    requestInterceptors,
-    responseInterceptors
+  timeout: 1000,
+  errorConfig,
+  requestInterceptors,
+  responseInterceptors
 };
 
 export default requestConfig;

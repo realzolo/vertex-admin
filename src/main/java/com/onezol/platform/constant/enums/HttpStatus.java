@@ -3,12 +3,8 @@ package com.onezol.platform.constant.enums;
 import com.onezol.platform.constant.EnumService;
 
 public enum HttpStatus implements EnumService {
-    SUCCESS("成功", 10000),
-    FAILURE("失败", 10101),
-    BAD_PARAMETER("参数错误", 10102),
-    UNAUTHORIZED("未认证", 10103),
-    FORBIDDEN("无权限", 10104),
-    NOT_FOUND("未找到", 10105);
+    SUCCESS("ok", 10000),
+    FAILURE("failure", 10001);
 
     private final String value;
     private final int code;

@@ -4,7 +4,6 @@ import com.onezol.platform.annotation.Authorized;
 import com.onezol.platform.annotation.Validated;
 import com.onezol.platform.annotation.Validator;
 import com.onezol.platform.common.UserContextHolder;
-import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.service.PermissionService;
 import com.onezol.platform.util.StringUtils;
@@ -15,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -129,26 +129,26 @@ public class ControllerAspect {
         Object value = field.get(arg);
         String name = field.getName();
         if (validator.required() && Objects.isNull(value)) {
-            throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "不可为空");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, name + "不可为空");
         }
         if (Objects.nonNull(value)) {
             String strValue = value.toString();
             // 如果value类型为字符串
             if (String.class.isAssignableFrom(value.getClass())) {
                 if (validator.minLength() > 0 && strValue.length() < validator.minLength()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "长度不能小于" + validator.minLength() + "个字符");
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "长度不能小于" + validator.minLength() + "个字符");
                 }
                 if (validator.maxLength() > 0 && strValue.length() > validator.maxLength()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "长度不能大于" + validator.maxLength() + "个字符");
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "长度不能大于" + validator.maxLength() + "个字符");
                 }
             }
             // 如果value类型为数字
             if (Number.class.isAssignableFrom(value.getClass())) {
                 if (validator.minValue() > 0 && Integer.parseInt(strValue) < validator.minValue()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "值不能小于" + validator.minValue() + "");
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "值不能小于" + validator.minValue() + "");
                 }
                 if (validator.maxValue() > 0 && Integer.parseInt(strValue) > validator.maxValue()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "值不能大于" + validator.maxValue() + "");
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "值不能大于" + validator.maxValue() + "");
                 }
             }
             // 如果value不属于基本类型或者包装类型
@@ -157,7 +157,7 @@ public class ControllerAspect {
             }
             // 正则校验
             if (StringUtils.isNotBlank(validator.regex()) && !strValue.matches(validator.regex())) {
-                throw new BusinessException(HttpStatus.BAD_PARAMETER, StringUtils.hasText(validator.regexTip()) ? validator.regexTip() : name + "格式不正确");
+                throw new BusinessException(HttpStatus.BAD_REQUEST, StringUtils.hasText(validator.regexTip()) ? validator.regexTip() : name + "格式不正确");
             }
             // 如果value类型为数组
             if (value.getClass().isArray()) {
@@ -165,10 +165,10 @@ public class ControllerAspect {
                 Object[] array = (Object[]) value;
                 // 校验数组长度
                 if (validator.minLength() > 0 && array.length < validator.minLength()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "长度不能小于" + validator.minLength());
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "长度不能小于" + validator.minLength());
                 }
                 if (validator.maxLength() > 0 && array.length > validator.maxLength()) {
-                    throw new BusinessException(HttpStatus.BAD_PARAMETER, name + "长度不能大于" + validator.maxLength());
+                    throw new BusinessException(HttpStatus.BAD_REQUEST, name + "长度不能大于" + validator.maxLength());
                 }
             }
         }
