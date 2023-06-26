@@ -35,16 +35,16 @@ const responseInterceptors: any[] = [
       switch (data.code) {
         // 所有非特殊业务异常处理
         case 10001:
-          message.error(data.message || '请求失败');
+          message.error(data.message);
           break;
         // 特殊异常处理(登录失败): data.success = false, 会触发errorHandler。next step: errorHandler
         case 10002:
           return response;
-        default:
-          return data;
       }
+      return data;
+    } else {
+      message.error(`请求失败: ${config.url}`);
     }
-    return response
   },
 ];
 

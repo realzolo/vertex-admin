@@ -115,14 +115,14 @@ export default class CommonRequest {
    * @param serviceName 服务名称
    * @param id ID
    */
-  public static delete = (serviceName: string, id: number): Promise<API.AjaxResult<void>> => {
+  public static delete = (serviceName: string, id: number): Promise<void> => {
     const params = {
       serviceName: serviceName,
       data: {
         id: [id]
       }
     }
-    return request<API.AjaxResult<void>>('/api/common/request', {
+    return request<void>('/api/common/request', {
       method: 'DELETE',
       data: params
     });
@@ -133,14 +133,14 @@ export default class CommonRequest {
    * @param serviceName 服务名称
    * @param ids ID数组
    */
-  public static deleteBatch = (serviceName: string, ids: number[]): Promise<API.AjaxResult<void>> => {
+  public static deleteBatch = (serviceName: string, ids: number[]): Promise<void> => {
     const params = {
       serviceName: serviceName,
       data: {
         id: ids
       }
     }
-    return request<API.AjaxResult<void>>('/api/common/request', {
+    return request<void>('/api/common/request', {
       method: 'DELETE',
       data: params
     });
@@ -151,12 +151,12 @@ export default class CommonRequest {
    * @param serviceName 服务名称
    * @param data 数据
    */
-  public static update = (serviceName: string, data: UpdateParams): Promise<API.AjaxResult<unknown>> => {
+  public static update = (serviceName: string, data: UpdateParams): Promise<unknown> => {
     const params = {
       serviceName: serviceName,
       data: data
     }
-    return request<API.AjaxResult<unknown>>('/api/common/request', {
+    return request<unknown>('/api/common/request', {
       method: 'PUT',
       data: params
     });
@@ -167,12 +167,12 @@ export default class CommonRequest {
    * @param serviceName 服务名称
    * @param data 数据
    */
-  public static save = (serviceName: string, data: Record<string, any>): Promise<API.AjaxResult<unknown>> => {
+  public static save = (serviceName: string, data: Record<string, any>): Promise<unknown> => {
     const params = {
       serviceName: serviceName,
       data: data
     }
-    return request<API.AjaxResult<unknown>>('/api/common/request', {
+    return request<unknown>('/api/common/request', {
       method: 'POST',
       data: params
     });
