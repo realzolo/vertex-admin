@@ -96,18 +96,29 @@ public class JwtUtils {
      *
      * @param token Token
      * @return 是否有效
-     * @throws JOSEException  JOSE 异常
-     * @throws ParseException 解析异常
      */
-    public static boolean validateToken(String token) throws JOSEException, ParseException {
-        SignedJWT signedJWT;
+    public static boolean validateToken(String token) {
+        JWTClaimsSet claimsSet;
         try {
-            signedJWT = SignedJWT.parse(token);
-        } catch (ParseException e) {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+
+            JWSVerifier verifier = new MACVerifier(SECRET);
+
+            if (!signedJWT.verify(verifier)) {
+                return false;
+            }
+
+            claimsSet = signedJWT.getJWTClaimsSet();
+        } catch (ParseException | JOSEException e) {
+            throw new RuntimeException(e);
+        }
+
+        Date expirationTime = claimsSet.getExpirationTime();
+        if (expirationTime != null && expirationTime.before(new Date())) {
             return false;
         }
-        JWSVerifier verifier = new MACVerifier(SECRET);
-        return signedJWT.verify(verifier);
+
+        return true;
     }
 
     @Value("${encryption.jwt.secret}")
@@ -121,6 +132,6 @@ public class JwtUtils {
 
     @Value("${encryption.jwt.expire}")
     public void setExpire(Long expire) {
-        JwtUtils.EXPIRE = expire;
+        JwtUtils.EXPIRE = expire * 1000;
     }
 }
