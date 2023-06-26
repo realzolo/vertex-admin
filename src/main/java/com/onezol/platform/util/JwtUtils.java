@@ -110,15 +110,11 @@ public class JwtUtils {
 
             claimsSet = signedJWT.getJWTClaimsSet();
         } catch (ParseException | JOSEException e) {
-            throw new RuntimeException(e);
-        }
-
-        Date expirationTime = claimsSet.getExpirationTime();
-        if (expirationTime != null && expirationTime.before(new Date())) {
             return false;
         }
 
-        return true;
+        Date expirationTime = claimsSet.getExpirationTime();
+        return expirationTime == null || !expirationTime.before(new Date());
     }
 
     @Value("${encryption.jwt.secret}")
