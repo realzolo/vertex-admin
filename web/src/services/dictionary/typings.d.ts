@@ -9,10 +9,11 @@ declare interface DictKey {
 }
 
 declare interface DictValue {
-  id?: number;
+  id: number;
   name: string;
   identifier: string;
   description: string;
+  keyId: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

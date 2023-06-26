@@ -1,16 +1,11 @@
-import {TreeProps} from "antd/es/tree";
+// 子页Props
+interface SubPageProps {
+  visible: boolean;
+  hide: () => void;
+  itemKey: string | number | undefined;
+  data?: unknown;
+}
 
-declare namespace AntTree {
-    /**
-     * 树节点
-     */
-    interface TreeNode {
-        id: number;
-        title: string;
-        key: string;
-        parentId?: number;
-        children?: TreeNode[];
-    }
-
-    type onSelected = TreeProps['onSelect']
+// 模态框Props
+interface ModalProps extends SubPageProps {
 }

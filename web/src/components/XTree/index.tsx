@@ -1,7 +1,7 @@
 import {Card, Tree} from "antd";
 import {useEffect, useState} from "react";
 import {defaultTreeData, treeDataHandler} from "@/utils/treeify";
-import {AntTree} from "@/typings";
+import {AntTree} from "./typings";
 import styles from './style.less';
 
 interface Props {

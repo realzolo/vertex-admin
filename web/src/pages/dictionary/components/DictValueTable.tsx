@@ -1,18 +1,12 @@
 import {Button, Drawer, message, Modal} from "antd";
-import {ActionType, FooterToolbar, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
+import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
 import CommonRequest from "@/services/common";
 
-interface Props {
-  visible: boolean;
-  hide: () => void;
-  itemKey: string | number | undefined;
-}
-
-const DictValueTable: React.FC<Props> = (props) => {
-  const {visible, hide, itemKey} = props;
+const DictValueTable: React.FC<SubPageProps> = (props) => {
+  const {visible, hide, itemKey, data} = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
@@ -44,14 +38,18 @@ const DictValueTable: React.FC<Props> = (props) => {
    * @param values
    */
   const doCreate = async (values: DictValue) => {
+    if (typeof itemKey !== "number") {
+      message.error("字典项ID不能为空");
+      return;
+    }
+    values.keyId = itemKey;
     const res = await CommonRequest.save("dictValue", values);
-    handleModalVisible(false);
     if (res) {
+      handleModalVisible(false);
       actionRef.current?.reloadAndRest?.();
       message.success('添加成功');
       return;
     }
-    message.error('添加失败');
   }
 
   /**
@@ -79,23 +77,59 @@ const DictValueTable: React.FC<Props> = (props) => {
       title: '字典值',
       dataIndex: 'value',
       valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            type: 'string',
+            min: 1,
+            max: 8,
+          }
+        ]
+      }
     },
     {
       title: '唯一标识',
       dataIndex: 'key',
       valueType: 'text',
       copyable: true,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            type: 'string',
+            min: 1,
+            max: 16,
+          }
+        ]
+      }
     },
     {
       title: '字典代码',
       dataIndex: 'code',
       valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            type: 'number',
+            transform: (value: string) => Number(value),
+          }
+        ]
+      }
     },
     {
       title: '字典描述',
       dataIndex: 'description',
       valueType: 'text',
       hideInSearch: true,
+      formItemProps: {
+        rules: [
+          {
+            max: 255,
+          }
+        ]
+      }
     },
     {
       title: '创建时间',
@@ -104,24 +138,6 @@ const DictValueTable: React.FC<Props> = (props) => {
       hideInSearch: true,
       hideInForm: true,
     },
-    {
-      title: '字典项ID',
-      dataIndex: 'keyId',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInForm: true,
-      hideInDescriptions: true,
-    },
-    // {
-    //   title: '操作',
-    //   dataIndex: 'option',
-    //   valueType: 'option',
-    //   render: (_, record) => (
-    //     <>
-    //       <a href="">删除</a>
-    //     </>
-    //   ),
-    // },
   ];
   const onClose = () => {
     hide();
@@ -129,18 +145,25 @@ const DictValueTable: React.FC<Props> = (props) => {
 
   return (
     <Drawer
-      title="Basic Drawer"
+      title="字典值列表"
       placement="right"
       onClose={onClose}
       open={visible}
       width={'85%'}
-      mask={false}
+      mask={true}
       destroyOnClose={true}
     >
       <ProTable
         {...BASE_PRO_TABLE_PROPS}
-        headerTitle="权限列表"
+        headerTitle="字典值"
         actionRef={actionRef}
+        defaultData={[{
+          id: 1,
+          name: "string",
+          identifier: "string",
+          description: "string",
+          keyId: 1
+        }]}
         toolBarRender={() => [
           <Button
             key="1"
@@ -156,13 +179,6 @@ const DictValueTable: React.FC<Props> = (props) => {
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={<div>已选择{' '}<a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}项&nbsp;&nbsp;</div>}
-        >
-          <Button onClick={deleteBatch}>批量删除</Button>
-        </FooterToolbar>
-      )}
       <CreateForm
         onCancel={() => handleModalVisible(false)}
         visible={createModalVisible}
