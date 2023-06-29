@@ -34,16 +34,4 @@ public class GlobalExceptionHandler {
         logger.error("参数解析失败：{}", e.getMessage());
         return AjaxResult.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
-
-    /**
-     * RuntimeException 用于处理运行时异常
-     *
-     * @param e 异常
-     * @return AjaxResult
-     */
-    @ExceptionHandler(Exception.class)
-    public AjaxResult<?> runtimeExceptionHandler(RuntimeException e) {
-        e.printStackTrace();
-        return AjaxResult.failure(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-    }
 }

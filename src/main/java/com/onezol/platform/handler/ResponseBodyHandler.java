@@ -12,7 +12,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.onezol.platform.constant.Constant.S_CONTROLLER_NULL_RESP;
 
@@ -61,6 +62,15 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
                 return JsonUtils.toJson(AjaxResult.success(null));
             }
             return JsonUtils.toJson(AjaxResult.success(body));
+        }
+        // 4. 处理异常
+        if (body instanceof LinkedHashMap && ((LinkedHashMap<?, ?>) body).size() == 4) {
+            Set<?> keySet = ((LinkedHashMap<?, ?>) body).keySet();
+            Set<String> keys = keySet.stream().map(Object::toString).collect(Collectors.toSet());
+            List<String> list = Arrays.asList("status", "timestamp", "path", "error");
+            if (keys.containsAll(list)) {
+                return body;
+            }
         }
 //        String bodyString = body.toString();
 //        if (bodyString.startsWith("{") && bodyString.endsWith("}")) {
