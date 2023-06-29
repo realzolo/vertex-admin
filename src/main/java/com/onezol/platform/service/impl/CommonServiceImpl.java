@@ -138,7 +138,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      * @return 保存/更新结果
      */
     @Override
-    public Object save(String serviceName, Map<String, Object> data) {
+    public Object save(String serviceName, Map<String, Object> data, String[] unique) {
         IService<Object> service = getBeanByName(serviceName);
         Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
 
@@ -154,6 +154,24 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
+        }
+
+        // 唯一性校验
+        if (Objects.nonNull(unique) && unique.length > 0) {
+            QueryWrapper<Object> wrapper = new QueryWrapper<>();
+            for (String field : unique) {
+                Object value = data.get(field);
+                if (value == null || "".equals(value)) {
+                    continue;
+                }
+                field = StringUtils.toUnderScoreCase(field); // 驼峰转下划线
+                field = "`" + field + "`";  // 防止字段名为数据库关键字
+                wrapper.eq(field, value);
+            }
+            long count = service.count(wrapper);
+            if (count > 0) {
+                throw new BusinessException("保存失败，数据已存在");
+            }
         }
 
         // 保存

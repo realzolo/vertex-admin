@@ -150,11 +150,13 @@ export default class CommonRequest {
    * 通用更新接口(根据ID更新)
    * @param serviceName 服务名称
    * @param data 数据
+   * @param unique 唯一键
    */
-  public static update = (serviceName: string, data: UpdateParams): Promise<unknown> => {
+  public static update = (serviceName: string, data: UpdateParams, unique?: string[]): Promise<unknown> => {
     const params = {
       serviceName: serviceName,
-      data: data
+      data: data,
+      unique: unique
     }
     return request<unknown>('/api/common/request', {
       method: 'PUT',
@@ -166,11 +168,13 @@ export default class CommonRequest {
    * 通用新增接口
    * @param serviceName 服务名称
    * @param data 数据
+   * @param unique
    */
-  public static save = (serviceName: string, data: Record<string, any>): Promise<unknown> => {
+  public static save = (serviceName: string, data: Record<string, any>, unique?: string[]): Promise<unknown> => {
     const params = {
       serviceName: serviceName,
-      data: data
+      data: data,
+      unique: unique
     }
     return request<unknown>('/api/common/request', {
       method: 'POST',

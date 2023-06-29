@@ -57,19 +57,21 @@ public class CommonController {
     public Object update(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         Map<String, Object> data = param.getData();
+        String[] unique = param.getUnique();
         if (data == null || !data.containsKey("id")) {
             throw new BusinessException("缺失参数id");
         }
-        return service.save(serviceName, data);
+        return service.save(serviceName, data, unique);
     }
 
     @PostMapping("/request")
     public Object save(@RequestBody @Validated CommonRequestParam param) {
         String serviceName = param.getServiceName();
         Map<String, Object> data = param.getData();
+        String[] unique = param.getUnique();
         if (data == null || data.isEmpty()) {
             throw new BusinessException("缺失参数data");
         }
-        return service.save(serviceName, data);
+        return service.save(serviceName, data, unique);
     }
 }

@@ -29,6 +29,9 @@ public class CommonRequestParam {
     // 条件表达式
     private Map<String, Map<String, Object>> condition;
 
+    // 唯一值属性
+    private String[] unique;
+
     public String getServiceName() {
         return serviceName;
     }
@@ -83,5 +86,13 @@ public class CommonRequestParam {
 
     public void setCondition(Map<String, Map<String, Object>> condition) {
         this.condition = condition;
+    }
+
+    public String[] getUnique() {
+        return unique;
+    }
+
+    public void setUnique(String[] unique) {
+        this.unique = unique;
     }
 }
