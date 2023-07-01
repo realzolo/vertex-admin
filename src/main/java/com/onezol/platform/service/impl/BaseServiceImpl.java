@@ -54,7 +54,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     }
 
     /**
-     * 忽视逻辑删除查询
+     * 查询(忽视逻辑删除)
      *
      * @param id id
      */
@@ -69,7 +69,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     }
 
     /**
-     * 忽视逻辑删除批量查询
+     * 查询(忽视逻辑删除)
      *
      * @param ids id列表
      */
@@ -83,6 +83,23 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         }
         String idsStr = handleIdList(ids);
         return this.baseMapper.opsForSelectList("select * from " + tableName + " where id in (" + idsStr + ")");
+    }
+
+    /**
+     * 查询(忽视逻辑删除)
+     *
+     * @param field 字段名
+     * @param value 字段值
+     */
+    @Override
+    public T[] selectIgnoreLogicDelete(String field, Object value) {
+        String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
+        // 如果value是字符串，需要加上单引号
+        if (value instanceof String) {
+            value = "'" + value + "'";
+        }
+        field = "`" + field + "`";
+        return this.baseMapper.opsForSelectList("select * from " + tableName + " where " + field + " = " + value);
     }
 
     /**

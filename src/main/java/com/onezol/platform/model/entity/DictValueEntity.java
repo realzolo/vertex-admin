@@ -2,6 +2,9 @@ package com.onezol.platform.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.onezol.platform.annotation.InsertStrategy;
+import com.onezol.platform.constant.enums.FieldStrategy;
+
 
 @TableName("pf_dict_value")
 public class DictValueEntity extends BaseEntity {
@@ -13,14 +16,17 @@ public class DictValueEntity extends BaseEntity {
      * 字典值键，如：PERSON.GENDER
      */
     @TableField("`key`")
+    @InsertStrategy(FieldStrategy.UNIQUE)
     private String key;
     /**
      * 字典代码，如：1
      */
+    @InsertStrategy(FieldStrategy.UNIQUE)
     private Integer code;
     /**
      * 字典值，如：男
      */
+    @InsertStrategy(FieldStrategy.UNIQUE)
     private String value;
     /**
      * 字典描述

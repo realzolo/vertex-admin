@@ -29,8 +29,7 @@ public interface CommonService {
      *
      * @param serviceName 服务名
      * @param data        数据
-     * @param unique      唯一值
      * @return 保存/更新结果
      */
-    Object save(String serviceName, Map<String, Object> data, String[] unique);
+    Object save(String serviceName, Map<String, Object> data);
 }

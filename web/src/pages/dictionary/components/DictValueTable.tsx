@@ -43,7 +43,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       return;
     }
     values.keyId = itemKey;
-    const res = await CommonRequest.save("dictValue", values, ["key"]);
+    const res = await CommonRequest.save("dictValue", values);
     if (res) {
       handleModalVisible(false);
       actionRef.current?.reloadAndRest?.();

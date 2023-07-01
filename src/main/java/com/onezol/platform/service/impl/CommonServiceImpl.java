@@ -2,11 +2,13 @@ package com.onezol.platform.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.onezol.AppStarter;
+import com.onezol.platform.annotation.InsertStrategy;
+import com.onezol.platform.constant.enums.FieldStrategy;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.pojo.ListResultWrapper;
+import com.onezol.platform.service.BaseService;
 import com.onezol.platform.service.CommonService;
 import com.onezol.platform.util.ConditionUtils;
 import com.onezol.platform.util.StringUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,8 +67,8 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      */
     @Override
     public Object query(String serviceName, String[] fields, Map<String, Map<String, Object>> condition, String orderBy, Integer page, Integer pageSize) {
-        IService<Object> service = getBeanByName(serviceName);
-        QueryWrapper<Object> wrapper = new QueryWrapper<>();
+        BaseService<BaseEntity> service = getBeanByName(serviceName);
+        QueryWrapper<BaseEntity> wrapper = new QueryWrapper<>();
 
         // 查询字段
         if (Objects.nonNull(fields) && fields.length > 0) {
@@ -91,9 +94,9 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         }
 
         // 分页
-        Page<Object> objectPage = getPage(page, pageSize);
+        Page<BaseEntity> objectPage = getPage(page, pageSize);
 
-        Page<Object> resultPage;
+        Page<BaseEntity> resultPage;
         try {
             resultPage = service.page(objectPage, wrapper);
         } catch (Exception e) {
@@ -118,7 +121,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
     @Override
     @Transactional
     public void delete(String serviceName, long[] ids) {
-        IService<Object> service = getBeanByName(serviceName);
+        BaseService<BaseEntity> service = getBeanByName(serviceName);
         List<Long> idList = Arrays.stream(ids).filter(id -> id > 0).distinct().boxed().collect(Collectors.toList());
         if (idList.isEmpty()) {
             throw new BusinessException("删除失败, 无效的id");
@@ -138,8 +141,8 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      * @return 保存/更新结果
      */
     @Override
-    public Object save(String serviceName, Map<String, Object> data, String[] unique) {
-        IService<Object> service = getBeanByName(serviceName);
+    public Object save(String serviceName, Map<String, Object> data) {
+        BaseService<BaseEntity> service = getBeanByName(serviceName);
         Class<? extends BaseEntity> entityClass = getEntityClass(serviceName);
 
         if (Objects.isNull(data) || data.isEmpty()) {
@@ -156,23 +159,35 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             throw new RuntimeException(e);
         }
 
-        // 唯一性校验
-        if (Objects.nonNull(unique) && unique.length > 0) {
-            QueryWrapper<Object> wrapper = new QueryWrapper<>();
-            for (String field : unique) {
-                Object value = data.get(field);
-                if (value == null || "".equals(value)) {
+        // 唯一性校验与逻辑删除处理(更新时无需处理)
+        if (entity.getId() == null) {
+            Field[] fields = entityClass.getDeclaredFields();
+            for (Field field : fields) {
+                InsertStrategy insertStrategy = field.getAnnotation(InsertStrategy.class);
+                if (Objects.isNull(insertStrategy)) {
                     continue;
                 }
-                field = StringUtils.toUnderScoreCase(field); // 驼峰转下划线
-                field = "`" + field + "`";  // 防止字段名为数据库关键字
-                wrapper.eq(field, value);
-            }
-            long count = service.count(wrapper);
-            if (count > 0) {
-                throw new BusinessException("保存失败，数据已存在");
+                String fieldName = field.getName();
+                FieldStrategy[] value = insertStrategy.value();
+                for (FieldStrategy strategy : value) {
+                    // 校验唯一性
+                    if (strategy == FieldStrategy.UNIQUE) {
+                        BaseEntity[] existEntities = service.selectIgnoreLogicDelete(fieldName, data.get(fieldName));
+                        if (existEntities.length == 0) {
+                            continue;
+                        }
+                        BaseEntity existEntity = existEntities[0];
+                        // 存在且未被逻辑删除的数据, 则抛出异常
+                        if (!existEntity.isDeleted()) {
+                            throw new BusinessException("保存失败, 数据已存在");
+                        }
+                        // 存在且被逻辑删除的数据, 则直接物理删除(此处不直接更新是因为某些实体类的字段并不会使用UNIQUE策略，需要数据库层面的唯一性校验)
+                        service.deleteById(existEntity.getId());
+                    }
+                }
             }
         }
+
 
         // 保存
         boolean ok;
@@ -193,15 +208,15 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      * @param serviceName 服务名
      * @return bean对象
      */
-    @SuppressWarnings("unchecked,rawtypes")
-    public IService<Object> getBeanByName(String serviceName) {
+    @SuppressWarnings("unchecked")
+    public BaseService<BaseEntity> getBeanByName(String serviceName) {
         serviceName = serviceName + "ServiceImpl";
-        IService serviceBean;
+        BaseService<BaseEntity> serviceBean;
         try {
-            serviceBean = context.getBean(serviceName, IService.class);
+            serviceBean = context.getBean(serviceName, BaseService.class);
         } catch (BeansException e) {
             try {
-                serviceBean = context.getBean(serviceName.substring(0, serviceName.length() - 4), IService.class);
+                serviceBean = context.getBean(serviceName.substring(0, serviceName.length() - 4), BaseService.class);
             } catch (RuntimeException ex) {
                 throw new RuntimeException("服务名不存在");
             }
@@ -236,7 +251,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
      * @param pageSize 每页数量
      * @return page 页码
      */
-    private Page<Object> getPage(Integer page, Integer pageSize) {
+    private Page<BaseEntity> getPage(Integer page, Integer pageSize) {
         if (Objects.isNull(page) || page < 1) {
             page = 1;
         }
