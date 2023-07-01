@@ -21,7 +21,6 @@ public class DictValueEntity extends BaseEntity {
     /**
      * 字典代码，如：1
      */
-    @InsertStrategy(FieldStrategy.UNIQUE)
     private Integer code;
     /**
      * 字典值，如：男

@@ -3,13 +3,16 @@ package com.onezol.platform.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.onezol.AppStarter;
+import com.onezol.platform.annotation.DictDefinition;
 import com.onezol.platform.annotation.InsertStrategy;
 import com.onezol.platform.constant.enums.FieldStrategy;
 import com.onezol.platform.exception.BusinessException;
+import com.onezol.platform.model.dto.DictValue;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.BaseService;
 import com.onezol.platform.service.CommonService;
+import com.onezol.platform.service.DictValueService;
 import com.onezol.platform.util.ConditionUtils;
 import com.onezol.platform.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class CommonServiceImpl implements CommonService, InitializingBean {
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private DictValueService dictValueService;
 
     private List<String> entityPath;
 
@@ -159,20 +164,22 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             throw new RuntimeException(e);
         }
 
-        // 唯一性校验与逻辑删除处理(更新时无需处理)
-        if (entity.getId() == null) {
-            Field[] fields = entityClass.getDeclaredFields();
-            for (Field field : fields) {
-                InsertStrategy insertStrategy = field.getAnnotation(InsertStrategy.class);
-                if (Objects.isNull(insertStrategy)) {
-                    continue;
-                }
-                String fieldName = field.getName();
+        // 字段处理
+        Field[] fields = entityClass.getDeclaredFields();
+        for (Field field : fields) {
+            InsertStrategy insertStrategy = field.getAnnotation(InsertStrategy.class);
+            DictDefinition dictDefinition = field.getAnnotation(DictDefinition.class);
+
+            String fieldName = field.getName();
+            Object fieldValue = data.get(fieldName);
+
+            // 唯一性校验与逻辑删除处理(更新时无需处理)
+            if (entity.getId() == null && Objects.nonNull(insertStrategy)) {
                 FieldStrategy[] value = insertStrategy.value();
                 for (FieldStrategy strategy : value) {
                     // 校验唯一性
                     if (strategy == FieldStrategy.UNIQUE) {
-                        BaseEntity[] existEntities = service.selectIgnoreLogicDelete(fieldName, data.get(fieldName));
+                        BaseEntity[] existEntities = service.selectIgnoreLogicDelete(fieldName, fieldValue);
                         if (existEntities.length == 0) {
                             continue;
                         }
@@ -186,8 +193,23 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
                     }
                 }
             }
-        }
 
+            // 字典转换
+            if (Objects.nonNull(dictDefinition)) {
+                String dictKey = dictDefinition.value();
+                DictValue dictvalue = dictValueService.getByKey(dictKey);
+                if (Objects.isNull(dictvalue)) {
+                    throw new BusinessException("保存失败, 无效的字典值: " + fieldValue);
+                }
+                // 反射设置字典值
+                try {
+                    field.setAccessible(true);
+                    field.set(entity, dictvalue.getCode());
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         // 保存
         boolean ok;

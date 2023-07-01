@@ -26,5 +26,5 @@ public interface Constant {
     String S_CONTROLLER_NULL_RESP = "::SYMBOL::4CCA07368BEB40DA0DB2101421C9E46B::";
 
     // Redis key: 字典键
-    String RK_DICT = "dictionary";
+    String RK_DICTIONARY = "dictionary";
 }

@@ -16,7 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.onezol.platform.constant.Constant.RK_DICT;
+import static com.onezol.platform.constant.Constant.RK_DICTIONARY;
+
 
 @Component
 public class DictionarySyncRunner implements ApplicationRunner {
@@ -38,7 +39,7 @@ public class DictionarySyncRunner implements ApplicationRunner {
         });
 
         // 将字典数据保存到Redis缓存中
-        redisTemplate.opsForHash().putAll(RK_DICT, dictionaryMap);
+        redisTemplate.opsForHash().putAll(RK_DICTIONARY, dictionaryMap);
         logger.info("字典数据已同步到Redis缓存中，共 {} 项", dictionaryMap.size());
     }
 }
