@@ -1,19 +1,19 @@
 declare interface DictKey {
-  id: number;
+  id?: number;
   name: string;
   key: string;
-  parentId?: number;
-  description: string;
+  remark: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 declare interface DictValue {
-  id: number;
-  name: string;
-  identifier: string;
-  description: string;
+  id?: number;
   keyId: number;
+  key: string;
+  code: number;
+  value: string;
+  remark: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

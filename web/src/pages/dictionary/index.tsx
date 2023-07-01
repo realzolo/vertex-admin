@@ -6,14 +6,11 @@ import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import DictValueTable from "@/pages/dictionary/components/DictValueTable";
 
-/**
- * TODO: 个别请求需自定义
- */
 const DictionaryPage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValue, setStepFormValue] = useState<DictKey>();
-  const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [dictValueVisible, setDictValueVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
@@ -36,6 +33,10 @@ const DictionaryPage: React.FC = () => {
    * @param values
    */
   const doCreate = async (values: DictKey) => {
+    values = {
+      ...values,
+      key: values.key.toUpperCase()
+    }
     const res = await CommonRequest.save("dictKey", values);
     handleModalVisible(false);
     if (res) {
@@ -54,7 +55,7 @@ const DictionaryPage: React.FC = () => {
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("dictKey", selectedRowsState.map((item) => item.id));
+        await CommonRequest.deleteBatch("dictKey", selectedRows.map((item) => item.id));
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;
@@ -80,16 +81,36 @@ const DictionaryPage: React.FC = () => {
       title: '字典名称',
       dataIndex: 'name',
       valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            type: 'string',
+            min: 1,
+            max: 8,
+          }
+        ]
+      }
     },
     {
       title: '唯一标识',
       dataIndex: 'key',
       valueType: 'text',
       copyable: true,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            type: 'string',
+            min: 1,
+            max: 16,
+          }
+        ]
+      }
     },
     {
-      title: '字典描述',
-      dataIndex: 'description',
+      title: '备注',
+      dataIndex: 'remark',
       valueType: 'text',
       hideInSearch: true,
     },
@@ -134,9 +155,9 @@ const DictionaryPage: React.FC = () => {
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
       />
-      {selectedRowsState?.length > 0 && (
+      {selectedRows?.length > 0 && (
         <FooterToolbar
-          extra={<div>已选择{' '}<a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}项&nbsp;&nbsp;</div>}
+          extra={<div>已选择{' '}<a style={{fontWeight: 600}}>{selectedRows.length}</a>{' '}项&nbsp;&nbsp;</div>}
         >
           <Button onClick={deleteBatch}>批量删除</Button>
         </FooterToolbar>

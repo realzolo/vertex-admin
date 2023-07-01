@@ -10,7 +10,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
-  const [selectedRowsState, setSelectedRows] = useState<any[]>([]);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
   const actionRef = useRef<ActionType>();
 
@@ -42,7 +42,11 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       message.error("字典项ID不能为空");
       return;
     }
-    values.keyId = itemKey;
+    values = {
+      ...values,
+      keyId: itemKey,
+      key: (data as DictKey).key.toUpperCase() + "." + values.key.toUpperCase(),
+    }
     const res = await CommonRequest.save("dictValue", values);
     if (res) {
       handleModalVisible(false);
@@ -53,14 +57,14 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
   }
 
   /**
-   * 批量删除
+   * 删除
    */
-  const deleteBatch = async () => {
+  const doDelete = async () => {
     Modal.confirm({
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("dictValue", selectedRowsState.map((item) => item.id));
+        await CommonRequest.deleteBatch("dictValue", selectedRows.map((item) => item.id));
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;
@@ -119,8 +123,8 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       }
     },
     {
-      title: '字典描述',
-      dataIndex: 'description',
+      title: '备注',
+      dataIndex: 'remark',
       valueType: 'text',
       hideInSearch: true,
       formItemProps: {
@@ -157,13 +161,6 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
         {...BASE_PRO_TABLE_PROPS}
         headerTitle="字典值"
         actionRef={actionRef}
-        defaultData={[{
-          id: 1,
-          name: "string",
-          identifier: "string",
-          description: "string",
-          keyId: 1
-        }]}
         toolBarRender={() => [
           <Button
             key="1"
@@ -172,6 +169,16 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
           >
             新建
           </Button>,
+          selectedRows.length > 0 && (
+            <Button
+              key="1"
+              type="primary"
+              danger
+              onClick={doDelete}
+            >
+              删除
+            </Button>
+          )
         ]}
         request={fetchData}
         columns={columns}

@@ -18,9 +18,9 @@ public class DictValue extends BaseDTO {
      */
     private String value;
     /**
-     * 字典描述
+     * 备注
      */
-    private String description;
+    private String remark;
 
     public Long getKeyId() {
         return keyId;
@@ -54,11 +54,11 @@ public class DictValue extends BaseDTO {
         this.value = value;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

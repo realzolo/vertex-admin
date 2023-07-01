@@ -10,9 +10,9 @@ public class DictKey extends BaseDTO {
      */
     private String key;
     /**
-     * 字典描述
+     * 备注
      */
-    private String description;
+    private String remark;
 
     public String getName() {
         return name;
@@ -30,11 +30,11 @@ public class DictKey extends BaseDTO {
         this.key = key;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -30,7 +30,7 @@ CREATE TABLE pf_role
     name        VARCHAR(50)         DEFAULT NULL COMMENT '角色名称',
     `key`       VARCHAR(50)         DEFAULT NULL COMMENT '角色key',
     permissions TEXT COMMENT '权限列表',
-    description VARCHAR(500)        DEFAULT NULL COMMENT '角色描述',
+    remark      VARCHAR(500)        DEFAULT NULL COMMENT '备注',
     created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
@@ -43,13 +43,13 @@ CREATE TABLE pf_role
 DROP TABLE IF EXISTS pf_permission;
 CREATE TABLE pf_permission
 (
-    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    name        VARCHAR(50)         DEFAULT NULL COMMENT '权限名称',
-    `key`       VARCHAR(50)         DEFAULT NULL COMMENT '权限key',
-    description TEXT COMMENT '权限描述',
-    created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    name       VARCHAR(50)         DEFAULT NULL COMMENT '权限名称',
+    `key`      VARCHAR(50)         DEFAULT NULL COMMENT '权限key',
+    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
+    created_at DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
     PRIMARY KEY (id),
     KEY idx_pf_permission_name (name)
 ) ENGINE = InnoDB
@@ -91,13 +91,13 @@ CREATE TABLE pf_role_permission
 DROP TABLE IF EXISTS pf_dict_key;
 CREATE TABLE pf_dict_key
 (
-    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    name        VARCHAR(50)         DEFAULT NULL COMMENT '字典名称',
-    `key`       VARCHAR(50)         DEFAULT NULL COMMENT '字典key',
-    description VARCHAR(500)        DEFAULT NULL COMMENT '字典描述',
-    created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    name       VARCHAR(50)         DEFAULT NULL COMMENT '字典名称',
+    `key`      VARCHAR(50)         DEFAULT NULL COMMENT '字典key',
+    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
+    created_at DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
     PRIMARY KEY (id),
     UNIQUE KEY idx_pf_dict_key_key (`key`)
 ) ENGINE = InnoDB
@@ -107,15 +107,15 @@ CREATE TABLE pf_dict_key
 DROP TABLE IF EXISTS pf_dict_value;
 CREATE TABLE pf_dict_value
 (
-    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    key_id      BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '字典key ID',
-    `key`       VARCHAR(50)         DEFAULT NULL COMMENT '字典值key',
-    code        INT                 DEFAULT NULL COMMENT '字典code',
-    value       VARCHAR(50)         DEFAULT NULL COMMENT '字典value',
-    description VARCHAR(500)        DEFAULT NULL COMMENT '字典描述',
-    created_at  DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at  DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    key_id     BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '字典key ID',
+    `key`      VARCHAR(50)         DEFAULT NULL COMMENT '字典值key',
+    code       INT                 DEFAULT NULL COMMENT '字典code',
+    value      VARCHAR(50)         DEFAULT NULL COMMENT '字典value',
+    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
+    created_at DATETIME            DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
     PRIMARY KEY (id),
     UNIQUE KEY idx_pf_dict_value_key (`key`)
 ) ENGINE = InnoDB
