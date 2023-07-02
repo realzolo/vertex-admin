@@ -154,6 +154,11 @@ public class NetUtils {
         return bytes;
     }
 
+    /**
+     * 获取本机IP地址
+     *
+     * @return ip
+     */
     public static String getHostIp() {
         try {
             return InetAddress.getLocalHost().getHostAddress();

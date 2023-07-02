@@ -14,27 +14,7 @@ import java.util.Date;
  */
 public class DateUtils {
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    static DateTimeFormatter[] FORMATTERS = {
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时"),
-            DateTimeFormatter.ofPattern("yyyy年MM月dd日HH"),
-            DateTimeFormatter.ofPattern("yyyy年MM月"),
-            DateTimeFormatter.ofPattern("yyyy年"),
-            DateTimeFormatter.ofPattern("yyyy")
-    };
+    static DateTimeFormatter[] FORMATTERS = {DateTimeFormatter.ISO_LOCAL_DATE_TIME, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy-MM-dd"), DateTimeFormatter.ofPattern("yyyy/MM/dd"), DateTimeFormatter.ofPattern("yyyy年MM月dd日"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH"), DateTimeFormatter.ofPattern("yyyy年MM月"), DateTimeFormatter.ofPattern("yyyy年"), DateTimeFormatter.ofPattern("yyyy")};
 
     /**
      * 今日开始时间
@@ -154,5 +134,21 @@ public class DateUtils {
     public static String format(Date date, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 时间差
+     */
+    public static String timeDifference(LocalDateTime startTime, LocalDateTime endTime) {
+        long between = java.time.Duration.between(startTime, endTime).toMillis();
+        long day = between / (24 * 60 * 60 * 1000);
+        long hour = (between / (60 * 60 * 1000) - day * 24);
+        long min = ((between / (60 * 1000)) - day * 24 * 60 - hour * 60);
+        long s = (between / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+        return day + "天" + hour + "小时" + min + "分" + s + "秒";
     }
 }
