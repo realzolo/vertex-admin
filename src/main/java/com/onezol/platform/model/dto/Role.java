@@ -3,7 +3,7 @@ package com.onezol.platform.model.dto;
 public class Role extends BaseDTO {
     private String name;
     private String key;
-    private String description;
+    private String remark;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class Role extends BaseDTO {
         this.key = key;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

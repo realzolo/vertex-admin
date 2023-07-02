@@ -1,8 +1,27 @@
+declare interface PermissionGroup {
+  id?: number;
+  name: string;
+  key: string;
+  remark: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 declare interface Permission {
-    id?: number;
-    name: string;
-    identifier: string;
-    description: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+  id?: number;
+  groupId: number;
+  name: string;
+  key: string;
+  remark: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+declare interface Role {
+  id?: number;
+  name: string;
+  key: string;
+  remark: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

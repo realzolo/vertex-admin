@@ -49,7 +49,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleEntity> imp
             role.setId(roleEntity.getId());
             role.setName(roleEntity.getName());
             role.setKey(roleEntity.getKey());
-            role.setDescription(roleEntity.getDescription());
+            role.setRemark(roleEntity.getRemark());
             return role;
         }).collect(Collectors.toSet());
     }

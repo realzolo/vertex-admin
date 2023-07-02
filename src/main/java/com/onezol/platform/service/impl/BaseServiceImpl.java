@@ -103,6 +103,21 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     }
 
     /**
+     * 查询(忽视逻辑删除)
+     *
+     * @param condition 条件
+     * @return T[]
+     */
+    @Override
+    public T[] selectIgnoreLogicDelete(String condition) {
+        String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
+        if (condition == null || condition.isEmpty()) {
+            condition = "1 = 1";
+        }
+        return this.baseMapper.opsForSelectList("select * from " + tableName + " where " + condition);
+    }
+
+    /**
      * 处理id列表
      *
      * @param ids id列表

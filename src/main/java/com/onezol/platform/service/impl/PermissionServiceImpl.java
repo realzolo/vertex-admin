@@ -55,7 +55,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
             permission.setId(permissionEntity.getId());
             permission.setName(permissionEntity.getName());
             permission.setKey(permissionEntity.getKey());
-            permission.setDescription(permissionEntity.getDescription());
+            permission.setRemark(permissionEntity.getRemark());
             return permission;
         }).collect(Collectors.toSet());
     }

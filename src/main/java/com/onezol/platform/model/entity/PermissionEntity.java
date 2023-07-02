@@ -5,10 +5,29 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("pf_permission")
 public class PermissionEntity extends BaseEntity {
+    private Long groupId;
     private String name;
     @TableField("`key`")
     private String key;
-    private String description;
+    private String remark;
+
+    public PermissionEntity() {
+    }
+
+    public PermissionEntity(Long groupId, String name, String key, String remark) {
+        this.groupId = groupId;
+        this.name = name;
+        this.key = key;
+        this.remark = remark;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     public String getName() {
         return name;
@@ -26,11 +45,11 @@ public class PermissionEntity extends BaseEntity {
         this.key = key;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

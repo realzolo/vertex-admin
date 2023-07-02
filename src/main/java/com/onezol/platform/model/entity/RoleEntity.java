@@ -1,12 +1,14 @@
 package com.onezol.platform.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("pf_role")
 public class RoleEntity extends BaseEntity {
     private String name;
+    @TableField("`key`")
     private String key;
-    private String description;
+    private String remark;
 
     public String getName() {
         return name;
@@ -24,11 +26,11 @@ public class RoleEntity extends BaseEntity {
         this.key = key;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -29,16 +29,16 @@ export default [
         name: '安全管理',
         path: '/security',
         routes: [
-            {
-                name: '权限管理',
-                path: '/security/permission',
-                component: '@/pages/security/permission',
-            },
-            // {
-            //     name: '角色管理',
-            //     path: '/security/role',
-            //     component: '/security/role',
-            // },
+          {
+            name: '权限管理',
+            path: '/security/permission',
+            component: '@/pages/security/permission',
+          },
+          {
+            name: '角色管理',
+            path: '/security/role',
+            component: '@/pages/security/role',
+          },
         ]
     },
     {

@@ -4,15 +4,14 @@ import {Button, message, Modal} from "antd";
 import CommonRequest from "@/services/common";
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
-import PermissionTable from "./components/PermissionTable";
-import service from "@/services/security";
+import PermissionTransfer from "./components/PermissionTransfer";
 
-const PermissionPage: React.FC = () => {
+const RolePage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValue, setStepFormValue] = useState<PermissionGroup>();
+  const [stepFormValue, setStepFormValue] = useState<Role>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [subTableVisible, setSubTableVisible] = useState<boolean>(false);
+  const [dictValueVisible, setDictValueVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
@@ -22,9 +21,9 @@ const PermissionPage: React.FC = () => {
         key,
       }
     }
-    const res = await CommonRequest.query("permissionGroup", [], condition, page, pageSize);
+    const res = await CommonRequest.query("role", [], condition, page, pageSize);
     return {
-      data: res.items as PermissionGroup[],
+      data: res.items as Role[],
       total: res.total,
     }
   }
@@ -33,19 +32,18 @@ const PermissionPage: React.FC = () => {
    * 新建
    * @param values
    */
-  const doCreate = async (values: PermissionGroup) => {
+  const doCreate = async (values: Role) => {
     values = {
       ...values,
     }
-    const autoGeneratePermission = (values as any).autoGeneratePermission;
-    const autoGenerate = autoGeneratePermission && autoGeneratePermission.length > 0;
-    const res = await service.createPermissionGroup(values, autoGenerate);
+    const res = await CommonRequest.save("role", values);
     handleModalVisible(false);
     if (res) {
       actionRef.current?.reloadAndRest?.();
       message.success('添加成功');
       return;
     }
+    message.error('添加失败');
   }
 
   /**
@@ -56,7 +54,7 @@ const PermissionPage: React.FC = () => {
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("permissionGroup", selectedRows.map((item) => item.id));
+        await CommonRequest.deleteBatch("role", selectedRows.map((item) => item.id));
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;
@@ -65,21 +63,21 @@ const PermissionPage: React.FC = () => {
   }
 
   /**
-   * 查看权限值
+   * 查看
    * @param record
    */
-  const onViewDictValue = (record: PermissionGroup) => {
+  const onViewDictValue = (record: Role) => {
     setStepFormValue(record);
-    setSubTableVisible(true);
+    setDictValueVisible(true);
   }
 
-  const columns: ProDescriptionsItemProps<PermissionGroup>[] = [
+  const columns: ProDescriptionsItemProps<Role>[] = [
     {
       title: '序号',
       valueType: 'index',
     },
     {
-      title: '权限组',
+      title: '角色名称',
       dataIndex: 'name',
       valueType: 'text',
       formItemProps: {
@@ -97,13 +95,14 @@ const PermissionPage: React.FC = () => {
       title: '唯一标识',
       dataIndex: 'key',
       valueType: 'text',
+      copyable: true,
       formItemProps: {
         rules: [
           {
             required: true,
             type: 'string',
             min: 1,
-            max: 32,
+            max: 16,
           }
         ]
       }
@@ -113,15 +112,6 @@ const PermissionPage: React.FC = () => {
       dataIndex: 'remark',
       valueType: 'text',
       hideInSearch: true,
-    },
-    {
-      dataIndex: 'autoGeneratePermission',
-      valueType: 'checkbox',
-      valueEnum: {
-        option: '自动生成权限(新增/删除/修改/查询)',
-      },
-      hideInSearch: true,
-      render: (_, record) => (<></>)
     },
     {
       title: '创建时间',
@@ -137,7 +127,7 @@ const PermissionPage: React.FC = () => {
       render: (_, record) => (
         <>
           <a onClick={() => onViewDictValue(record)}>
-            权限配置
+            权限分配
           </a>
         </>
       ),
@@ -147,7 +137,7 @@ const PermissionPage: React.FC = () => {
     <PageContainer>
       <ProTable
         {...BASE_PRO_TABLE_PROPS}
-        headerTitle="权限列表"
+        headerTitle="字典项列表"
         actionRef={actionRef}
         toolBarRender={() => [
           <Button
@@ -182,9 +172,9 @@ const PermissionPage: React.FC = () => {
           columns={columns}
         />
       </CreateForm>
-      <PermissionTable
-        visible={subTableVisible}
-        hide={() => setSubTableVisible(false)}
+      <PermissionTransfer
+        visible={dictValueVisible}
+        hide={() => setDictValueVisible(false)}
         itemKey={stepFormValue?.id}
         data={stepFormValue}
       />
@@ -192,4 +182,4 @@ const PermissionPage: React.FC = () => {
   )
 }
 
-export default PermissionPage;
+export default RolePage;

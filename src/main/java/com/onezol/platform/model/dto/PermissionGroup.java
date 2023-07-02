@@ -1,6 +1,6 @@
 package com.onezol.platform.model.dto;
 
-public class Permission extends BaseDTO {
+public class PermissionGroup extends BaseDTO {
     private String name;
     private String key;
     private String remark;

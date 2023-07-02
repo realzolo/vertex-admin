@@ -1,7 +1,12 @@
-package com.onezol.platform.model.dto;
+package com.onezol.platform.model.entity;
 
-public class Permission extends BaseDTO {
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+@TableName("pf_permission_group")
+public class PermissionGroupEntity extends BaseEntity {
     private String name;
+    @TableField("`key`")
     private String key;
     private String remark;
 

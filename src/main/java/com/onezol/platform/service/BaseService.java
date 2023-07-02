@@ -48,4 +48,12 @@ public interface BaseService<T extends BaseEntity> extends com.baomidou.mybatisp
      * @return T[]
      */
     T[] selectIgnoreLogicDelete(String field, Object value);
+
+    /**
+     * 查询(忽视逻辑删除)
+     *
+     * @param condition 条件
+     * @return T[]
+     */
+    T[] selectIgnoreLogicDelete(String condition);
 }

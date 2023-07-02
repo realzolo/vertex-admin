@@ -1,4 +1,4 @@
-import {AntTree} from "@/typings";
+import {AntTree} from "@/components/XTree/typings";
 
 /**
  * 生成基础树形结构

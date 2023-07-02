@@ -90,7 +90,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
 
 
 const requestConfig: RequestConfig = {
-  timeout: 1000,
+  timeout: 10000,
   errorConfig,
   requestInterceptors,
   responseInterceptors
