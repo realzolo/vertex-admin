@@ -216,4 +216,41 @@ public class StringUtils extends org.springframework.util.StringUtils {
         }
         return "";
     }
+
+    /**
+     * 从字符串中去除指定的字符串
+     *
+     * @param str    字符串
+     * @param remove 指定的字符串
+     * @return 去除指定字符串后的字符串
+     */
+    public static String removeStart(String str, String remove) {
+        if (hasText(str) && hasText(remove)) {
+            return str.startsWith(remove) ? str.substring(remove.length()) : str;
+        } else {
+            return str;
+        }
+    }
+
+    /**
+     * 从字符串中获取两个指定字符串中间的字符串
+     *
+     * @param str   字符串
+     * @param open  开始字符串
+     * @param close 结束字符串
+     * @return 两个指定字符串中间的字符串
+     */
+    public static String substringBetween(String str, String open, String close) {
+        if (!StringUtils.isAnyBlank(str, open, close)) {
+            int start = str.indexOf(open);
+            if (start != -1) {
+                int end = str.indexOf(close, start + open.length());
+                if (end != -1) {
+                    return str.substring(start + open.length(), end);
+                }
+            }
+
+        }
+        return null;
+    }
 }
