@@ -1,6 +1,9 @@
 package com.onezol.platform.util;
 
 
+import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
+
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,10 +13,10 @@ import java.util.regex.Pattern;
  * @description ...
  */
 public class StringUtils extends org.springframework.util.StringUtils {
-    /**
-     * 空字符串
-     */
-    private static final String EMPTY_STRING = "";
+    public static final String SPACE = " ";
+    public static final String EMPTY = "";
+    public static final String LF = "\n";
+    public static final String CR = "\r";
 
     /**
      * 下划线
@@ -252,5 +255,26 @@ public class StringUtils extends org.springframework.util.StringUtils {
 
         }
         return null;
+    }
+
+    /**
+     * 字符串是否在指定的字符串中
+     *
+     * @param string        字符串
+     * @param searchStrings 指定的字符串
+     * @return 是否在指定的字符串中
+     */
+    public static boolean equalsAny(CharSequence string, CharSequence... searchStrings) {
+        if (ArrayUtils.isNotEmpty(searchStrings)) {
+            int var3 = searchStrings.length;
+
+            for (CharSequence next : searchStrings) {
+                if (Objects.equals(string, next)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

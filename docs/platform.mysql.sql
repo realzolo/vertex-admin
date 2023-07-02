@@ -128,10 +128,10 @@ CREATE TABLE pf_dict_value
 (
     id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
     key_id     BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '字典key ID',
-    `key`      VARCHAR(50)  DEFAULT NULL COMMENT '字典值key',
-    code       INT          DEFAULT NULL COMMENT '字典code',
-    value      VARCHAR(50)  DEFAULT NULL COMMENT '字典value',
-    remark     VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    `key`      VARCHAR(50)         DEFAULT NULL COMMENT '字典值key',
+    code       INT                 DEFAULT NULL COMMENT '字典code',
+    value      VARCHAR(50)         DEFAULT NULL COMMENT '字典value',
+    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
     created_at DATETIME COMMENT '创建时间',
     updated_at DATETIME COMMENT '更新时间',
     deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
@@ -139,3 +139,22 @@ CREATE TABLE pf_dict_value
     UNIQUE KEY idx_pf_dict_value_key (`key`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='字典value表';
+
+DROP TABLE IF EXISTS pf_user_login_log;
+CREATE TABLE pf_user_login_log
+(
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    username   VARCHAR(50)         DEFAULT NULL COMMENT '用户账号',
+    status     VARCHAR(50)         DEFAULT NULL COMMENT '登录状态',
+    ip         VARCHAR(50)         DEFAULT NULL COMMENT '登录IP地址',
+    location   VARCHAR(50)         DEFAULT NULL COMMENT '登录地点',
+    browser    VARCHAR(50)         DEFAULT NULL COMMENT '浏览器类型',
+    os         VARCHAR(50)         DEFAULT NULL COMMENT '操作系统',
+    message    VARCHAR(500)        DEFAULT NULL COMMENT '提示消息',
+    time       DATETIME COMMENT '访问时间',
+    created_at DATETIME COMMENT '创建时间',
+    updated_at DATETIME COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='用户登录日志表';

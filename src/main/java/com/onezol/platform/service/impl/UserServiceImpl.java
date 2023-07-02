@@ -3,7 +3,10 @@ package com.onezol.platform.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.nimbusds.jose.JOSEException;
 import com.onezol.platform.constant.enums.HttpStatus;
+import com.onezol.platform.constant.enums.LoginStatus;
 import com.onezol.platform.exception.BusinessException;
+import com.onezol.platform.manager.AsyncManager;
+import com.onezol.platform.manager.factory.AsyncFactory;
 import com.onezol.platform.mapper.UserMapper;
 import com.onezol.platform.model.dto.User;
 import com.onezol.platform.model.entity.UserEntity;
@@ -88,11 +91,13 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         // 校验用户名密码
         UserEntity userEntity = this.getOne(Wrappers.<UserEntity>lambdaQuery().eq(UserEntity::getUsername, username));
         if (userEntity == null) {
+            AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.PASSWORD_ERROR));
             throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
         }
         String key = this.getKey(username, password);
         password = EncryptionUtils.encryptSha512(key);
         if (!userEntity.getPassword().equals(password)) {
+            AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.PASSWORD_ERROR));
             throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
         }
 
@@ -112,6 +117,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
 
         // 将用户信息存入Redis
         redisTemplate.opsForValue().set(P_RK_USER + username, user, JwtUtils.EXPIRE);
+
+        AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.SUCCESS));
+
         final String finalToken = token;
         return new HashMap<String, Object>() {{
             put("user", user);
