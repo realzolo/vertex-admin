@@ -66,7 +66,7 @@ const LoginPage = () => {
     }
 
     // 跳转到首页
-    navigate('/');
+    navigate('/home');
   }
   /**
    * 登录失败后的操作
