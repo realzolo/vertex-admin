@@ -9,7 +9,7 @@ import JVMInfoCard from "@/pages/monitor/server/components/JVMInfoCard";
 import FileSystemInfoCard from "@/pages/monitor/server/components/FileSystemInfoCard";
 
 const ServerMonitorPage = () => {
-  const [systemInfo, setSystemInfo] = useState<SystemInfo>();
+  const [data, setData] = useState<SystemInfo>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -19,12 +19,11 @@ const ServerMonitorPage = () => {
   const fetchData = async () => {
     setLoading(true);
     const res = await service.getServerMonitorInfo();
-    setSystemInfo(res);
-    console.log(res)
+    setData(res);
     setLoading(false);
   }
 
-  if (!systemInfo) {
+  if (!data) {
     return (
       <PageContainer loading={loading}/>
     );
@@ -32,23 +31,23 @@ const ServerMonitorPage = () => {
 
   return (
     <PageContainer loading={loading}>
-      <ServerInfoCard data={systemInfo.server}/>
+      <ServerInfoCard data={data.server}/>
 
       <Row gutter={24} style={{marginTop: 15}}>
         <Col span={12}>
-          <CPUInfoCard data={systemInfo.cpu}/>
+          <CPUInfoCard data={data.cpu}/>
         </Col>
         <Col span={12}>
           <MemoryInfoCard data={{
-            os: systemInfo.memory,
-            jvm: systemInfo.jvm
+            os: data.memory,
+            jvm: data.jvm
           }}/>
         </Col>
       </Row>
 
-      <JVMInfoCard data={{...systemInfo.jvm, projectPath: systemInfo.server?.projectPath}}/>
+      <JVMInfoCard data={{...data.jvm, projectPath: data.server?.projectPath}}/>
 
-      <FileSystemInfoCard data={systemInfo.fileSystems}/>
+      <FileSystemInfoCard data={data.fileSystems}/>
     </PageContainer>
   );
 }

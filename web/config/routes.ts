@@ -55,11 +55,11 @@ export default [
         path: '/monitor/server',
         component: '@/pages/monitor/server',
       },
-      // {
-      //   name: '缓存监控',
-      //   path: '/monitor/cache',
-      //   component: '@/pages/monitor/cache',
-      // },
+      {
+        name: '缓存监控',
+        path: '/monitor/cache',
+        component: '@/pages/monitor/cache',
+      },
     ]
   },
 ]

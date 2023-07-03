@@ -8,8 +8,18 @@ export interface SystemInfo {
   fileSystems: Record<string, string | number>[],
 }
 
+export interface CacheInfo {
+  commandStats: Record<string, string>[],
+  dbSize: number,
+  info: Record<string, string | number>,
+}
+
 export default {
   getServerMonitorInfo: (): Promise<SystemInfo> => {
     return request<SystemInfo>('/api/monitor/server');
+  },
+
+  getCacheMonitorInfo: (): Promise<CacheInfo> => {
+    return request<CacheInfo>('/api/monitor/cache');
   },
 }
