@@ -108,17 +108,62 @@ public class AuthorizeAspect {
     /**
      * 校验权限
      *
-     * @param permKeys     权限标识
-     * @param userPermKeys 用户权限标识
+     * @param permKeys     权限标识集合
+     * @param userPermKeys 用户权限标识集合
      */
     private void doValidatePerms(Set<String> permKeys, Set<String> userPermKeys) {
-        // 判断是否存在交集
-        boolean hasIntersection = !Collections.disjoint(permKeys, userPermKeys);
-
-        if (!hasIntersection) {
-            throw new BusinessException(HttpStatus.FORBIDDEN, "无权限");
+        // 遍历每个权限标识
+        for (String permKey : permKeys) {
+            if (isPermissionGranted(permKey, userPermKeys)) {
+                return; // 权限通过，退出方法
+            }
         }
+
+        throw new BusinessException(HttpStatus.FORBIDDEN, "无权限");
     }
+
+    /**
+     * 判断是否有权限
+     *
+     * @param permKey      权限标识
+     * @param userPermKeys 用户权限标识集合
+     * @return 是否有权限
+     */
+    private boolean isPermissionGranted(String permKey, Set<String> userPermKeys) {
+        // 遍历用户权限标识集合
+        for (String userPermKey : userPermKeys) {
+            if (isWildcardMatch(permKey, userPermKey)) {
+                return true; // 权限匹配，返回true
+            }
+        }
+        return false; // 权限不匹配
+    }
+
+    /**
+     * 判断是否满足通配符匹配条件
+     *
+     * @param permKey     权限标识
+     * @param userPermKey 用户权限标识
+     * @return 是否满足通配符匹配条件
+     */
+    private boolean isWildcardMatch(String permKey, String userPermKey) {
+        String[] permKeyParts = permKey.split(":"); // 拆分权限标识为三个部分
+        String[] userPermKeyParts = userPermKey.split(":"); // 拆分用户权限标识为三个部分
+
+        if (permKeyParts.length != 3 || userPermKeyParts.length != 3) {
+            return false; // 权限标识格式错误，不匹配
+        }
+
+        // 逐一比较每个位置上的角色是否匹配
+        for (int i = 0; i < 3; i++) {
+            if (!permKeyParts[i].equals("*") && !permKeyParts[i].equals(userPermKeyParts[i])) {
+                return false; // 不是通配符匹配
+            }
+        }
+
+        return true; // 是通配符匹配
+    }
+
 
     /**
      * 校验请求参数
