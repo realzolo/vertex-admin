@@ -52,7 +52,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
         String[] entityPackages = new String[entityDirs.length];
         for (int i = 0; i < entityDirs.length; i++) {
             // 将路径转换为包名
-            entityPackages[i] = entityDirs[i].replace("/", ".");
+            entityPackages[i] = entityDirs[i].replace("/", ".").replace("\\", ".");
             int index = entityPackages[i].indexOf(basePackage);
             entityPackages[i] = entityPackages[i].substring(index);
         }
