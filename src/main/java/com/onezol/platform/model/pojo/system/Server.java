@@ -1,9 +1,9 @@
 package com.onezol.platform.model.pojo.system;
 
 /**
- * 系统相关信息
+ * 服务器相关信息
  */
-public class System {
+public class Server {
     /**
      * 服务器名称
      */

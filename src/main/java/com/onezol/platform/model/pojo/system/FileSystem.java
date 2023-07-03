@@ -1,7 +1,7 @@
 package com.onezol.platform.model.pojo.system;
 
 /**
- * 系统文件相关信息
+ * 文件系统相关信息
  */
 public class FileSystem {
     /**

@@ -1,9 +1,16 @@
-package com.onezol.platform.manager;
+package com.onezol.platform.service.impl;
 
-import com.onezol.platform.model.pojo.system.System;
+import com.onezol.platform.model.dto.SystemInfoWrapper;
 import com.onezol.platform.model.pojo.system.*;
+import com.onezol.platform.service.MonitorService;
 import com.onezol.platform.util.MathUtils;
 import com.onezol.platform.util.NetUtils;
+import com.onezol.platform.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisServerCommands;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
@@ -12,75 +19,91 @@ import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 import oshi.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.lang.ref.WeakReference;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
-public class SystemInformation {
-    private static final int WAIT_SECOND = 1000;
-
-    /**
-     * CPU相关信息
-     */
-    private CPU cpu = new CPU();
-
-    /**
-     * 內存相关信息
-     */
-    private Memory memory = new Memory();
+@Service
+public class MonitorServiceImpl implements MonitorService {
+    private static WeakReference<SystemInfoWrapper> systemInfoWrapperCache = new WeakReference<>(null);
+    private static LocalDateTime lastTime = LocalDateTime.now();
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
-     * JVM相关信息
-     */
-    private JVM jvm = new JVM();
-
-    /**
-     * 系统相关信息
-     */
-    private System system = new System();
-
-    /**
-     * 文件系统相关信息
-     */
-    private List<FileSystem> fileSystems = new ArrayList<>();
-
-
-    /**
-     * 获取当前系统信息
+     * 获取当前系统监控信息
      *
-     * @return 当前系统信息
+     * @return 当前系统监控信息
      */
-    public static SystemInformation currentSystemInfo() {
+    @Override
+    public SystemInfoWrapper getSystemInfo() {
+        // 从缓存中获取, 10秒内不重复获取
+        if (systemInfoWrapperCache.get() != null && lastTime.plusSeconds(10).isAfter(LocalDateTime.now())) {
+            return systemInfoWrapperCache.get();
+        }
+
         SystemInfo systemInfo = new SystemInfo();
         HardwareAbstractionLayer hardware = systemInfo.getHardware();
 
         CPU cpu = getCPUInfo(hardware.getProcessor());
         Memory memory = getMemoryInfo(hardware.getMemory());
-        System system = getSystemInfo();
+        Server server = getServerInfo();
         JVM jvm = getJVMInfo();
         List<FileSystem> fileSystemInfo = getFileSystemInfo(systemInfo.getOperatingSystem());
 
-        SystemInformation systemInformation = new SystemInformation();
-        systemInformation.setCpu(cpu);
-        systemInformation.setMemory(memory);
-        systemInformation.setSystem(system);
-        systemInformation.setJvm(jvm);
-        systemInformation.setFileSystems(fileSystemInfo);
+        SystemInfoWrapper wrapper = new SystemInfoWrapper();
+        wrapper.setCpu(cpu);
+        wrapper.setMemory(memory);
+        wrapper.setServer(server);
+        wrapper.setJvm(jvm);
+        wrapper.setFileSystems(fileSystemInfo);
 
-        return systemInformation;
+        // 缓存
+        systemInfoWrapperCache = new WeakReference<>(wrapper);
+        lastTime = LocalDateTime.now();
+
+        return wrapper;
     }
 
+    /**
+     * 获取缓存(Redis)信息
+     *
+     * @return 缓存信息
+     */
+    @Override
+    public Object getCacheInfo() {
+        Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
+        Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));
+        Object dbSize = redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::dbSize);
+
+        Map<String, Object> result = new HashMap<>(3);
+        result.put("info", info);
+        result.put("dbSize", dbSize);
+
+        List<Map<String, String>> pieList = new ArrayList<>();
+        assert commandStats != null;
+        commandStats.stringPropertyNames().forEach(key -> {
+            Map<String, String> data = new HashMap<>(2);
+            String property = commandStats.getProperty(key);
+            data.put("name", StringUtils.removeStart(key, "cmdstat_"));
+            data.put("value", StringUtils.substringBetween(property, "calls=", ",usec"));
+            pieList.add(data);
+        });
+        result.put("commandStats", pieList);
+        return result;
+    }
 
     /**
      * 获取CPU信息
      *
      * @return CPU信息
      */
-    private static CPU getCPUInfo(CentralProcessor processor) {
+    private CPU getCPUInfo(CentralProcessor processor) {
         CPU cpu = new CPU();
 
         long[] prevTicks = processor.getSystemCpuLoadTicks();
+        int WAIT_SECOND = 1000;
         Util.sleep(WAIT_SECOND);
         long[] ticks = processor.getSystemCpuLoadTicks();
         long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
@@ -107,7 +130,7 @@ public class SystemInformation {
      *
      * @return 内存信息
      */
-    private static Memory getMemoryInfo(GlobalMemory globalMemory) {
+    private Memory getMemoryInfo(GlobalMemory globalMemory) {
         Memory memory = new Memory();
 
         memory.setTotal(globalMemory.getTotal());
@@ -118,21 +141,21 @@ public class SystemInformation {
     }
 
     /**
-     * 获取系统信息
+     * 获取服务器信息
      *
      * @return 系统信息
      */
-    private static System getSystemInfo() {
-        System system = new System();
+    private Server getServerInfo() {
+        Server server = new Server();
 
         Properties props = java.lang.System.getProperties();
-        system.setHostname(NetUtils.getHostName());
-        system.setIp(NetUtils.getHostIp());
-        system.setOsName(props.getProperty("os.name"));
-        system.setOsArch(props.getProperty("os.arch"));
-        system.setProjectPath(props.getProperty("user.dir"));
+        server.setHostname(NetUtils.getHostName());
+        server.setIp(NetUtils.getHostIp());
+        server.setOsName(props.getProperty("os.name"));
+        server.setOsArch(props.getProperty("os.arch"));
+        server.setProjectPath(props.getProperty("user.dir"));
 
-        return system;
+        return server;
     }
 
     /**
@@ -140,7 +163,7 @@ public class SystemInformation {
      *
      * @return JVM信息
      */
-    private static JVM getJVMInfo() {
+    private JVM getJVMInfo() {
         JVM jvm = new JVM();
 
         Properties props = java.lang.System.getProperties();
@@ -158,7 +181,7 @@ public class SystemInformation {
      *
      * @return 磁盘信息
      */
-    private static List<FileSystem> getFileSystemInfo(OperatingSystem os) {
+    private List<FileSystem> getFileSystemInfo(OperatingSystem os) {
         List<FileSystem> fileSystems = new ArrayList<>();
 
         oshi.software.os.FileSystem fs = os.getFileSystem();
@@ -187,7 +210,7 @@ public class SystemInformation {
      * @param size 字节大小
      * @return 转换后值
      */
-    public static String convertFileSize(long size) {
+    public String convertFileSize(long size) {
         long kb = 1024;
         long mb = kb * 1024;
         long gb = mb * 1024;
@@ -202,45 +225,5 @@ public class SystemInformation {
         } else {
             return String.format("%d B", size);
         }
-    }
-
-    public CPU getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(CPU cpu) {
-        this.cpu = cpu;
-    }
-
-    public Memory getMemory() {
-        return memory;
-    }
-
-    public void setMemory(Memory memory) {
-        this.memory = memory;
-    }
-
-    public JVM getJvm() {
-        return jvm;
-    }
-
-    public void setJvm(JVM jvm) {
-        this.jvm = jvm;
-    }
-
-    public System getSystem() {
-        return system;
-    }
-
-    public void setSystem(System system) {
-        this.system = system;
-    }
-
-    public List<FileSystem> getFileSystems() {
-        return fileSystems;
-    }
-
-    public void setFileSystems(List<FileSystem> fileSystems) {
-        this.fileSystems = fileSystems;
     }
 }
