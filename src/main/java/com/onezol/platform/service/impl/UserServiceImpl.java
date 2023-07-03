@@ -160,6 +160,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         }
         User user = new User();
         BeanUtils.copyProperties(userEntity, user);
+        user.setRoles(roleService.getKeysByUserId(user.getId()));
+        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
         return user;
     }
 
