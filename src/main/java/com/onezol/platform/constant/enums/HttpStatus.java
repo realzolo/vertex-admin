@@ -8,7 +8,8 @@ public enum HttpStatus implements EnumService {
     LOGIN_FAILURE("登录失败", 10002),
     NO_PERMISSION("无访问权限", 10003),
     FORBIDDEN("禁止访问", 10004),
-    UNAUTHORIZED("未授权", 10005);
+    UNAUTHORIZED("未授权", 10005),
+    PARAM_ERROR("请求参数错误", 10006);
 
 
     private final String value;

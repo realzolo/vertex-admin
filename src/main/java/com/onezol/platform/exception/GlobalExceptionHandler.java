@@ -1,9 +1,9 @@
 package com.onezol.platform.exception;
 
+import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.model.pojo.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +32,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public AjaxResult<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
         logger.error("参数解析失败：{}", e.getMessage());
-        return AjaxResult.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+        return AjaxResult.failure(HttpStatus.PARAM_ERROR);
     }
 }

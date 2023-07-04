@@ -37,6 +37,7 @@ const responseInterceptors: any[] = [
         case 10001: // 通用失败
         case 10003: // 无访问权限
         case 10004: // 禁止访问
+        case 10006: // 请求参数错误
           message.error(data.message);
           break;
         // 特殊异常处理(登录失败): data.success = false, 会触发errorHandler。next step: errorHandler
