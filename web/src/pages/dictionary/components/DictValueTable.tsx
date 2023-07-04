@@ -3,8 +3,9 @@ import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-co
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
-import CommonRequest from "@/services/common";
+import GenericService, {GenericParam} from "@/services/common";
 
+const genericService = new GenericService('dictValue');
 const DictValueTable: React.FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
@@ -16,17 +17,21 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
 
   const fetchData = async (params: any) => {
     const {current: page, pageSize, value, key, code} = params;
-    const condition = {
-      like: {
-        value,
-        key,
-        code
-      },
-      eq: {
-        keyId: itemKey
+    const param: GenericParam = {
+      page,
+      pageSize,
+      condition: {
+        like: {
+          value,
+          key,
+          code
+        },
+        eq: {
+          keyId: itemKey
+        }
       }
     }
-    const res = await CommonRequest.query("dictValue", [], condition, page, pageSize);
+    const res = await genericService.queryList(param);
     return {
       data: res.items as DictValue[],
       total: res.total,
@@ -47,7 +52,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       keyId: itemKey,
       key: (data as DictKey).key.toUpperCase() + "." + values.key.toUpperCase(),
     }
-    const res = await CommonRequest.save("dictValue", values);
+    const res = await genericService.save(values);
     if (res) {
       handleModalVisible(false);
       actionRef.current?.reloadAndRest?.();
@@ -64,7 +69,8 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("dictValue", selectedRows.map((item) => item.id));
+        const ids = selectedRows.map((item) => item.id);
+        await genericService.delete(ids);
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;

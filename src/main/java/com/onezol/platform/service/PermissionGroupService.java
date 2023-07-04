@@ -3,7 +3,7 @@ package com.onezol.platform.service;
 import com.onezol.platform.model.dto.PermissionGroup;
 import com.onezol.platform.model.entity.PermissionGroupEntity;
 
-public interface PermissionGroupService extends BaseService<PermissionGroupEntity> {
+public interface PermissionGroupService extends GenericService<PermissionGroupEntity> {
     /**
      * 创建权限组
      *

@@ -5,7 +5,7 @@ import com.onezol.platform.model.entity.RoleEntity;
 
 import java.util.Set;
 
-public interface RoleService extends BaseService<RoleEntity> {
+public interface RoleService extends GenericService<RoleEntity> {
     /**
      * 根据用户id获取角色列表
      *

@@ -1,12 +1,13 @@
 import React, {useRef, useState} from "react";
 import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {Button, message, Modal} from "antd";
-import CommonRequest from "@/services/common";
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import PermissionTable from "./components/PermissionTable";
 import service from "@/services/security";
+import GenericService, {GenericParam} from "@/services/common";
 
+const genericService = new GenericService("PermissionGroup");
 const PermissionPage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
@@ -15,14 +16,18 @@ const PermissionPage: React.FC = () => {
   const [subTableVisible, setSubTableVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
-    const {current: page, pageSize, name, key} = params;
-    const condition = {
-      like: {
-        name,
-        key,
+    const param: GenericParam = {
+      page: params.current,
+      pageSize: params.pageSize,
+      condition: {
+        like: {
+          name: params.name,
+          key: params.key,
+        }
       }
     }
-    const res = await CommonRequest.query("permissionGroup", [], condition, page, pageSize);
+    const res = await genericService.queryList(param);
+    console.log(res)
     return {
       data: res.items as PermissionGroup[],
       total: res.total,
@@ -56,7 +61,8 @@ const PermissionPage: React.FC = () => {
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("permissionGroup", selectedRows.map((item) => item.id));
+        const ids = selectedRows.map((item) => item.id);
+        await genericService.delete(ids);
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;

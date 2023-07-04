@@ -6,7 +6,7 @@ export default {
    *
    */
   createPermissionGroup: (values: PermissionGroup, autoGeneratePermission: boolean): Promise<PermissionGroup> => {
-    return request('/api/permission-group/create', {
+    return request('/api/permission-group/save', {
       method: 'POST',
       data: {
         ...values,

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
-public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleEntity> implements RoleService {
+public class RoleServiceImpl extends GenericServiceImpl<RoleMapper, RoleEntity> implements RoleService {
     @Autowired
     private UserRoleService userRoleService;
 

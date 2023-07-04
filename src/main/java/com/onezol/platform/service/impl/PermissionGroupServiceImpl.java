@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class PermissionGroupServiceImpl extends BaseServiceImpl<PermissionGroupMapper, PermissionGroupEntity> implements PermissionGroupService {
+public class PermissionGroupServiceImpl extends GenericServiceImpl<PermissionGroupMapper, PermissionGroupEntity> implements PermissionGroupService {
     @Autowired
     private PermissionService permissionService;
 
@@ -57,7 +57,7 @@ public class PermissionGroupServiceImpl extends BaseServiceImpl<PermissionGroupM
             String groupName = permissionGroupEntity.getName();
             String groupKey = permissionGroupEntity.getKey();
             List<PermissionEntity> permissions = Arrays.asList(
-                    new PermissionEntity(groupId, "查询" + groupName, groupKey + ":view", "查看" + groupName + "权限"),
+                    new PermissionEntity(groupId, "查询" + groupName, groupKey + ":query", "查询" + groupName + "权限"),
                     new PermissionEntity(groupId, "创建" + groupName, groupKey + ":create", "创建" + groupName + "权限"),
                     new PermissionEntity(groupId, "更新" + groupName, groupKey + ":update", "更新" + groupName + "权限"),
                     new PermissionEntity(groupId, "删除" + groupName, groupKey + ":delete", "删除" + groupName + "权限")

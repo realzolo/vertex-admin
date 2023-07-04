@@ -1,14 +1,18 @@
 package com.onezol.platform.model.param;
 
-import com.onezol.platform.annotation.Validator;
-
-public class PermissionGroupParam extends BaseParam {
-    @Validator(required = true)
+public class DictKeyParam extends BaseParam {
+    /**
+     * 字典名称，如：性别
+     */
     private String name;
-    @Validator(required = true)
+    /**
+     * 字典键，如：GENDER
+     */
     private String key;
+    /**
+     * 备注
+     */
     private String remark;
-    private Boolean autoGeneratePermission;
 
     public String getName() {
         return name;
@@ -32,13 +36,5 @@ public class PermissionGroupParam extends BaseParam {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Boolean getAutoGeneratePermission() {
-        return autoGeneratePermission;
-    }
-
-    public void setAutoGeneratePermission(Boolean autoGeneratePermission) {
-        this.autoGeneratePermission = autoGeneratePermission;
     }
 }

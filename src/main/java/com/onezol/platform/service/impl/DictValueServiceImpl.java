@@ -19,7 +19,7 @@ import java.util.Map;
 import static com.onezol.platform.constant.Constant.RK_DICTIONARY;
 
 @Service
-public class DictValueServiceImpl extends BaseServiceImpl<DictValueMapper, DictValueEntity> implements DictValueService {
+public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, DictValueEntity> implements DictValueService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired

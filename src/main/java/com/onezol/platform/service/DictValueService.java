@@ -4,7 +4,7 @@ import com.onezol.platform.model.dto.DictOption;
 import com.onezol.platform.model.dto.DictValue;
 import com.onezol.platform.model.entity.DictValueEntity;
 
-public interface DictValueService extends BaseService<DictValueEntity> {
+public interface DictValueService extends GenericService<DictValueEntity> {
     /**
      * 根据字典键获取字典值
      *

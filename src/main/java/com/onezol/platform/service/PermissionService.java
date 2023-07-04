@@ -5,7 +5,7 @@ import com.onezol.platform.model.entity.PermissionEntity;
 
 import java.util.Set;
 
-public interface PermissionService extends BaseService<PermissionEntity> {
+public interface PermissionService extends GenericService<PermissionEntity> {
     /**
      * 根据角色id获取权限列表
      *

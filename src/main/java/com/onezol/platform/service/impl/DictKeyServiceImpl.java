@@ -6,5 +6,5 @@ import com.onezol.platform.service.DictKeyService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DictKeyServiceImpl extends BaseServiceImpl<DictKeyMapper, DictKeyEntity> implements DictKeyService {
+public class DictKeyServiceImpl extends GenericServiceImpl<DictKeyMapper, DictKeyEntity> implements DictKeyService {
 }

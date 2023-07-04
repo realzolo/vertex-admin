@@ -1,11 +1,12 @@
 import React, {useRef, useState} from "react";
 import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {Button, message, Modal} from "antd";
-import CommonRequest from "@/services/common";
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import PermissionTransfer from "./components/PermissionTransfer";
+import GenericService, {GenericParam} from "@/services/common";
 
+const genericService = new GenericService('role');
 const RolePage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
@@ -15,13 +16,17 @@ const RolePage: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
-    const condition = {
-      like: {
-        name,
-        key,
+    const param: GenericParam = {
+      page,
+      pageSize,
+      condition: {
+        like: {
+          name,
+          key,
+        }
       }
     }
-    const res = await CommonRequest.query("role", [], condition, page, pageSize);
+    const res = await genericService.queryList(param);
     return {
       data: res.items as Role[],
       total: res.total,
@@ -36,7 +41,7 @@ const RolePage: React.FC = () => {
     values = {
       ...values,
     }
-    const res = await CommonRequest.save("role", values);
+    const res = await genericService.save(values);
     handleModalVisible(false);
     if (res) {
       actionRef.current?.reloadAndRest?.();
@@ -54,7 +59,8 @@ const RolePage: React.FC = () => {
       title: '确认操作',
       content: '是否要删除当前选中的数据？',
       onOk: async () => {
-        await CommonRequest.deleteBatch("role", selectedRows.map((item) => item.id));
+        const ids = selectedRows.map((item) => item.id);
+        await genericService.delete(ids);
         setSelectedRows([]);
         actionRef.current?.reloadAndRest?.();
         return true;

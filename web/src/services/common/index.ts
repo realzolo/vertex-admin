@@ -1,4 +1,4 @@
-import {request} from "@umijs/max";
+import {request} from "@@/plugin-request";
 
 export interface Condition {
   eq?: Record<string, any>;         // 等于
@@ -14,167 +14,76 @@ export interface Condition {
   isNotNull?: Record<string, any>;  // 不为空
 }
 
-interface UpdateParams {
-  id: number;
+export interface GenericParam {
+  page?: number;
+  pageSize?: number;
+  orderBy?: string;
+  fields?: string[];
+  condition?: Condition;
 
-  [key: string]: any;
 }
 
-/**
- * 通用API接口
- */
-export default class CommonRequest {
-  /**
-   * 通用查询接口(查询)
-   * @param serviceName 服务名称
-   * @param fields 字段
-   * @param condition 条件
-   * @param page 页码
-   * @param pageSize 每页大小
-   */
-  public static query = (serviceName: string, fields?: string[], condition?: Condition, page?: number, pageSize?: number): Promise<API.ListResult<unknown>> => {
-    const params = {
-      serviceName: serviceName,
-      fields: fields,
-      condition: condition,
-      page: page,
-      pageSize: pageSize
+class GenericService {
+  private readonly name: string;
+
+  constructor(name: string) {
+    // 去掉开头的/
+    if (name.startsWith('/')) {
+      name = name.substring(1);
     }
-    return request<API.ListResult<unknown>>('/api/common/query', {
-      method: 'POST',
-      data: params
-    });
+    // 驼峰转中划线
+    name = name.replace(/([A-Z])/g, "-$1").toLowerCase();
+    if (name.startsWith('-')) {
+      name = name.substring(1);
+    }
+    this.name = name;
   }
 
   /**
-   * 通用查询接口(快速查询)
-   * @param serviceName 服务名称
-   * @param page 页码
-   * @param pageSize 每页大小
-   */
-  public static quickQuery = (serviceName: string, page?: number, pageSize?: number): Promise<API.ListResult<unknown>> => {
-    const params = {
-      serviceName: serviceName,
-      page: page,
-      pageSize: pageSize
-    }
-    return request<API.ListResult<unknown>>('/api/common/query', {
-      method: 'POST',
-      data: params
-    });
-  }
-
-  /**
-   * 通用查询接口(查询一条结果)
-   * @param serviceName 服务名称
-   * @param fields 字段
-   * @param condition 条件
-   */
-  public static queryOne = async (serviceName: string, fields?: string[], condition?: Condition): Promise<unknown> => {
-    const params = {
-      serviceName: serviceName,
-      fields: fields,
-      condition: condition
-    }
-    const res = await request<API.ListResult<unknown>>('/api/common/query', {
-      method: 'POST',
-      data: params
-    });
-    if (res.items.length > 0) {
-      return res.items[0];
-    }
-    return null;
-  }
-
-  /**
-   * 通用查询接口(根据ID查询)
-   * @param serviceName
-   * @param id
-   */
-  public static queryById = async (serviceName: string, id: number): Promise<unknown> => {
-    const params = {
-      serviceName: serviceName,
-      condition: {
-        eq: {
-          id: id
-        }
-      }
-    }
-    const res = await request<API.ListResult<unknown>>('/api/common/query', {
-      method: 'POST',
-      data: params
-    });
-    if (res.items.length > 0) {
-      return res.items[0];
-    }
-    return null;
-  }
-
-  /**
-   * 通用删除接口(根据ID删除)
-   * @param serviceName 服务名称
+   * 通用接口(查询一条结果)
    * @param id ID
    */
-  public static delete = (serviceName: string, id: number): Promise<void> => {
-    const params = {
-      serviceName: serviceName,
-      data: {
-        id: [id]
-      }
-    }
-    return request<void>('/api/common/request', {
-      method: 'DELETE',
-      data: params
+  public query = (id: number) => {
+    return request(`/api/${this.name}/${id}`, {
+      method: 'GET'
     });
   }
 
   /**
-   * 通用删除接口(批量删除)
-   * @param serviceName 服务名称
-   * @param ids ID数组
+   * 通用接口(查询列表)
+   * @param param
    */
-  public static deleteBatch = (serviceName: string, ids: number[]): Promise<void> => {
-    const params = {
-      serviceName: serviceName,
-      data: {
-        id: ids
-      }
-    }
-    return request<void>('/api/common/request', {
-      method: 'DELETE',
-      data: params
-    });
-  }
-
-  /**
-   * 通用更新接口(根据ID更新)
-   * @param serviceName 服务名称
-   * @param data 数据
-   */
-  public static update = (serviceName: string, data: UpdateParams): Promise<unknown> => {
-    const params = {
-      serviceName: serviceName,
-      data: data,
-    }
-    return request<unknown>('/api/common/request', {
-      method: 'PUT',
-      data: params
-    });
-  }
-
-  /**
-   * 通用新增接口
-   * @param serviceName 服务名称
-   * @param data 数据
-   */
-  public static save = (serviceName: string, data: Record<string, any>): Promise<unknown> => {
-    const params = {
-      serviceName: serviceName,
-      data: data,
-    }
-    return request<unknown>('/api/common/request', {
+  public queryList = (param: GenericParam) => {
+    return request(`/api/${this.name}/list`, {
       method: 'POST',
-      data: params
+      data: param
+    });
+  }
+
+  /**
+   * 通用接口(删除)
+   * @param id ID
+   * @param physical 是否物理删除
+   */
+  public delete = (id: number | number[], physical?: boolean) => {
+    const ids = (Array.isArray(id) ? id.join(',') : id).toString();
+    const physicalDelete = physical ?? false;
+    // 将ids编码
+    // const ids = encodeURIComponent(id);
+    return request(`/api/${this.name}/${physicalDelete}/${ids}`, {
+      method: 'DELETE'
+    });
+  }
+
+  /**
+   * 通用接口(保存/更新)
+   */
+  public save = (values: Record<string, any>) => {
+    return request(`/api/${this.name}/save`, {
+      method: 'POST',
+      data: values
     });
   }
 }
+
+export default GenericService;

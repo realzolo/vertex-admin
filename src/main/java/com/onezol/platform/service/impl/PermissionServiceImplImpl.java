@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
-public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, PermissionEntity> implements PermissionService {
+public class PermissionServiceImplImpl extends GenericServiceImpl<PermissionMapper, PermissionEntity> implements PermissionService {
     @Autowired
     private RolePermissionService rolePermissionService;
     @Autowired
