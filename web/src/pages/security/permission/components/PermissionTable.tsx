@@ -3,7 +3,7 @@ import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-co
 import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
-import GenericService, {GenericParam} from "@/services/common/service";
+import GenericService, {GenericParam} from "@/services/common";
 
 const genericService = new GenericService('permission');
 const PermissionTable: React.FC<SubPageProps> = (props) => {

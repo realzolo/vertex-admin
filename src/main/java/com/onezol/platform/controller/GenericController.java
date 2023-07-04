@@ -5,6 +5,7 @@ import com.onezol.platform.annotation.Validated;
 import com.onezol.platform.model.dto.BaseDTO;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.param.BaseParam;
+import com.onezol.platform.model.param.DeleteParam;
 import com.onezol.platform.model.param.GenericParam;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.GenericService;
@@ -14,11 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Arrays;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class GenericController<T extends BaseEntity, P extends BaseParam> {
@@ -39,7 +39,7 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
     }
 
     /**
-     * 查询列表： /${controllerName}/list
+     * 查询列表： /{controllerName}/list
      *
      * @param param 通用参数
      * @return 结果列表
@@ -51,7 +51,7 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
     }
 
     /**
-     * 保存/更新： /${controllerName}/save
+     * 保存/更新： /{controllerName}/save
      *
      * @param param 通用参数
      * @return 保存/更新后的实体
@@ -63,14 +63,14 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
     }
 
     /**
-     * 删除： /${controllerName}/delete/${ids}/${physical}
+     * 删除： /{controllerName}/delete
      *
-     * @param physicalDelete 是否物理删除
-     * @param ids            逗号分隔的id列表
+     * @param param 删除参数
      */
-    @DeleteMapping("/{physical}/{ids}")
-    public void delete(@PathVariable("physical") boolean physicalDelete, @PathVariable String ids) {
-        Long[] idList = Arrays.stream(ids.split(",")).map(Long::parseLong).toArray(Long[]::new);
-        service.delete(idList, physicalDelete);
+    @DeleteMapping("/delete")
+    public void delete(@RequestBody @Validated DeleteParam param) {
+        Long[] ids = param.getIds();
+        boolean physicalDelete = !Objects.isNull(param.getPhysicalDelete()) && param.getPhysicalDelete();
+        service.delete(ids, physicalDelete);
     }
 }

@@ -4,6 +4,7 @@ import com.onezol.platform.annotation.ControllerService;
 import com.onezol.platform.model.dto.BaseDTO;
 import com.onezol.platform.model.dto.PermissionGroup;
 import com.onezol.platform.model.entity.PermissionGroupEntity;
+import com.onezol.platform.model.param.DeleteParam;
 import com.onezol.platform.model.param.GenericParam;
 import com.onezol.platform.model.param.PermissionGroupParam;
 import com.onezol.platform.model.pojo.ListResultWrapper;
@@ -25,19 +26,19 @@ public class PermissionGroupController extends GenericController<PermissionGroup
     private PermissionGroupService permissionGroupService;
 
     /**
-     * 查询列表： /${controllerName}/list
+     * 查询列表： /{controllerName}/list
      *
      * @param param 通用参数
      * @return 结果列表
      */
     @Override
 //    @PreAuthorize("admin:permission:list")
-    public ListResultWrapper<? extends BaseDTO> list(GenericParam param) {
+    public ListResultWrapper<? extends BaseDTO> list(@RequestBody GenericParam param) {
         return super.list(param);
     }
 
     /**
-     * 保存/更新： /${controllerName}/save
+     * 保存/更新： /{controllerName}/save
      *
      * @param param 通用参数
      * @return 保存/更新后的实体
@@ -51,14 +52,13 @@ public class PermissionGroupController extends GenericController<PermissionGroup
     }
 
     /**
-     * 删除： /${controllerName}/delete/${ids}/${physical}
+     * 删除： /{controllerName}/delete
      *
-     * @param physicalDelete 是否物理删除
-     * @param ids            逗号分隔的id列表
+     * @param param 删除参数
      */
     @Override
 //    @PreAuthorize("admin:permission:delete")
-    public void delete(boolean physicalDelete, String ids) {
-        super.delete(physicalDelete, ids);
+    public void delete(@RequestBody DeleteParam param) {
+        super.delete(param);
     }
 }

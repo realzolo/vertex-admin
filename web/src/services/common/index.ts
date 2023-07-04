@@ -66,12 +66,14 @@ class GenericService {
    * @param physical 是否物理删除
    */
   public delete = (id: number | number[], physical?: boolean) => {
-    const ids = (Array.isArray(id) ? id.join(',') : id).toString();
+    const ids = Array.isArray(id) ? id : [id];
     const physicalDelete = physical ?? false;
-    // 将ids编码
-    // const ids = encodeURIComponent(id);
-    return request(`/api/${this.name}/${physicalDelete}/${ids}`, {
-      method: 'DELETE'
+    return request(`/api/${this.name}/delete`, {
+      method: 'DELETE',
+      data: {
+        ids: ids,
+        physicalDelete: physicalDelete
+      }
     });
   }
 
