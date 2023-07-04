@@ -1,8 +1,10 @@
 import {Button, Drawer, Space, Transfer} from "antd";
 import React, {useEffect, useState} from "react";
-import CommonRequest from "@/services/common";
 import {TransferDirection} from "antd/es/transfer";
+import {DEFAULT_DRAWER_PROPS} from "@/constants";
+import GenericService, {GenericParam} from "@/services/common";
 
+const genericService = new GenericService('permission');
 const PermissionTransfer: React.FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
   const [sourceData, setSourceData] = useState<any[]>([]);
@@ -14,7 +16,11 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
   }, []);
 
   const fetchData = async () => {
-    const res = await CommonRequest.quickQuery("permission", 1, 99999);
+    const param: GenericParam = {
+      page: 1,
+      pageSize: 1000,
+    }
+    const res = await genericService.queryList(param);
     const sourceData = res.items.map((item: any) => {
       return {
         key: item.id,
@@ -46,13 +52,12 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
 
   return (
     <Drawer
-      title="	权限分配"
+      {...DEFAULT_DRAWER_PROPS}
+      title="权限分配"
       placement="right"
       onClose={onClose}
       open={visible}
       width={'50%'}
-      mask={true}
-      destroyOnClose={true}
       footer={
         <div
           style={{

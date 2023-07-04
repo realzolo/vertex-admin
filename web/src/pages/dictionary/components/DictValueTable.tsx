@@ -1,6 +1,6 @@
 import {Button, Drawer, message, Modal} from "antd";
 import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
-import {BASE_PRO_TABLE_PROPS} from "@/constants";
+import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
 import GenericService, {GenericParam} from "@/services/common";
@@ -164,7 +164,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
       destroyOnClose={true}
     >
       <ProTable
-        {...BASE_PRO_TABLE_PROPS}
+        {...DEFAULT_PRO_TABLE_PROPS}
         headerTitle="字典值"
         actionRef={actionRef}
         toolBarRender={() => [

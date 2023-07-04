@@ -1,9 +1,9 @@
 import {Button, Drawer, message, Modal} from "antd";
 import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
-import {BASE_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
 import GenericService, {GenericParam} from "@/services/common";
+import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 
 const genericService = new GenericService('permission');
 const PermissionTable: React.FC<SubPageProps> = (props) => {
@@ -155,7 +155,7 @@ const PermissionTable: React.FC<SubPageProps> = (props) => {
       destroyOnClose={true}
     >
       <ProTable
-        {...BASE_PRO_TABLE_PROPS}
+        {...DEFAULT_PRO_TABLE_PROPS}
         headerTitle="权限值"
         actionRef={actionRef}
         toolBarRender={() => [

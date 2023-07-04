@@ -1,7 +1,7 @@
 import React, {useRef, useState} from "react";
 import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {Button, message, Modal} from "antd";
-import {BASE_PRO_TABLE_PROPS} from "@/constants";
+import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import PermissionTransfer from "./components/PermissionTransfer";
 import GenericService, {GenericParam} from "@/services/common";
@@ -142,7 +142,7 @@ const RolePage: React.FC = () => {
   return (
     <PageContainer>
       <ProTable
-        {...BASE_PRO_TABLE_PROPS}
+        {...DEFAULT_PRO_TABLE_PROPS}
         headerTitle="字典项列表"
         actionRef={actionRef}
         toolBarRender={() => [
