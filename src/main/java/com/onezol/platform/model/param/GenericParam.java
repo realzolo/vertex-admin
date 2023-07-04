@@ -22,6 +22,9 @@ public class GenericParam {
     // 条件表达式
     private Map<String, Map<String, Object>> condition;
 
+    // 数据
+    private Map<String, Object> data;
+
     public Integer getPage() {
         return page;
     }
@@ -60,5 +63,13 @@ public class GenericParam {
 
     public void setCondition(Map<String, Map<String, Object>> condition) {
         this.condition = condition;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
     }
 }

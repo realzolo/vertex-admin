@@ -1,14 +1,12 @@
 package com.onezol.platform.util;
 
-import com.onezol.platform.annotation.DictDefinition;
+import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.DictKeyService;
 import com.onezol.platform.service.DictValueService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,68 +30,15 @@ public class ConvertUtils {
      * @return 转换后的目标对象
      */
     public static <S, T> T convertTo(S source, Class<T> clazz) {
-        Objects.requireNonNull(clazz, "目标类不能为空");
-
-        if (Objects.isNull(source)) {
-            return null;
-        }
-
-        if (source instanceof Map) {
-            return (T) convertMapToObject((Map) source, clazz);
-        }
-
-        T target;
+        T t;
         try {
-            target = clazz.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException e) {
+            t = clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-
-        Field[] fields = clazz.getDeclaredFields();
-
-        for (Field field : fields) {
-            field.setAccessible(true);
-            // 如上，先判断是否有set方法，再判断是否有对应的get方法。如果类型不匹配，再进行类型转换。
-            try {
-                String fieldName = field.getName();
-                String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                Method targetMethod = clazz.getMethod(methodName, field.getType());
-                String sourceMethodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                Method sourceMethod = source.getClass().getMethod(sourceMethodName);
-                Object value = sourceMethod.invoke(source);
-                if (Objects.isNull(value)) {
-                    continue;
-                }
-                if (!field.getType().isInstance(value)) {
-                    switch (field.getType().getName()) {
-                        case "java.lang.Integer":
-                            value = Integer.valueOf(String.valueOf(value));
-                            break;
-                        case "java.lang.Long":
-                            value = Long.valueOf(String.valueOf(value));
-                            break;
-                        case "java.lang.Boolean":
-                            value = Boolean.valueOf(String.valueOf(value));
-                            break;
-                        case "com.onezol.platform.model.pojo.DictType":  // 字典类型
-                            // 判断源对象的属性是否标注了@DictDifinition注解，如果标注了，获取value值
-                            DictDefinition dictDefinition = field.getAnnotation(DictDefinition.class);
-                            if (Objects.nonNull(dictDefinition)) {
-                                String dictKey = dictDefinition.value().toUpperCase();
-                                // TODO: 从缓存中获取字典值
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                targetMethod.invoke(target, value);
-            } catch (ReflectiveOperationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return target;
+        org.springframework.beans.BeanUtils.copyProperties(source, t);
+        return t;
     }
 
     /**
@@ -138,4 +83,18 @@ public class ConvertUtils {
         return t;
     }
 
+    /**
+     * 将给定源对象列表转换为目标类对象列表
+     *
+     * @param source 源对象列表
+     * @param clazz  目标对象的类
+     */
+    public static <S, T> ListResultWrapper<T> convertTo(ListResultWrapper<S> source, Class<T> clazz) {
+        List<S> list = source.getItems();
+        List<T> target = new ArrayList<>(list.size());
+        for (S s : list) {
+            target.add(convertTo(s, clazz));
+        }
+        return new ListResultWrapper<>(target, source.getTotal());
+    }
 }

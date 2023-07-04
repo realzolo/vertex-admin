@@ -34,12 +34,21 @@ const responseInterceptors: any[] = [
     if (status === 200) {
       switch (data.code) {
         // 所有非特殊业务异常处理
-        case 10001:
+        case 10001: // 通用失败
+        case 10003: // 无访问权限
+        case 10004: // 禁止访问
           message.error(data.message);
           break;
         // 特殊异常处理(登录失败): data.success = false, 会触发errorHandler。next step: errorHandler
         case 10002:
           return response;
+        case 10005: // 未授权
+          message.error(data.message);
+          setTimeout(() => {
+              window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+            }
+            , 1000);
+          break;
       }
       return data;
     } else {

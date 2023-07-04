@@ -2,6 +2,7 @@ package com.onezol.platform.aspect;
 
 import com.onezol.platform.annotation.PreAuthorize;
 import com.onezol.platform.common.UserContextHolder;
+import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.dto.User;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,7 +12,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -66,7 +66,7 @@ public class AuthorizeAspect {
         // 用户的角色/权限
         User user = UserContextHolder.getUser();
         if (Objects.isNull(user)) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED, "未登录");
+            throw new BusinessException(HttpStatus.UNAUTHORIZED);
         }
         Set<String> userRoles = user.getRoles();
         Set<String> userPerms = user.getPermissions();
@@ -111,7 +111,7 @@ public class AuthorizeAspect {
             }
         }
 
-        throw new BusinessException(HttpStatus.FORBIDDEN, "无权限");
+        throw new BusinessException(HttpStatus.NO_PERMISSION, "您没有此接口的访问权限");
     }
 
     /**

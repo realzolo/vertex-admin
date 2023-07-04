@@ -34,7 +34,7 @@ public class TestController {
     @RequestMapping("/return-object")
     public Object returnObject() {
         ListResultWrapper<Object> result = new ListResultWrapper<>();
-        result.setItems(Arrays.asList("Zolo", "Li", "T", 123).toArray());
+        result.setItems(Arrays.asList("Zolo", "Li", "T", 123));
         result.setTotal(999L);
         return result;
     }
