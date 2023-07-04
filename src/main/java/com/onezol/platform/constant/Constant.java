@@ -27,4 +27,7 @@ public interface Constant {
 
     // Redis key: 字典键
     String RK_DICTIONARY = "dictionary";
+
+    // 最大页大小
+    int MAX_PAGE_SIZE = 500;
 }

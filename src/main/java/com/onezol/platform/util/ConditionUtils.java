@@ -16,7 +16,9 @@ public class ConditionUtils {
      */
     public static void withCondition(QueryWrapper<?> queryWrapper, Map<String, Map<String, Object>> condition) {
         Objects.requireNonNull(queryWrapper, "queryWrapper不能为空");
-        Objects.requireNonNull(condition, "condition不能为空");
+        if (condition == null || condition.isEmpty()) {
+            return;
+        }
         for (Map.Entry<String, Map<String, Object>> entry : condition.entrySet()) {
             String operator = entry.getKey();
             Map<String, Object> entryValue = entry.getValue();

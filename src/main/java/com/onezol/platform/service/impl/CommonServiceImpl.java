@@ -111,10 +111,10 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             }
             throw new RuntimeException(e);
         }
-        Object[] items = resultPage.getRecords().toArray();
+        List<BaseEntity> records = resultPage.getRecords();
         long total = resultPage.getTotal();
 
-        return new ListResultWrapper<>(items, total);
+        return new ListResultWrapper<>(records, total);
     }
 
     /**
