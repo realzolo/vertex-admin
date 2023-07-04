@@ -18,7 +18,7 @@ import java.util.Objects;
 import static com.onezol.platform.constant.Constant.S_CONTROLLER_NULL_RESP;
 
 /**
- * Controller切面
+ * Controller参数校验切面
  */
 @Aspect
 @Order(2)
