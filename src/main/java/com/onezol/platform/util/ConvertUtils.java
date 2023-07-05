@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Component
+@Deprecated
 public class ConvertUtils {
     private static DictKeyService dictKeyService;
     private static DictValueService dictValueService;
