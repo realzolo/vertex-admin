@@ -120,7 +120,7 @@ public class ParamCheckAspect {
             }
             // 正则校验
             if (StringUtils.isNotBlank(validator.regex()) && !strValue.matches(validator.regex())) {
-                throw new BusinessException(HttpStatus.PARAM_ERROR, StringUtils.hasText(validator.regexTip()) ? validator.regexTip() : name + "格式不正确");
+                throw new BusinessException(HttpStatus.PARAM_ERROR, StringUtils.isNotBlank(validator.regexTip()) ? validator.regexTip() : name + "格式不正确");
             }
             // 如果value类型为数组
             if (value.getClass().isArray()) {

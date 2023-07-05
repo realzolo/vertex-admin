@@ -154,7 +154,7 @@ public class FrpConfig implements ApplicationListener<AvailabilityChangeEvent<Re
         String serverRemotePort = getMapValue(configMap, "server.remote_port");
         String webRemotePort = getMapValue(configMap, "web.remote_port");
         logger.info("访问地址：{}{}:{}{}", P_PROTOCOL_HTTP, remoteAddr, serverRemotePort, contextPath);
-        if (StringUtils.hasText(webRemotePort)) {
+        if (StringUtils.isNotBlank(webRemotePort)) {
             logger.info("web访问地址：{}{}:{}", P_PROTOCOL_HTTP, remoteAddr, webRemotePort);
         }
     }

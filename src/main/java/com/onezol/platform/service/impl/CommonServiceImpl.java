@@ -106,7 +106,7 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
             resultPage = service.page(objectPage, wrapper);
         } catch (Exception e) {
             if (e.getMessage().contains("Cause: java.sql.SQLSyntaxErrorException: Unknown column")) {
-                String column = StringUtils.getSubUtilSimple(e.getMessage(), "Unknown column '(.+?)' in 'where clause'");
+                String column = StringUtils.getMatch(e.getMessage(), "Unknown column '(.+?)' in 'where clause'");
                 throw new BusinessException("查询失败, 无效的字段: " + column);
             }
             throw new RuntimeException(e);

@@ -66,7 +66,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
         // 查询字段
         if (Objects.nonNull(fields) && fields.length > 0) {
             // 所有字段加上"`", 防止字段名与数据库关键字冲突
-            fields = Arrays.stream(fields).filter(StringUtils::hasText).map(item -> "`" + item + "`").toArray(String[]::new);
+            fields = Arrays.stream(fields).filter(StringUtils::isNotBlank).map(item -> "`" + item + "`").toArray(String[]::new);
             wrapper.select(fields);
         }
 
@@ -76,7 +76,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
         }
 
         // 排序
-        if (StringUtils.hasText(orderBy)) {
+        if (StringUtils.isNotBlank(orderBy)) {
             String[] vars = orderBy.split(",");
             for (String var : vars) {
                 String[] split = var.trim().split(" ");
@@ -96,7 +96,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
             resultPage = this.page(objectPage, wrapper);
         } catch (Exception e) {
             if (e.getMessage().contains("Cause: java.sql.SQLSyntaxErrorException: Unknown column")) {
-                String column = StringUtils.getSubUtilSimple(e.getMessage(), "Unknown column '(.+?)' in");
+                String column = StringUtils.getMatch(e.getMessage(), "Unknown column '(.+?)' in");
                 e.printStackTrace();
                 throw new BusinessException("查询失败, 无效的字段: " + column);
             }

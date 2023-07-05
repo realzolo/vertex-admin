@@ -23,7 +23,7 @@ public class ConditionUtils {
             String operator = entry.getKey();
             Map<String, Object> entryValue = entry.getValue();
             // 如果key或者field或者value为空，则抛出异常
-            if (!StringUtils.hasText(operator) || entryValue == null) {
+            if (StringUtils.isNotBlank(operator) || entryValue == null) {
                 throw new BusinessException("condition解析失败");
             }
             if (entryValue.isEmpty()) {
@@ -33,11 +33,11 @@ public class ConditionUtils {
                 String field = objectEntry.getKey();
                 Object value = objectEntry.getValue();
                 // 如果field或者value为空，则抛出异常
-                if (!StringUtils.hasText(field) || value == null) {
+                if (StringUtils.isNotBlank(field) || value == null) {
                     throw new BusinessException("condition解析失败");
                 }
                 // 将驼峰转为下划线
-                field = StringUtils.toUnderScoreCase(field);
+                field = StringUtils.camelCaseToUnderline(field);
                 // 将字段名加上``, 防止和数据库关键字冲突
                 field = String.format("`%s`", field);
                 switch (operator) {

@@ -23,6 +23,7 @@
         <oshi-core.version>6.4.3</oshi-core.version>
         <user-agent-utils.version>1.21</user-agent-utils.version>
         <fastjson2.version>2.0.34</fastjson2.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
@@ -97,6 +98,12 @@
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
             <version>${fastjson2.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
 

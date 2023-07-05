@@ -226,7 +226,7 @@ public class NetUtils {
             return false;
         }
         for (String s : ips) {
-            if (!StringUtils.isNumber(s)) {
+            if (!StringUtils.isNumeric(s)) {
                 return false;
             }
             int i = Integer.parseInt(s);

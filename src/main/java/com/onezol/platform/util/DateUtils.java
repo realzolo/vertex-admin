@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 日期工具类
  */
-public class DateUtils {
+public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     static DateTimeFormatter[] FORMATTERS = {DateTimeFormatter.ISO_LOCAL_DATE_TIME, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy-MM-dd"), DateTimeFormatter.ofPattern("yyyy/MM/dd"), DateTimeFormatter.ofPattern("yyyy年MM月dd日"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时"), DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH:mm:ss"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时"), DateTimeFormatter.ofPattern("yyyy年MM月dd日HH"), DateTimeFormatter.ofPattern("yyyy年MM月"), DateTimeFormatter.ofPattern("yyyy年"), DateTimeFormatter.ofPattern("yyyy")};
 

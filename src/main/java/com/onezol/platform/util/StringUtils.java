@@ -1,172 +1,64 @@
 package com.onezol.platform.util;
 
 
-import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
-
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Zolo(Lixm)
- * @date 2022/12/21 12:23
- * @description ...
- */
-public class StringUtils extends org.springframework.util.StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static final String SPACE = " ";
     public static final String EMPTY = "";
     public static final String LF = "\n";
     public static final String CR = "\r";
+    private static final char UNDERLINE = '_';
 
     /**
-     * 下划线
-     */
-    private static final char SEPARATOR = '_';
-
-    /**
-     * 多个字符串是否有空
+     * 下划线转大驼峰 例如：user_name -> UserName
      *
-     * @param str 字符串
-     * @return 是否有空
+     * @param input 输入字符串
+     * @return 大驼峰字符串
      */
-    public static boolean isAnyBlank(String... str) {
-        for (String s : str) {
-            if (!org.springframework.util.StringUtils.hasText(s)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 字符串是否不为空
-     *
-     * @param str 字符串
-     * @return 是否不为空
-     */
-    public static boolean isNotBlank(String str) {
-        return org.springframework.util.StringUtils.hasText(str);
-    }
-
-
-    /**
-     * 驼峰转下划线命名
-     */
-    public static String toUnderScoreCase(String str) {
-        if (str == null) {
-            return null;
-        }
+    public static String underlineToCamelCase(String input) {
         StringBuilder sb = new StringBuilder();
-        // 前置字符是否大写
-        boolean preCharIsUpperCase = true;
-        // 当前字符是否大写
-        boolean curreCharIsUpperCase = true;
-        // 下一字符是否大写
-        boolean nexteCharIsUpperCase = true;
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (i > 0) {
-                preCharIsUpperCase = Character.isUpperCase(str.charAt(i - 1));
+        boolean nextUpperCase = false;
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c == UNDERLINE) {
+                nextUpperCase = true;
             } else {
-                preCharIsUpperCase = false;
+                if (nextUpperCase) {
+                    sb.append(Character.toUpperCase(c));
+                    nextUpperCase = false;
+                } else {
+                    sb.append(Character.toLowerCase(c));
+                }
             }
-
-            curreCharIsUpperCase = Character.isUpperCase(c);
-
-            if (i < (str.length() - 1)) {
-                nexteCharIsUpperCase = Character.isUpperCase(str.charAt(i + 1));
-            }
-
-            if (preCharIsUpperCase && curreCharIsUpperCase && !nexteCharIsUpperCase) {
-                sb.append(SEPARATOR);
-            } else if ((i != 0 && !preCharIsUpperCase) && curreCharIsUpperCase) {
-                sb.append(SEPARATOR);
-            }
-            sb.append(Character.toLowerCase(c));
         }
-
         return sb.toString();
     }
 
     /**
-     * 是否包含子字符串
+     * 下划线转小驼峰 例如：user_name -> userName
      *
-     * @param str  验证字符串
-     * @param strs 字符串组
-     * @return 包含返回true
+     * @param input 输入字符串
+     * @return 小驼峰字符串
      */
-    public static boolean inStringIgnoreCase(String str, String... strs) {
-        if (str != null && strs != null) {
-            for (String s : strs) {
-                if (str.equalsIgnoreCase(trim(s))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public static String underlineToLowerCamelCase(String input) {
+        String camelCase = underlineToCamelCase(input);
+        return Character.toLowerCase(camelCase.charAt(0)) + camelCase.substring(1);
     }
 
     /**
-     * 去空格
+     * 驼峰转下划线 例如：UserName -> user_name
      *
-     * @param str 字符串
-     * @return 去空格后的字符串
+     * @param input 输入字符串
+     * @return 下划线字符串
      */
-    public static String trim(String str) {
-        return (str == null ? "" : str.trim());
-    }
-
-    /**
-     * 将下划线大写方式命名的字符串转换为驼峰式
-     * 如果转换前的下划线大写方式命名的字符串为空则返回空字符串
-     * 例如：HELLO_WORLD -> HelloWorld
-     *
-     * @param name 转换前的下划线大写方式命名的字符串
-     * @return 转换后的驼峰式命名的字符串
-     */
-    public static String convertToCamelCase(String name) {
-        StringBuilder result = new StringBuilder();
-        // 快速检查
-        if (name == null || name.isEmpty()) {
-            // 没必要转换
-            return "";
-        } else if (!name.contains("_")) {
-            // 不含下划线，仅将首字母大写
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
-        }
-        // 用下划线将原始字符串分割
-        String[] camels = name.split("_");
-        for (String camel : camels) {
-            // 跳过原始字符串中开头、结尾的下换线或双重下划线
-            if (camel.isEmpty()) {
-                continue;
-            }
-            // 首字母大写
-            result.append(camel.substring(0, 1).toUpperCase());
-            result.append(camel.substring(1).toLowerCase());
-        }
-        return result.toString();
-    }
-
-    /**
-     * 驼峰式命名法
-     * 例如：user_name -> userName
-     */
-    public static String toCamelCase(String s) {
-        if (s == null) {
-            return null;
-        }
-        s = s.toLowerCase();
-        StringBuilder sb = new StringBuilder(s.length());
-        boolean upperCase = false;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-
-            if (c == SEPARATOR) {
-                upperCase = true;
-            } else if (upperCase) {
-                sb.append(Character.toUpperCase(c));
-                upperCase = false;
+    public static String camelCaseToUnderline(String input) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (Character.isUpperCase(c)) {
+                sb.append(UNDERLINE).append(Character.toLowerCase(c));
             } else {
                 sb.append(c);
             }
@@ -175,106 +67,20 @@ public class StringUtils extends org.springframework.util.StringUtils {
     }
 
     /**
-     * 判断字符串是否是数字
+     * 使用正则表达式从输入字符串中获取第一个匹配项的内容。
      *
-     * @param s 字符串
-     * @return 是否是数字
+     * @param input 输入字符串
+     * @param regex 正则表达式
+     * @return 匹配项的内容，如果未找到匹配项则返回 null
      */
-    public static boolean isNumber(String s) {
-        if (s == null || s.length() == 0) {
-            return false;
-        }
-        for (int i = 0; i < s.length(); i++) {
-            if (!Character.isDigit(s.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+    public static String getMatch(String input, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
 
-    /**
-     * 字符串是否不为空
-     *
-     * @param s 字符串
-     * @return 是否不为空
-     */
-    public static boolean isNotEmpty(String s) {
-        return !hasText(s);
-    }
-
-    /**
-     * 从字符串中根据正则表达式获取匹配到的字符串
-     * 使用方式：getSubUtil("a123b", "a(.*)b") -> 123
-     *
-     * @param message 源字符串
-     * @param s       正则表达式
-     * @return 匹配到的字符串
-     */
-    public static String getSubUtilSimple(String message, String s) {
-        String rgex = s + "(.*?)";
-        Pattern pattern = Pattern.compile(rgex);
-        Matcher m = pattern.matcher(message);
-        while (m.find()) {
-            return m.group(1);
-        }
-        return "";
-    }
-
-    /**
-     * 从字符串中去除指定的字符串
-     *
-     * @param str    字符串
-     * @param remove 指定的字符串
-     * @return 去除指定字符串后的字符串
-     */
-    public static String removeStart(String str, String remove) {
-        if (hasText(str) && hasText(remove)) {
-            return str.startsWith(remove) ? str.substring(remove.length()) : str;
+        if (matcher.find()) {
+            return matcher.group(1);
         } else {
-            return str;
+            return EMPTY;
         }
-    }
-
-    /**
-     * 从字符串中获取两个指定字符串中间的字符串
-     *
-     * @param str   字符串
-     * @param open  开始字符串
-     * @param close 结束字符串
-     * @return 两个指定字符串中间的字符串
-     */
-    public static String substringBetween(String str, String open, String close) {
-        if (!StringUtils.isAnyBlank(str, open, close)) {
-            int start = str.indexOf(open);
-            if (start != -1) {
-                int end = str.indexOf(close, start + open.length());
-                if (end != -1) {
-                    return str.substring(start + open.length(), end);
-                }
-            }
-
-        }
-        return null;
-    }
-
-    /**
-     * 字符串是否在指定的字符串中
-     *
-     * @param string        字符串
-     * @param searchStrings 指定的字符串
-     * @return 是否在指定的字符串中
-     */
-    public static boolean equalsAny(CharSequence string, CharSequence... searchStrings) {
-        if (ArrayUtils.isNotEmpty(searchStrings)) {
-            int var3 = searchStrings.length;
-
-            for (CharSequence next : searchStrings) {
-                if (Objects.equals(string, next)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }
