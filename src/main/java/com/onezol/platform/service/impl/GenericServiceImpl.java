@@ -66,8 +66,11 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
 
         // 查询字段
         if (Objects.nonNull(fields) && fields.length > 0) {
-            // 所有字段加上"`", 防止字段名与数据库关键字冲突
-            fields = Arrays.stream(fields).filter(StringUtils::isNotBlank).map(item -> "`" + item + "`").toArray(String[]::new);
+            // 字段处理：驼峰转下划线、加上"`"防止字段名与数据库关键字冲突
+            fields = Arrays.stream(fields)
+                    .filter(StringUtils::isNotBlank)
+                    .map(item -> "`" + StringUtils.camelCaseToUnderline(item) + "`")
+                    .toArray(String[]::new);
             wrapper.select(fields);
         }
 
