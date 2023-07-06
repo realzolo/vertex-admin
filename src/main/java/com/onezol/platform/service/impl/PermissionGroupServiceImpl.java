@@ -1,5 +1,6 @@
 package com.onezol.platform.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.mapper.PermissionGroupMapper;
 import com.onezol.platform.model.dto.PermissionGroup;
@@ -30,7 +31,10 @@ public class PermissionGroupServiceImpl extends GenericServiceImpl<PermissionGro
     @Override
     public PermissionGroup createPermissionGroup(PermissionGroup permissionGroup, boolean autoGeneratePermission) {
         // 处理逻辑删除与重复创建问题
-        PermissionGroupEntity[] existEntities = this.selectIgnoreLogicDelete("key", permissionGroup.getKey());
+        PermissionGroupEntity[] existEntities = this.selectIgnoreLogicDelete(
+                Wrappers.<PermissionGroupEntity>lambdaQuery()
+                        .eq(PermissionGroupEntity::getKey, permissionGroup.getKey())
+        );
         PermissionGroupEntity existEntity = Objects.isNull(existEntities) || existEntities.length == 0 ? null : existEntities[0];
         if (existEntity != null) {
             if (!existEntity.isDeleted()) {
@@ -38,7 +42,10 @@ public class PermissionGroupServiceImpl extends GenericServiceImpl<PermissionGro
             }
             this.deleteById(existEntity.getId());
         }
-        PermissionEntity[] existPermissionEntities = permissionService.selectIgnoreLogicDelete("`key` like '" + permissionGroup.getKey() + "%'");
+        PermissionEntity[] existPermissionEntities = permissionService.selectIgnoreLogicDelete(
+                Wrappers.<PermissionEntity>lambdaQuery()
+                        .likeRight(PermissionEntity::getKey, permissionGroup.getKey())
+        );
         if (existPermissionEntities.length > 0) {
             permissionService.deleteBatchByIds(Arrays.stream(existPermissionEntities).map(PermissionEntity::getId).toArray(Long[]::new));
         }

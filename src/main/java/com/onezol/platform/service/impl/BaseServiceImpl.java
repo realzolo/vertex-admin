@@ -1,5 +1,7 @@
 package com.onezol.platform.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.onezol.platform.mapper.BaseMapper;
@@ -32,7 +34,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         if (id instanceof String) {
             id = "'" + id + "'";
         }
-        int affectedRows = this.baseMapper.opsForDelete("delete from " + tableName + " where id = " + id);
+        Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
+                .setEntityClass(this.currentModelClass())
+                .eq(BaseEntity::getId, id);
+        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
         return affectedRows > 0;
     }
 
@@ -48,8 +53,22 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         if (ids.length == 0) {
             return false;
         }
-        String idsStr = handleIdList(ids);
-        int affectedRows = this.baseMapper.opsForDelete("delete from " + tableName + " where id in (" + idsStr + ")");
+        Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
+                .setEntityClass(this.currentModelClass())
+                .in(BaseEntity::getId, Arrays.asList(ids));
+        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
+        return affectedRows > 0;
+    }
+
+    /**
+     * 物理删除
+     *
+     * @param wrapper 条件构造器
+     */
+    @Override
+    public boolean delete(Wrapper<T> wrapper) {
+        String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
+        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
         return affectedRows > 0;
     }
 
@@ -61,11 +80,10 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     @Override
     public T selectIgnoreLogicDelete(Serializable id) {
         String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
-        // 如果id是字符串，需要加上单引号
-        if (id instanceof String) {
-            id = "'" + id + "'";
-        }
-        return this.baseMapper.opsForSelect("select * from " + tableName + " where id = " + id);
+        Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
+                .setEntityClass(this.currentModelClass())
+                .eq(BaseEntity::getId, id);
+        return this.baseMapper.opsForSelect(tableName, wrapper);
     }
 
     /**
@@ -81,57 +99,20 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
             Class<T> clazz = this.currentModelClass();
             return (T[]) Array.newInstance(clazz, 0);
         }
-        String idsStr = handleIdList(ids);
-        return this.baseMapper.opsForSelectList("select * from " + tableName + " where id in (" + idsStr + ")");
+        Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
+                .setEntityClass(this.currentModelClass())
+                .in(BaseEntity::getId, Arrays.asList(ids));
+        return this.baseMapper.opsForSelectList(tableName, wrapper);
     }
 
     /**
      * 查询(忽视逻辑删除)
      *
-     * @param field 字段名
-     * @param value 字段值
+     * @param wrapper 条件
      */
     @Override
-    public T[] selectIgnoreLogicDelete(String field, Object value) {
+    public T[] selectIgnoreLogicDelete(Wrapper<T> wrapper) {
         String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
-        // 如果value是字符串，需要加上单引号
-        if (value instanceof String) {
-            value = "'" + value + "'";
-        }
-        field = "`" + field + "`";
-        return this.baseMapper.opsForSelectList("select * from " + tableName + " where " + field + " = " + value);
-    }
-
-    /**
-     * 查询(忽视逻辑删除)
-     *
-     * @param condition 条件
-     * @return T[]
-     */
-    @Override
-    public T[] selectIgnoreLogicDelete(String condition) {
-        String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
-        if (condition == null || condition.isEmpty()) {
-            condition = "1 = 1";
-        }
-        return this.baseMapper.opsForSelectList("select * from " + tableName + " where " + condition);
-    }
-
-    /**
-     * 处理id列表
-     *
-     * @param ids id列表
-     * @return 处理后的id列表
-     */
-    private String handleIdList(Serializable[] ids) {
-        // 如果id是字符串，需要加上单引号
-        if (ids[0] instanceof String) {
-            for (int i = 0; i < ids.length; i++) {
-                ids[i] = "'" + ids[i] + "'";
-            }
-        }
-        String idsStr = String.join(",", Arrays.toString(ids));
-        idsStr = idsStr.substring(1, idsStr.length() - 1);
-        return idsStr;
+        return this.baseMapper.opsForSelectList(tableName, wrapper);
     }
 }

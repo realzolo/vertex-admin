@@ -1,5 +1,6 @@
 package com.onezol.platform.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.onezol.platform.model.entity.BaseEntity;
 
 import java.io.Serializable;
@@ -25,6 +26,13 @@ public interface BaseService<T extends BaseEntity> extends com.baomidou.mybatisp
     boolean deleteBatchByIds(Serializable[] ids);
 
     /**
+     * 物理删除
+     *
+     * @param wrapper 条件构造器
+     */
+    boolean delete(Wrapper<T> wrapper);
+
+    /**
      * 查询(忽视逻辑删除)
      *
      * @param id id
@@ -43,17 +51,8 @@ public interface BaseService<T extends BaseEntity> extends com.baomidou.mybatisp
     /**
      * 查询(忽视逻辑删除)
      *
-     * @param field 字段名
-     * @param value 字段值
-     * @return T[]
+     * @param wrapper 条件构造器
+     * @return T
      */
-    T[] selectIgnoreLogicDelete(String field, Object value);
-
-    /**
-     * 查询(忽视逻辑删除)
-     *
-     * @param condition 条件
-     * @return T[]
-     */
-    T[] selectIgnoreLogicDelete(String condition);
+    T[] selectIgnoreLogicDelete(Wrapper<T> wrapper);
 }

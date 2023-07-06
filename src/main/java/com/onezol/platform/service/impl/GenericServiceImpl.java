@@ -1,5 +1,6 @@
 package com.onezol.platform.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.onezol.platform.annotation.DictDefinition;
@@ -178,7 +179,8 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
                 for (FieldStrategy strategy : value) {
                     // 校验唯一性
                     if (strategy == FieldStrategy.UNIQUE) {
-                        BaseEntity[] existEntities = this.selectIgnoreLogicDelete(fieldName, fieldValue);
+                        Wrapper<T> wrapper = new QueryWrapper<T>().eq(fieldName, fieldValue);
+                        BaseEntity[] existEntities = this.selectIgnoreLogicDelete(wrapper);
                         if (existEntities.length == 0) {
                             continue;
                         }

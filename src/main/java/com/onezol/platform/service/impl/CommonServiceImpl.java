@@ -1,5 +1,6 @@
 package com.onezol.platform.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.onezol.AppStarter;
@@ -179,7 +180,8 @@ public class CommonServiceImpl implements CommonService, InitializingBean {
                 for (FieldStrategy strategy : value) {
                     // 校验唯一性
                     if (strategy == FieldStrategy.UNIQUE) {
-                        BaseEntity[] existEntities = service.selectIgnoreLogicDelete(fieldName, fieldValue);
+                        Wrapper<BaseEntity> wrapper = new QueryWrapper<BaseEntity>().eq(fieldName, fieldValue);
+                        BaseEntity[] existEntities = service.selectIgnoreLogicDelete(wrapper);
                         if (existEntities.length == 0) {
                             continue;
                         }
