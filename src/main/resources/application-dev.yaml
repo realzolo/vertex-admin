@@ -40,6 +40,17 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: mail@onezol.com
+    password: JYGtUgkah6x89BLc
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
 
 mybatis-plus:
   configuration:
