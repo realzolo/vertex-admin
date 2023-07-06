@@ -37,8 +37,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
                 .setEntityClass(this.currentModelClass())
                 .eq(BaseEntity::getId, id);
-        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
-        return affectedRows > 0;
+        long count = this.count(wrapper);
+        if (count == 0) {
+            return true;
+        }
+        return SqlHelper.retBool(this.baseMapper.opsForDelete(tableName, wrapper));
     }
 
     /**
@@ -56,8 +59,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
                 .setEntityClass(this.currentModelClass())
                 .in(BaseEntity::getId, Arrays.asList(ids));
-        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
-        return affectedRows > 0;
+        long count = this.count(wrapper);
+        if (count == 0) {
+            return true;
+        }
+        return SqlHelper.retBool(this.baseMapper.opsForDelete(tableName, wrapper));
     }
 
     /**
@@ -68,8 +74,11 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     @Override
     public boolean delete(Wrapper<T> wrapper) {
         String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
-        int affectedRows = this.baseMapper.opsForDelete(tableName, wrapper);
-        return affectedRows > 0;
+        long count = this.count(wrapper);
+        if (count == 0) {
+            return true;
+        }
+        return SqlHelper.retBool(this.baseMapper.opsForDelete(tableName, wrapper));
     }
 
     /**
