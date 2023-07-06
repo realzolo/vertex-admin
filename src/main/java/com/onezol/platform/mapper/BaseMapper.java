@@ -16,6 +16,9 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface BaseMapper<T extends BaseEntity> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
 
+    @Select("SELECT COUNT(*) FROM ${tableName} ${ew.customSqlSegment}")
+    int opsForCount(@Param("tableName") String tableName, @Param(Constants.WRAPPER) Wrapper<T> wrapper);
+
     @Delete("DELETE FROM ${tableName} ${ew.customSqlSegment}")
     int opsForDelete(@Param("tableName") String tableName, @Param(Constants.WRAPPER) Wrapper<T> wrapper);
 

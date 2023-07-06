@@ -37,7 +37,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
                 .setEntityClass(this.currentModelClass())
                 .eq(BaseEntity::getId, id);
-        long count = this.count(wrapper);
+        long count = this.baseMapper.opsForCount(tableName, wrapper);
         if (count == 0) {
             return true;
         }
@@ -59,7 +59,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
         Wrapper<T> wrapper = Wrappers.<T>lambdaQuery()
                 .setEntityClass(this.currentModelClass())
                 .in(BaseEntity::getId, Arrays.asList(ids));
-        long count = this.count(wrapper);
+        long count = this.baseMapper.opsForCount(tableName, wrapper);
         if (count == 0) {
             return true;
         }
@@ -74,7 +74,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEnt
     @Override
     public boolean delete(Wrapper<T> wrapper) {
         String tableName = SqlHelper.table(this.currentModelClass()).getTableName();
-        long count = this.count(wrapper);
+        long count = this.baseMapper.opsForCount(tableName, wrapper);
         if (count == 0) {
             return true;
         }

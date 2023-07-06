@@ -182,6 +182,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
                 for (FieldStrategy strategy : value) {
                     // 校验唯一性
                     if (strategy == FieldStrategy.UNIQUE) {
+                        fieldName = "`" + StringUtils.camelCaseToUnderline(fieldName) + "`";
                         Wrapper<T> wrapper = new QueryWrapper<T>().eq(fieldName, fieldValue);
                         BaseEntity[] existEntities = this.selectIgnoreLogicDelete(wrapper);
                         if (existEntities.length == 0) {
