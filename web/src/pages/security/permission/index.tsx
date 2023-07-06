@@ -27,7 +27,6 @@ const PermissionPage: React.FC = () => {
       }
     }
     const res = await genericService.queryList(param);
-    console.log(res)
     return {
       data: res.items as PermissionGroup[],
       total: res.total,

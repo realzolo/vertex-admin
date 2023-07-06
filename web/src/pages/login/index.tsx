@@ -35,16 +35,13 @@ const LoginPage = () => {
       type: loginType,
     }
     const res = await service.signin(params);
-    // 判断res的类型：LoginResult 还是 API.AjaxResult
-    const keys = Object.keys(res);
     // 登录失败
-    if (keys.includes('code') && keys.includes('success')) {
-      afterFailure(res as API.AjaxResult<null>);
+    if (!res.success) {
+      afterFailure(res);
       return;
     }
-
     // 登录成功
-    afterSuccess(res as LoginResult);
+    afterSuccess(res.data);
   }
 
   /**
@@ -68,11 +65,12 @@ const LoginPage = () => {
     // 跳转到首页
     navigate('/home');
   }
+
   /**
    * 登录失败后的操作
    * @param values
    */
-  const afterFailure = (values: API.AjaxResult<null>) => {
+  const afterFailure = (values: API.AjaxResult<LoginResult>) => {
     const {code, message} = values;
     console.log(code, message);
     setLoginMsg(message);

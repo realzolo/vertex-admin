@@ -3,10 +3,10 @@ declare namespace API {
     code: number;
     success: boolean;
     message: string;
-    data?: T;
+    data: T;
   }
 
-  interface ListResult<T> {
+  interface ListWrapper<T> {
     items: T[];
     total: number;
   }

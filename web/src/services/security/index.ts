@@ -6,14 +6,15 @@ export default {
    * @param values 权限组信息
    * @param autoGeneratePermission 是否自动生成默认权限
    */
-  createPermissionGroup: (values: PermissionGroup, autoGeneratePermission: boolean): Promise<PermissionGroup> => {
-    return request('/api/permission-group/save', {
+  createPermissionGroup: async (values: PermissionGroup, autoGeneratePermission: boolean): Promise<PermissionGroup | undefined> => {
+    const res = await request<API.AjaxResult<PermissionGroup>>('/api/permission-group/save', {
       method: 'POST',
       data: {
         ...values,
         autoGeneratePermission
       }
     });
+    return res.data;
   },
 
   /**
@@ -21,12 +22,13 @@ export default {
    * @param roleId 角色ID
    * @param permissionIds 权限ID
    */
-  assignPermission: (roleId: number, permissionIds: number[]): Promise<void> => {
-    return request<void>(`/api/role/assign-permission/${roleId}`, {
+  assignPermission: async (roleId: number, permissionIds: number[]): Promise<void> => {
+    const res = await request<API.AjaxResult<void>>(`/api/role/assign-permission/${roleId}`, {
       method: 'POST',
       data: {
         permissionIds
       }
     });
+    return res.data;
   }
 }

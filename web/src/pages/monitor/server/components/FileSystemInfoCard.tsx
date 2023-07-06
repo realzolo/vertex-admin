@@ -28,7 +28,6 @@ const FileSystemInfoCard: FC<Props> = ({data}) => {
       ...item,
       usage: item.usage + '%'
     }) as DataType);
-    console.log(dataArr)
     setDataSource(dataArr);
   }, [data]);
 

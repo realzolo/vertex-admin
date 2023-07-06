@@ -43,21 +43,23 @@ class GenericService {
    * 通用接口(查询一条结果)
    * @param id ID
    */
-  public query = (id: number) => {
-    return request(`/api/${this.name}/${id}`, {
+  public query = async (id: number): Promise<unknown> => {
+    const res = await request<API.AjaxResult<unknown>>(`/api/${this.name}/${id}`, {
       method: 'GET'
     });
+    return res.data;
   }
 
   /**
    * 通用接口(查询列表)
    * @param param
    */
-  public queryList = (param: GenericParam) => {
-    return request(`/api/${this.name}/list`, {
+  public queryList = async (param: GenericParam): Promise<API.ListWrapper<unknown>> => {
+    const res = await request<API.AjaxResult<API.ListWrapper<unknown>>>(`/api/${this.name}/list`, {
       method: 'POST',
       data: param
     });
+    return res.data;
   }
 
   /**
@@ -65,10 +67,10 @@ class GenericService {
    * @param id ID
    * @param physical 是否物理删除
    */
-  public delete = (id: number | number[], physical?: boolean) => {
+  public delete = async (id: number | number[], physical?: boolean): Promise<void> => {
     const ids = Array.isArray(id) ? id : [id];
     const physicalDelete = physical ?? false;
-    return request(`/api/${this.name}/delete`, {
+    await request<API.AjaxResult<void>>(`/api/${this.name}/delete`, {
       method: 'DELETE',
       data: {
         ids: ids,
@@ -80,11 +82,12 @@ class GenericService {
   /**
    * 通用接口(保存/更新)
    */
-  public save = (values: Record<string, any>) => {
-    return request(`/api/${this.name}/save`, {
+  public save = async (values: Record<string, any>): Promise<unknown> => {
+    const res = await request<API.AjaxResult<unknown>>(`/api/${this.name}/save`, {
       method: 'POST',
       data: values
     });
+    return res.data;
   }
 }
 

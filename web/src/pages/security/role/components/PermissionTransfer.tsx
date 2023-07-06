@@ -1,4 +1,4 @@
-import {Button, Drawer, Space, Spin, Transfer} from "antd";
+import {Button, Drawer, message, Space, Spin, Transfer} from "antd";
 import React, {useEffect, useState} from "react";
 import {TransferDirection, TransferItem} from "antd/es/transfer";
 import {DEFAULT_DRAWER_PROPS} from "@/constants";
@@ -12,6 +12,7 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!itemKey) return;
@@ -26,7 +27,8 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
       pageSize: 1000,
     }
     let res = await genericService.queryList(param);
-    const sourceData = res.items.map((item: Permission) => {
+    const perms = res.items as Permission[];
+    const sourceData = perms.map((item: Permission) => {
       return {
         key: item.id!.toString(),
         title: item.name,
@@ -45,9 +47,11 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
       }
     }
     res = await new GenericService('RolePermission').queryList(param);
-    const targetData: number[] = res.items.map((item: RolePermission) => item.permissionId);
+    const rolePerms = res.items as RolePermission[];
+    const targetData: number[] = rolePerms.map((item: RolePermission) => item.permissionId);
 
-    const realTargetKeys = sourceData.filter((item: TransferItem) => targetData.includes(parseInt(item.key!))).map((item: TransferItem) => item.key);
+    const realTargetKeys = sourceData.filter((item: TransferItem) => targetData.includes(parseInt(item.key!)))
+      .map((item: TransferItem) => item.key!);
 
     setSourceData(sourceData);
     setTargetKeys(realTargetKeys);
@@ -59,15 +63,19 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
    */
   const doSave = async () => {
     if (!itemKey) return;
+    setSaveLoading(true);
     const roleId = typeof itemKey === 'string' ? parseInt(itemKey) : itemKey;
     const permissionIds = targetKeys.map((item: string) => parseInt(item));
     try {
       await service.assignPermission(roleId, permissionIds)
     } catch (e) {
-      console.log(e)
       return;
+    } finally {
+      setSaveLoading(false);
     }
-    fetchData().finally();
+    await fetchData();
+    message.success('保存成功');
+    close();
   }
 
   const onChange = (nextTargetKeys: string[], direction: TransferDirection, moveKeys: string[]) => {
@@ -77,7 +85,7 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
-  const onClose = () => {
+  const close = () => {
     hide();
   }
 
@@ -86,7 +94,7 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
       {...DEFAULT_DRAWER_PROPS}
       title="权限分配"
       placement="right"
-      onClose={onClose}
+      onClose={close}
       open={visible}
       width={'50%'}
       footer={
@@ -96,8 +104,8 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
           }}
         >
           <Space wrap>
-            <Button type="primary" onClick={doSave}>保存</Button>
-            <Button>取消</Button>
+            <Button type="primary" onClick={doSave} loading={saveLoading}>保存</Button>
+            <Button onClick={close}>取消</Button>
           </Space>
         </div>
       }

@@ -21,8 +21,8 @@ export default {
    * 账号密码登录
    * @param values 登录参数
    */
-  signin: (values: LoginParams): Promise<LoginResult | API.AjaxResult<null>> => {
-    return request('/api/user/signin', {
+  signin: async (values: LoginParams): Promise<API.AjaxResult<LoginResult>> => {
+    return await request<API.AjaxResult<LoginResult>>('/api/user/signin', {
       method: 'POST',
       data: values
     });

@@ -15,11 +15,13 @@ export interface CacheInfo {
 }
 
 export default {
-  getServerMonitorInfo: (): Promise<SystemInfo> => {
-    return request<SystemInfo>('/api/monitor/server');
+  getServerMonitorInfo: async (): Promise<SystemInfo | undefined> => {
+    const res = await request<API.AjaxResult<SystemInfo>>('/api/monitor/server');
+    return res.data;
   },
 
-  getCacheMonitorInfo: (): Promise<CacheInfo> => {
-    return request<CacheInfo>('/api/monitor/cache');
+  getCacheMonitorInfo: async (): Promise<CacheInfo | undefined> => {
+    const res = await request<API.AjaxResult<CacheInfo>>('/api/monitor/cache');
+    return res.data;
   },
 }
