@@ -6,5 +6,5 @@ import com.onezol.platform.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RolePermissionServiceImpl extends BaseServiceImpl<RolePermissionMapper, RolePermissionEntity> implements RolePermissionService {
+public class RolePermissionServiceImpl extends GenericServiceImpl<RolePermissionMapper, RolePermissionEntity> implements RolePermissionService {
 }

@@ -21,4 +21,12 @@ public interface RoleService extends GenericService<RoleEntity> {
      * @return role keys
      */
     Set<String> getKeysByUserId(Long userId);
+
+    /**
+     * 为角色分配权限
+     *
+     * @param roleId        角色id
+     * @param permissionIds 权限id
+     */
+    void assignPermission(Long roleId, Long[] permissionIds);
 }

@@ -182,7 +182,6 @@ const RolePage: React.FC = () => {
         visible={dictValueVisible}
         hide={() => setDictValueVisible(false)}
         itemKey={stepFormValue?.id}
-        data={stepFormValue}
       />
     </PageContainer>
   )

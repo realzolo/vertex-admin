@@ -25,3 +25,11 @@ declare interface Role {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+declare interface RolePermission {
+  id?: number;
+  roleId: number;
+  permissionId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
