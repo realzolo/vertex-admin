@@ -30,11 +30,7 @@ const requestInterceptors: any[] = [
  */
 const responseInterceptors: any[] = [
   (response: any) => {
-    const {status, data = {}, config} = response;
-
     return response;
-
-
   },
 ];
 
@@ -42,12 +38,20 @@ const responseInterceptors: any[] = [
  * 异常处理: 当data.success为false时，会进入errorHandler (response.status一定为200)
  */
 const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
-  errorHandler: async (error: AxiosError) => {
-    const {response} = error;
-    console.log(response)
-    // 处理自定义异常
-    if (response?.status === 200) {
-      const {code, success, message, data} = response.data as API.AjaxResult<unknown>;
+  errorThrower: (res: API.AjaxResult<null>) => {
+    const {code, success, data, message} = res;
+    if (!success) {
+      const error: any = new Error(message);
+      error.name = 'BusinessError';
+      error.info = {code, success, data, message};
+      throw error;
+    }
+  },
+  errorHandler: async (error: any, opts: any) => {
+    if (opts?.skipErrorHandler) throw error;
+    // 业务异常处理
+    if (error.name === 'BusinessError') {
+      const {code, success, message, data} = error.info as API.AjaxResult<null>;
       switch (code) {
         case 10001: // 通用失败
         case 10003: // 无访问权限
@@ -64,10 +68,11 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
         default:
           Message.error(message);
       }
-      return response;
+      return error.info;
     }
 
-    // 其他异常处理, 非200状态码
+    // 其他异常处理
+    const {response} = error as AxiosError;
     switch (response?.status) {
       case 401:
         Message.error('未登录或登录已过期，请重新登录。');
