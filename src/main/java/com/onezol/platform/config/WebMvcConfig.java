@@ -14,13 +14,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private JwtAuthenticationInterceptor jwtAuthenticationInterceptor;
 
+    private static final String[] EXCLUDE_PATHS = {
+            "/user/sign*",
+            "/user/send-email-code/*",
+            "/dict-value"
+    };
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry
                 .addInterceptor(jwtAuthenticationInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/sign*")
-                .excludePathPatterns("/user/send-email-code/*")
+                .excludePathPatterns(EXCLUDE_PATHS)
         ;
     }
 

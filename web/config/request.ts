@@ -61,6 +61,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
           break;
         case 10005: // 未授权
           Message.error(message);
+          if (window.location.pathname.startsWith('/login')) break;
           setTimeout(() => {
             window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
           }, 1000);
@@ -76,6 +77,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
     switch (response?.status) {
       case 401:
         Message.error('未登录或登录已过期，请重新登录。');
+        if (window.location.pathname.startsWith('/login')) break;
         setTimeout(() => {
           window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
         }, 1000);
