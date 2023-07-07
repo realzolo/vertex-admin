@@ -6,7 +6,7 @@ import com.onezol.platform.model.param.UserSignupParam;
 
 import java.util.Map;
 
-public interface UserService extends BaseService<UserEntity> {
+public interface UserService extends GenericService<UserEntity> {
     /**
      * 用户注册
      *

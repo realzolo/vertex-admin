@@ -1,5 +1,9 @@
 package com.onezol.platform.util;
 
+import com.onezol.platform.annotation.DictDefinition;
+import com.onezol.platform.model.pojo.ListResultWrapper;
+import org.springframework.util.Assert;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -15,31 +19,49 @@ public class ModelUtils {
      * @param <T>         目标对象类型
      * @return 转换后的目标对象
      */
-    public static <S, T> T convert(S source, Class<T> targetClass) throws Exception {
-        T target = targetClass.getDeclaredConstructor().newInstance();
+    public static <S, T> T convert(S source, Class<T> targetClass) {
+        Assert.notNull(targetClass, "目标对象类不能为空");
+        if (source == null) {
+            return null;
+        }
+        try {
+            T target = targetClass.getDeclaredConstructor().newInstance();
 
-        // 使用反射获取源对象和目标对象的属性列表
-        Field[] sourceFields = source.getClass().getDeclaredFields();
-        Field[] targetFields = targetClass.getDeclaredFields();
+            // 使用反射获取源对象和目标对象的属性列表
+            Field[] subSourceFields = source.getClass().getDeclaredFields();
+            Field[] superSourceFields = source.getClass().getSuperclass().getDeclaredFields();
+            Field[] subTargetFields = targetClass.getDeclaredFields();
+            Field[] superTargetFields = targetClass.getSuperclass().getDeclaredFields();
 
-        for (Field sourceField : sourceFields) {
-            for (Field targetField : targetFields) {
-                if (sourceField.getName().equals(targetField.getName())) {
-                    sourceField.setAccessible(true);
-                    targetField.setAccessible(true);
+            // 属性列表合并
+            List<Field> sourceFields = new ArrayList<>();
+            sourceFields.addAll(Arrays.asList(subSourceFields));
+            sourceFields.addAll(Arrays.asList(superSourceFields));
+            List<Field> targetFields = new ArrayList<>();
+            targetFields.addAll(Arrays.asList(subTargetFields));
+            targetFields.addAll(Arrays.asList(superTargetFields));
 
-                    // 类型匹配时进行赋值
-                    if (sourceField.getType().equals(targetField.getType())) {
-                        targetField.set(target, sourceField.get(source));
-                        break;
+            for (Field sourceField : sourceFields) {
+                for (Field targetField : targetFields) {
+                    if (sourceField.getName().equals(targetField.getName())) {
+                        sourceField.setAccessible(true);
+                        targetField.setAccessible(true);
+
+                        // 类型匹配时进行赋值
+                        if (sourceField.getType().equals(targetField.getType())) {
+                            targetField.set(target, sourceField.get(source));
+                            break;
+                        }
+                        // 处理不同类型的同名属性
+                        handleDifferentTypes(source, target, sourceField, targetField);
                     }
-                    // 处理不同类型的同名属性
-                    handleDifferentTypes(source, target, sourceField, targetField);
                 }
             }
-        }
 
-        return target;
+            return target;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -96,21 +118,41 @@ public class ModelUtils {
      * @param source 源对象
      * @param <S>    源对象类型
      * @return 转换后的Map
-     * @throws IllegalAccessException 如果在获取字段值时发生异常
      */
-    public static <S> Map<String, Object> toMap(S source) throws IllegalAccessException {
+    public static <S> Map<String, Object> toMap(S source) {
         Map<String, Object> map = new HashMap<>();
 
         Class<?> sourceClass = source.getClass();
         Field[] fields = sourceClass.getDeclaredFields();
 
-        for (Field field : fields) {
-            field.setAccessible(true);
-            Object value = field.get(source);
-            map.put(field.getName(), value);
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value = field.get(source);
+                map.put(field.getName(), value);
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
 
         return map;
+    }
+
+    /**
+     * 将给定源对象列表转换为目标类对象列表
+     *
+     * @param source 源对象列表
+     * @param clazz  目标对象的类
+     */
+    public static <S, T> ListResultWrapper<T> convert(ListResultWrapper<S> source, Class<T> clazz) {
+        List<T> items = new ArrayList<>();
+
+        for (S item : source.getItems()) {
+            T t = convert(item, clazz);
+            items.add(t);
+        }
+
+        return new ListResultWrapper<>(items, source.getTotal());
     }
 
     /**
@@ -121,11 +163,36 @@ public class ModelUtils {
      * @param sourceField 源属性
      * @param targetField 目标属性
      */
-    private static <S, T> void handleDifferentTypes(S source, T target, Field sourceField,
-                                                    Field targetField) throws Exception {
+    private static <S, T> void handleDifferentTypes(S source, T target, Field sourceField, Field targetField) {
         Type sourceFieldType = sourceField.getGenericType();
         Type targetFieldType = targetField.getGenericType();
+        DictDefinition dictDefinition = sourceField.getAnnotation(DictDefinition.class);
 
+        // 处理字典类型
+        if (dictDefinition != null) {
+            // 目标属性是否为String类型, 非String类型不处理
+            if (!targetFieldType.equals(String.class)) {
+                throw new RuntimeException("目标属性不是String类型, 无法转换");
+            }
+            String entryKey = dictDefinition.value();  // 字典项的key
+            Integer code;
+            try {
+                code = (Integer) sourceField.get(source);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (StringUtils.isNotBlank(entryKey)) {
+                String value = DictUtils.getDictValue(entryKey, code);
+                // 字典项存在时进行赋值
+                try {
+                    targetField.set(target, value);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // 处理泛型类型
         if (sourceFieldType instanceof ParameterizedType && targetFieldType instanceof ParameterizedType) {
             ParameterizedType sourceParamType = (ParameterizedType) sourceFieldType;
             ParameterizedType targetParamType = (ParameterizedType) targetFieldType;
@@ -161,14 +228,14 @@ public class ModelUtils {
      * @param <S>         源对象类型
      * @param <T>         目标对象类型
      */
-    private static <S, T> void convertListToSet(S source, T target, Field sourceField,
-                                                Field targetField)
-            throws IllegalAccessException {
-        List<?> sourceList = (List<?>) sourceField.get(source);
-
-        Set<Object> targetSet = new HashSet<>(sourceList);
-
-        targetField.set(target, targetSet);
+    private static <S, T> void convertListToSet(S source, T target, Field sourceField, Field targetField) {
+        try {
+            List<?> sourceList = (List<?>) sourceField.get(source);
+            Set<Object> targetSet = new HashSet<>(sourceList);
+            targetField.set(target, targetSet);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -181,13 +248,14 @@ public class ModelUtils {
      * @param <S>         源对象类型
      * @param <T>         目标对象类型
      */
-    private static <S, T> void convertSetToList(S source, T target, Field sourceField,
-                                                Field targetField) throws IllegalAccessException {
-        Set<?> sourceSet = (Set<?>) sourceField.get(source);
-
-        List<Object> targetList = new ArrayList<>(sourceSet);
-
-        targetField.set(target, targetList);
+    private static <S, T> void convertSetToList(S source, T target, Field sourceField, Field targetField) {
+        try {
+            Set<?> sourceSet = (Set<?>) sourceField.get(source);
+            List<Object> targetList = new ArrayList<>(sourceSet);
+            targetField.set(target, targetList);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -201,13 +269,17 @@ public class ModelUtils {
      * @param <S>         源对象类型
      * @param <T>         目标对象类型
      */
-    private static <S, T> void handlePrimitiveTypeConversion(S source, T target, Field sourceField,
-                                                             Field targetField)
-            throws IllegalAccessException {
-        if (sourceField.getType().isPrimitive() || targetField.getType().isPrimitive()) {
-            Object sourceValue = sourceField.get(source);
-            Object convertedValue = convertToTargetType(sourceValue, targetField.getType());
-            targetField.set(target, convertedValue);
+    private static <S, T> void handlePrimitiveTypeConversion(S source, T target, Field sourceField, Field targetField) {
+        sourceField.setAccessible(true);
+        targetField.setAccessible(true);
+        try {
+            if (sourceField.getType().isPrimitive() || targetField.getType().isPrimitive()) {
+                Object sourceValue = sourceField.get(source);
+                Object convertedValue = convertToTargetType(sourceValue, targetField.getType());
+                targetField.set(target, convertedValue);
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 

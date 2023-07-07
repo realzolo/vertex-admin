@@ -9,7 +9,7 @@ import com.onezol.platform.model.param.DeleteParam;
 import com.onezol.platform.model.param.GenericParam;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.GenericService;
-import com.onezol.platform.util.ConvertUtils;
+import com.onezol.platform.util.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
     @PostMapping("/list")
     public ListResultWrapper<? extends BaseDTO> list(@RequestBody @Validated GenericParam param) {
         ListResultWrapper<T> resultWrapper = service.queryList(param);
-        return ConvertUtils.convertTo(resultWrapper, clazz);
+        return ModelUtils.convert(resultWrapper, clazz);
     }
 
     /**
@@ -59,7 +59,7 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
     @PostMapping("/save")
     public BaseDTO save(@RequestBody P param) {
         T entity = service.save(param);
-        return ConvertUtils.convertTo(entity, clazz);
+        return ModelUtils.convert(entity, clazz);
     }
 
     /**

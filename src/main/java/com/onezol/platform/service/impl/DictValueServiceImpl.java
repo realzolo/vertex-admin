@@ -9,10 +9,12 @@ import com.onezol.platform.model.entity.DictValueEntity;
 import com.onezol.platform.service.DictEntryService;
 import com.onezol.platform.service.DictValueService;
 import com.onezol.platform.util.ConvertUtils;
+import com.onezol.platform.util.ModelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,40 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
         }
         DictValueEntity entity = this.getOne(Wrappers.<DictValueEntity>lambdaQuery().eq(DictValueEntity::getDictKey, key));
         return ConvertUtils.convertTo(entity, DictValue.class);
+    }
+
+    /**
+     * 根据字典项与字典code获取字典值
+     *
+     * @param entryKey 字典项键
+     * @param code     字典值编码
+     * @return 字典值
+     */
+    @Override
+    public DictValue getByCode(String entryKey, int code) {
+        List<DictValueEntity> dictValueList = getDictValueListByEntryKey(entryKey);
+        DictValueEntity dictValue = dictValueList.stream()
+                .filter(item -> item.getCode() == code)
+                .findFirst()
+                .orElse(null);
+        return ModelUtils.convert(dictValue, DictValue.class);
+    }
+
+    /**
+     * 根据字典项与字典值获取code
+     *
+     * @param entryKey 字典项键
+     * @param value    字典值
+     * @return 字典值编码
+     */
+    @Override
+    public DictValue getByValue(String entryKey, String value) {
+        List<DictValueEntity> dictValueList = getDictValueListByEntryKey(entryKey);
+        DictValueEntity dictValue = dictValueList.stream()
+                .filter(item -> item.getValue().equals(value))
+                .findFirst()
+                .orElse(null);
+        return ModelUtils.convert(dictValue, DictValue.class);
     }
 
     /**
@@ -76,5 +112,29 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
             options[i].setCode(entities.get(i).getCode());
         }
         return options;
+    }
+
+    /**
+     * 根据字典项获取字典值列表
+     *
+     * @param entryKey 字典项键
+     * @return 字典值列表
+     */
+    private List<DictValueEntity> getDictValueListByEntryKey(String entryKey) {
+        if (entryKey == null) return null;
+        entryKey = entryKey.toUpperCase().trim();
+        DictEntryEntity dictEntry = dictEntryService.getOne(
+                Wrappers.<DictEntryEntity>lambdaQuery()
+                        .select(DictEntryEntity::getId)
+                        .eq(DictEntryEntity::getEntryKey, entryKey)
+        );
+        if (dictEntry == null) {
+            return Collections.emptyList();
+        }
+
+        return this.list(
+                Wrappers.<DictValueEntity>lambdaQuery()
+                        .eq(DictValueEntity::getEntryId, dictEntry.getId())
+        );
     }
 }

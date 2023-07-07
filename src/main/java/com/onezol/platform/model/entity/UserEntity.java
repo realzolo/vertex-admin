@@ -1,11 +1,10 @@
 package com.onezol.platform.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.onezol.platform.annotation.DictDefinition;
 import com.onezol.platform.constant.enums.AccountStatus;
-import com.onezol.platform.constant.enums.Gender;
 
 import java.time.LocalDateTime;
-
 
 @TableName(value = "pf_user")
 public class UserEntity extends BaseEntity {
@@ -21,7 +20,8 @@ public class UserEntity extends BaseEntity {
 
     private String avatar;
 
-    private Gender gender;
+    @DictDefinition("gender")
+    private Integer gender;
 
     private LocalDateTime birthday;
 
@@ -30,24 +30,6 @@ public class UserEntity extends BaseEntity {
     private String email;
 
     private AccountStatus status;
-
-    public UserEntity() {
-    }
-
-    public UserEntity(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, boolean deleted, String username, String password, String nickname, String name, String introduction, String avatar, Gender gender, LocalDateTime birthday, String phone, String email, AccountStatus status) {
-        super(id, createdAt, updatedAt, deleted);
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.name = name;
-        this.introduction = introduction;
-        this.avatar = avatar;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.phone = phone;
-        this.email = email;
-        this.status = status;
-    }
 
     public String getUsername() {
         return username;
@@ -97,11 +79,11 @@ public class UserEntity extends BaseEntity {
         this.avatar = avatar;
     }
 
-    public Gender getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

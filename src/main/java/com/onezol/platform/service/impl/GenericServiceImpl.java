@@ -8,18 +8,15 @@ import com.onezol.platform.annotation.InsertStrategy;
 import com.onezol.platform.constant.enums.FieldStrategy;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.mapper.BaseMapper;
-import com.onezol.platform.model.dto.DictValue;
 import com.onezol.platform.model.entity.BaseEntity;
 import com.onezol.platform.model.param.BaseParam;
 import com.onezol.platform.model.param.GenericParam;
 import com.onezol.platform.model.pojo.ListResultWrapper;
-import com.onezol.platform.service.DictValueService;
 import com.onezol.platform.service.GenericService;
 import com.onezol.platform.util.ConditionUtils;
+import com.onezol.platform.util.DictUtils;
 import com.onezol.platform.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,10 +30,6 @@ import java.util.Objects;
 import static com.onezol.platform.constant.Constant.MAX_PAGE_SIZE;
 
 public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> extends BaseServiceImpl<M, T> implements GenericService<T> {
-
-    @Lazy
-    @Autowired
-    private DictValueService dictValueService;
 
     /**
      * 根据id查询
@@ -69,7 +62,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
             // 字段处理：驼峰转下划线、加上"`"防止字段名与数据库关键字冲突
             fields = Arrays.stream(fields)
                     .filter(StringUtils::isNotBlank)
-                    .map(item -> "`" + StringUtils.camelCaseToUnderline(item) + "`")
+                    .map(StringUtils::camelCaseToUnderline)
                     .toArray(String[]::new);
             wrapper.select(fields);
         }
@@ -182,7 +175,7 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
                 for (FieldStrategy strategy : value) {
                     // 校验唯一性
                     if (strategy == FieldStrategy.UNIQUE) {
-                        fieldName = "`" + StringUtils.camelCaseToUnderline(fieldName) + "`";
+                        fieldName = StringUtils.camelCaseToUnderline(fieldName);
                         Wrapper<T> wrapper = new QueryWrapper<T>().eq(fieldName, fieldValue);
                         BaseEntity[] existEntities = this.selectIgnoreLogicDelete(wrapper);
                         if (existEntities.length == 0) {
@@ -201,15 +194,13 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
 
             // 字典转换
             if (Objects.nonNull(dictDefinition)) {
-                String dictKey = dictDefinition.value();
-                DictValue dictvalue = dictValueService.getByKey(dictKey);
-                if (Objects.isNull(dictvalue)) {
-                    throw new BusinessException("保存失败, 无效的字典值: " + fieldValue);
-                }
+                String entryKey = dictDefinition.value();
+//                DictValue dictvalue = dictValueService.getByValue(entryKey, fieldValue.toString());
+                int code = DictUtils.getDictCode(entryKey, fieldValue.toString());
                 // 反射设置字典值
                 try {
                     field.setAccessible(true);
-                    field.set(t, dictvalue.getCode());
+                    field.set(t, code);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }

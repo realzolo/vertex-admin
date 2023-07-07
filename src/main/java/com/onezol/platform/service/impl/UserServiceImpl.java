@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import static com.onezol.platform.constant.Constant.P_RK_EMAIL_CODE;
 
 @Service
-public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> implements UserService {
+public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> implements UserService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired

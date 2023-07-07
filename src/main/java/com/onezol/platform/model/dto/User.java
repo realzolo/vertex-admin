@@ -12,7 +12,7 @@ public class User extends BaseDTO {
     private String name;
     private String introduction;
     private String avatar;
-    private DictType gender;
+    private String gender;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime birthday;
     private String phone;
@@ -62,11 +62,11 @@ public class User extends BaseDTO {
         this.avatar = avatar;
     }
 
-    public DictType getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(DictType gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

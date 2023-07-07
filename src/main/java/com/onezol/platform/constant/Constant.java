@@ -33,4 +33,7 @@ public interface Constant {
 
     // Redis key: 邮箱验证码前缀
     String P_RK_EMAIL_CODE = "emailCode:";
+
+    // unknown
+    String UNKNOWN = "unknown";
 }

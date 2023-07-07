@@ -1,10 +1,14 @@
 package com.onezol.platform.controller;
 
+import com.onezol.platform.annotation.ControllerService;
+import com.onezol.platform.annotation.PreAuthorize;
 import com.onezol.platform.annotation.Validated;
 import com.onezol.platform.exception.BusinessException;
+import com.onezol.platform.model.dto.BaseDTO;
 import com.onezol.platform.model.dto.User;
-import com.onezol.platform.model.param.UserSigninParam;
-import com.onezol.platform.model.param.UserSignupParam;
+import com.onezol.platform.model.entity.UserEntity;
+import com.onezol.platform.model.param.*;
+import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.UserService;
 import com.onezol.platform.util.RegexUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +18,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+@ControllerService(service = UserService.class, retClass = User.class)
+public class UserController extends GenericController<UserEntity, BaseParam> {
     @Autowired
     private UserService userService;
 
@@ -49,5 +54,40 @@ public class UserController {
             throw new BusinessException("邮箱格式不正确");
         }
         userService.sendEmailCode(email);
+    }
+
+    /**
+     * 查询列表： /{controllerName}/list
+     *
+     * @param param 通用参数
+     * @return 结果列表
+     */
+    @Override
+    @PreAuthorize("admin:user:list")
+    public ListResultWrapper<? extends BaseDTO> list(@RequestBody GenericParam param) {
+        return super.list(param);
+    }
+
+    /**
+     * 保存/更新： /{controllerName}/save
+     *
+     * @param param 通用参数
+     * @return 保存/更新后的实体
+     */
+    @Override
+    public BaseDTO save(BaseParam param) {
+        return super.save(param);
+    }
+
+    /**
+     * 删除： /{controllerName}/delete
+     *
+     * @param param 删除参数
+     */
+    @Override
+    @PreAuthorize("admin:user:delete")
+    public void delete(@RequestBody DeleteParam param) {
+        param.setPhysicalDelete(false);
+        super.delete(param);
     }
 }

@@ -26,6 +26,17 @@ export default [
     component: '@/pages/Table',
   },
   {
+    name: '用户管理',
+    path: '/user',
+    routes: [
+      {
+        name: '用户列表',
+        path: '/user/list',
+        component: '@/pages/user/list',
+      }
+    ]
+  },
+  {
     name: '安全管理',
     path: '/security',
     routes: [
