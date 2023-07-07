@@ -57,6 +57,18 @@ public class UserController extends GenericController<UserEntity, BaseParam> {
     }
 
     /**
+     * 查询: /{controllerName}/{id}
+     *
+     * @param id 主键
+     * @return 结果
+     */
+    @Override
+    @GetMapping("/{id}")
+    public BaseDTO getById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    /**
      * 查询列表： /{controllerName}/list
      *
      * @param param 通用参数

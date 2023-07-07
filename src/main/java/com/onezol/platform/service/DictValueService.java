@@ -1,7 +1,7 @@
 package com.onezol.platform.service;
 
-import com.onezol.platform.model.dto.DictOption;
 import com.onezol.platform.model.dto.DictValue;
+import com.onezol.platform.model.dto.SelectOption;
 import com.onezol.platform.model.entity.DictValueEntity;
 
 import java.util.List;
@@ -39,5 +39,5 @@ public interface DictValueService extends GenericService<DictValueEntity> {
      *
      * @return 字典列表
      */
-    Map<String, List<DictOption>> getDictionary();
+    Map<String, List<SelectOption>> getDictionary();
 }

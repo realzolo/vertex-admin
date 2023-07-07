@@ -42,6 +42,14 @@ public interface UserService extends GenericService<UserEntity> {
     User getUserByUsername(String username);
 
     /**
+     * 根据用户ID获取用户信息
+     *
+     * @param id 用户ID
+     * @return 用户信息
+     */
+    User getUserById(Long id);
+
+    /**
      * 发送邮箱验证码
      *
      * @param email 邮箱

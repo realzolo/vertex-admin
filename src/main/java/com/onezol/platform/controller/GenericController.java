@@ -14,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -36,6 +34,18 @@ public class GenericController<T extends BaseEntity, P extends BaseParam> {
         Class<?> serviceClass = annotation.service();
         this.service = (GenericService<T>) context.getBean(serviceClass);
         this.clazz = annotation.retClass();
+    }
+
+    /**
+     * 查询: /{controllerName}/{id}
+     *
+     * @param id 主键
+     * @return 结果
+     */
+    @GetMapping("/{id}")
+    public BaseDTO getById(@PathVariable Long id) {
+        T entity = service.getById(id);
+        return ModelUtils.convert(entity, clazz);
     }
 
     /**

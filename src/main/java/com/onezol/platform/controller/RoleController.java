@@ -4,6 +4,7 @@ import com.onezol.platform.annotation.ControllerService;
 import com.onezol.platform.constant.enums.HttpStatus;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.model.dto.Role;
+import com.onezol.platform.model.dto.SelectOption;
 import com.onezol.platform.model.entity.RoleEntity;
 import com.onezol.platform.model.param.RoleParam;
 import com.onezol.platform.service.RoleService;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,5 +35,10 @@ public class RoleController extends GenericController<RoleEntity, RoleParam> {
             throw new BusinessException(HttpStatus.PARAM_ERROR, "权限不能为空");
         }
         roleService.assignPermission(roleId, permissionIds);
+    }
+
+    @GetMapping("/select-options")
+    public List<SelectOption> selectOptions() {
+        return roleService.getRoleOptions();
     }
 }

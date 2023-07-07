@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import service from "@/services/dictionary";
 
 interface DictEntryMap {
-  [key: string]: DictEntry[];
+  [key: string]: SelectOption[];
 }
 
 export default () => {
@@ -19,8 +19,13 @@ export default () => {
     return dictionary[entryKey] || [];
   }
 
+  const generateOptions = (entryKey: string) => {
+    return getDictionary(entryKey);
+  }
+
   return {
     dictionary,
-    getDictionary
+    getDictionary,
+    generateOptions
   }
 }

@@ -1,8 +1,10 @@
 package com.onezol.platform.service;
 
 import com.onezol.platform.model.dto.Role;
+import com.onezol.platform.model.dto.SelectOption;
 import com.onezol.platform.model.entity.RoleEntity;
 
+import java.util.List;
 import java.util.Set;
 
 public interface RoleService extends GenericService<RoleEntity> {
@@ -29,4 +31,11 @@ public interface RoleService extends GenericService<RoleEntity> {
      * @param permissionIds 权限id
      */
     void assignPermission(Long roleId, Long[] permissionIds);
+
+    /**
+     * 获取角色选项
+     *
+     * @return options
+     */
+    List<SelectOption> getRoleOptions();
 }

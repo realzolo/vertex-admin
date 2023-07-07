@@ -151,8 +151,30 @@ public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> 
         if (userEntity == null) {
             return null;
         }
-        User user = new User();
-        BeanUtils.copyProperties(userEntity, user);
+        User user = ModelUtils.convert(userEntity, User.class);
+        assert user != null;
+        user.setRoles(roleService.getKeysByUserId(user.getId()));
+        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
+        return user;
+    }
+
+    /**
+     * 根据用户ID获取用户信息
+     *
+     * @param id 用户ID
+     * @return 用户信息
+     */
+    @Override
+    public User getUserById(Long id) {
+        if (id == null) {
+            return null;
+        }
+        UserEntity userEntity = this.getById(id);
+        if (userEntity == null) {
+            return null;
+        }
+        User user = ModelUtils.convert(userEntity, User.class);
+        assert user != null;
         user.setRoles(roleService.getKeysByUserId(user.getId()));
         user.setPermissions(permissionService.getKeysByUserId(user.getId()));
         return user;

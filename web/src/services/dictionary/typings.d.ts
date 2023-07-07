@@ -18,8 +18,8 @@ declare interface DictValue {
   updatedAt?: Date;
 }
 
-declare interface DictOption {
-  key: string;
-  value: string;
-  code: number;
+declare interface SelectOption {
+  label: string;
+  value: number;
+  key?: string;
 }

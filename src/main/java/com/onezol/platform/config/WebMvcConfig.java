@@ -17,7 +17,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private static final String[] EXCLUDE_PATHS = {
             "/user/sign*",
             "/user/send-email-code/*",
-            "/dict-value"
+            "/dict-value",
+            "/role/select-options"
     };
 
     @Override

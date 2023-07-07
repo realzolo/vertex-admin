@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.platform.exception.BusinessException;
 import com.onezol.platform.mapper.RoleMapper;
 import com.onezol.platform.model.dto.Role;
+import com.onezol.platform.model.dto.SelectOption;
 import com.onezol.platform.model.entity.RoleEntity;
 import com.onezol.platform.model.entity.RolePermissionEntity;
 import com.onezol.platform.model.entity.UserRoleEntity;
@@ -102,5 +103,25 @@ public class RoleServiceImpl extends GenericServiceImpl<RoleMapper, RoleEntity> 
             entities.add(entity);
         }
         rolePermissionService.saveBatch(entities);
+    }
+
+    /**
+     * 获取角色选项
+     *
+     * @return options
+     */
+    @Override
+    public List<SelectOption> getRoleOptions() {
+        List<RoleEntity> list = this.list(
+                Wrappers.<RoleEntity>lambdaQuery()
+                        .select(RoleEntity::getId, RoleEntity::getName, RoleEntity::getKey)
+        );
+        return list.stream().map(roleEntity -> {
+            SelectOption option = new SelectOption();
+            option.setLabel(roleEntity.getName());
+            option.setValue(roleEntity.getId());
+            option.setKey(roleEntity.getKey());
+            return option;
+        }).collect(Collectors.toList());
     }
 }

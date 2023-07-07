@@ -2,8 +2,8 @@ package com.onezol.platform.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.platform.mapper.DictValueMapper;
-import com.onezol.platform.model.dto.DictOption;
 import com.onezol.platform.model.dto.DictValue;
+import com.onezol.platform.model.dto.SelectOption;
 import com.onezol.platform.model.entity.DictEntryEntity;
 import com.onezol.platform.model.entity.DictValueEntity;
 import com.onezol.platform.service.DictEntryService;
@@ -86,16 +86,15 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
      * @return 字典列表
      */
     @Override
-    public Map<String, List<DictOption>> getDictionary() {
-        Map<String, List<DictOption>> dictMap = new HashMap<>();
+    public Map<String, List<SelectOption>> getDictionary() {
+        Map<String, List<SelectOption>> dictMap = new HashMap<>();
         List<Map<String, Object>> mapList = dictValueMapper.getDictionary();
         for (Map<String, Object> map : mapList) {
             String entryKey = (String) map.get("ENTRY_KEY");
-            List<DictOption> m = dictMap.getOrDefault(entryKey, new ArrayList<>());
-            DictOption option = new DictOption() {{
-                setKey(map.get("DICT_KEY").toString());
-                setValue(map.get("VALUE").toString());
-                setCode(Integer.valueOf(map.get("CODE").toString()));
+            List<SelectOption> m = dictMap.getOrDefault(entryKey, new ArrayList<>());
+            SelectOption option = new SelectOption() {{
+                setLabel(map.get("VALUE").toString());
+                setValue(Long.valueOf(map.get("CODE").toString()));
             }};
             m.add(option);
             dictMap.put(entryKey, m);

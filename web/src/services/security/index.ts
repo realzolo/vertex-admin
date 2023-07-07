@@ -30,5 +30,14 @@ export default {
       }
     });
     return res.data;
-  }
+  },
+
+
+  /**
+   * 获取角色选项
+   */
+  getRoleOptions: async () => {
+    const res = await request<API.AjaxResult<SelectOption[]>>('/api/role/select-options');
+    return res.data;
+  },
 }

@@ -1,9 +1,11 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {Button, message, Modal} from "antd";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import GenericService, {GenericParam} from "@/services/common";
+import UserDetail from "@/pages/user/list/components/UserDetail";
+import service from "@/services/security";
 
 const genericService = new GenericService('user');
 const UserListPage = () => {
@@ -11,8 +13,14 @@ const UserListPage = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValue, setStepFormValue] = useState<Role>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [dictValueVisible, setDictValueVisible] = useState<boolean>(false);
+  const [detailVisible, setDetailVisible] = useState<boolean>(false);
+  const [roleOptions, setRoleOptions] = useState<SelectOption[]>([]);
   const actionRef = useRef<ActionType>();
+
+  useEffect(() => {
+    getRoleOptions().finally();
+  }, []);
+
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
     const param: GenericParam = {
@@ -30,6 +38,11 @@ const UserListPage = () => {
       data: res.items as Role[],
       total: res.total,
     }
+  }
+
+  const getRoleOptions = async () => {
+    const res = await service.getRoleOptions();
+    setRoleOptions(res);
   }
 
   /**
@@ -73,7 +86,7 @@ const UserListPage = () => {
    */
   const onViewDictValue = (record: Role) => {
     setStepFormValue(record);
-    setDictValueVisible(true);
+    setDetailVisible(true);
   }
 
   const columns: ProDescriptionsItemProps<Role>[] = [
@@ -165,6 +178,12 @@ const UserListPage = () => {
           columns={columns}
         />
       </CreateForm>
+      <UserDetail
+        visible={detailVisible}
+        hide={() => setDetailVisible(false)}
+        itemKey={stepFormValue?.id}
+        data={roleOptions}
+      />
     </PageContainer>
   )
 }
