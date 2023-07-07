@@ -139,6 +139,34 @@ public class ModelUtils {
     }
 
     /**
+     * Map转换为对象
+     *
+     * @param map         Map
+     * @param targetClass 目标类
+     * @param <T>         目标类类型
+     */
+    public static <T> T toObject(Map<String, Object> map, Class<T> targetClass) {
+        try {
+            T target = targetClass.getDeclaredConstructor().newInstance();
+
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                String fieldName = entry.getKey();
+                Object fieldValue = entry.getValue();
+
+                Field field = getField(targetClass, fieldName);
+                if (field != null) {
+                    field.setAccessible(true);
+                    field.set(target, fieldValue);
+                }
+            }
+
+            return target;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * 将给定源对象列表转换为目标类对象列表
      *
      * @param source 源对象列表

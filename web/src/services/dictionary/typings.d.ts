@@ -17,3 +17,9 @@ declare interface DictValue {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+declare interface DictOption {
+  key: string;
+  value: string;
+  code: number;
+}

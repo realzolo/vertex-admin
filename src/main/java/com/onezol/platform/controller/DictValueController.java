@@ -5,6 +5,8 @@ import com.onezol.platform.model.dto.DictValue;
 import com.onezol.platform.model.entity.DictValueEntity;
 import com.onezol.platform.model.param.DictValueParam;
 import com.onezol.platform.service.DictValueService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,4 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dict-value")
 @ControllerService(service = DictValueService.class, retClass = DictValue.class)
 public class DictValueController extends GenericController<DictValueEntity, DictValueParam> {
+    @Autowired
+    private DictValueService dictValueService;
+
+    @GetMapping
+    public Object get() {
+        return dictValueService.getDictionary();
+    }
 }

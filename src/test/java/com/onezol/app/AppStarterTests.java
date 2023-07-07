@@ -1,5 +1,6 @@
 package com.onezol.app;
 
+import com.onezol.platform.service.DictValueService;
 import com.onezol.platform.service.MailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import javax.mail.MessagingException;
 class AppStarterTests {
     @Autowired
     private MailService mailService;
+    @Autowired
+    private DictValueService dictValueService;
 
     @Test
     void testSendEmail() {
@@ -22,6 +25,11 @@ class AppStarterTests {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void testDictValueService() {
+        dictValueService.getDictionary();
     }
 
 }

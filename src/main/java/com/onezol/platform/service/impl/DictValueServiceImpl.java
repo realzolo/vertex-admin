@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.onezol.platform.constant.Constant.RK_DICTIONARY;
 
@@ -26,6 +24,8 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private DictEntryService dictEntryService;
+    @Autowired
+    private DictValueMapper dictValueMapper;
 
     /**
      * 根据字典键获取字典值
@@ -81,37 +81,26 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
     }
 
     /**
-     * 根据字典键获取字典选项
+     * 获取字典列表
      *
-     * @param key 字典键
-     * @return 字典选项
+     * @return 字典列表
      */
     @Override
-    public DictOption[] getOptionsByKey(String key) {
-        DictValue dictValue = this.getByKey(key);
-        if (dictValue == null) {
-            return new DictOption[0];
+    public Map<String, List<DictOption>> getDictionary() {
+        Map<String, List<DictOption>> dictMap = new HashMap<>();
+        List<Map<String, Object>> mapList = dictValueMapper.getDictionary();
+        for (Map<String, Object> map : mapList) {
+            String entryKey = (String) map.get("ENTRY_KEY");
+            List<DictOption> m = dictMap.getOrDefault(entryKey, new ArrayList<>());
+            DictOption option = new DictOption() {{
+                setKey(map.get("DICT_KEY").toString());
+                setValue(map.get("VALUE").toString());
+                setCode(Integer.valueOf(map.get("CODE").toString()));
+            }};
+            m.add(option);
+            dictMap.put(entryKey, m);
         }
-        DictEntryEntity dictEntryEntity = dictEntryService.getOne(
-                Wrappers.<DictEntryEntity>lambdaQuery()
-                        .select(DictEntryEntity::getId)
-                        .eq(DictEntryEntity::getEntryKey, key)
-        );
-        if (dictEntryEntity == null) {
-            return new DictOption[0];
-        }
-        List<DictValueEntity> entities = this.list(
-                Wrappers.<DictValueEntity>lambdaQuery()
-                        .eq(DictValueEntity::getEntryId, dictEntryEntity.getId())
-        );
-        DictOption[] options = new DictOption[entities.size()];
-        for (int i = 0; i < entities.size(); i++) {
-            options[i] = new DictOption();
-            options[i].setKey(entities.get(i).getDictKey());
-            options[i].setValue(entities.get(i).getValue());
-            options[i].setCode(entities.get(i).getCode());
-        }
-        return options;
+        return dictMap;
     }
 
     /**

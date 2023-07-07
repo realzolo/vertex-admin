@@ -4,14 +4,17 @@ import com.onezol.platform.model.dto.DictOption;
 import com.onezol.platform.model.dto.DictValue;
 import com.onezol.platform.model.entity.DictValueEntity;
 
+import java.util.List;
+import java.util.Map;
+
 public interface DictValueService extends GenericService<DictValueEntity> {
     /**
      * 根据字典键获取字典值
      *
-     * @param key 字典键
+     * @param dictKey 字典键
      * @return 字典值
      */
-    DictValue getByKey(String key);
+    DictValue getByKey(String dictKey);
 
     /**
      * 根据字典项与字典code获取字典值
@@ -32,10 +35,9 @@ public interface DictValueService extends GenericService<DictValueEntity> {
     DictValue getByValue(String entryKey, String value);
 
     /**
-     * 根据字典键获取字典选项
+     * 获取字典列表
      *
-     * @param key 字典键
-     * @return 字典选项
+     * @return 字典列表
      */
-    DictOption[] getOptionsByKey(String key);
+    Map<String, List<DictOption>> getDictionary();
 }
