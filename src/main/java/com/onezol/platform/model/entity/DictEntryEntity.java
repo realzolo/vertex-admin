@@ -1,42 +1,40 @@
 package com.onezol.platform.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.platform.annotation.InsertStrategy;
 import com.onezol.platform.constant.enums.FieldStrategy;
 
-@TableName("pf_dict_key")
-public class DictKeyEntity extends BaseEntity {
+@TableName("pf_dict_entry")
+public class DictEntryEntity extends BaseEntity {
     /**
-     * 字典名称，如：性别
+     * 字典项名称，如：性别
      */
     @InsertStrategy(FieldStrategy.UNIQUE)
-    private String name;
+    private String entryName;
     /**
-     * 字典键，如：GENDER
+     * 字典项，如：GENDER
      */
-    @TableField("`key`")
     @InsertStrategy(FieldStrategy.UNIQUE)
-    private String key;
+    private String entryKey;
     /**
      * 备注
      */
     private String remark;
 
-    public String getName() {
-        return name;
+    public String getEntryName() {
+        return entryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEntryName(String entryName) {
+        this.entryName = entryName;
     }
 
-    public String getKey() {
-        return key;
+    public String getEntryKey() {
+        return entryKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setEntryKey(String entryKey) {
+        this.entryKey = entryKey;
     }
 
     public String getRemark() {

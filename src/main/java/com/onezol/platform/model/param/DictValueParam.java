@@ -2,13 +2,13 @@ package com.onezol.platform.model.param;
 
 public class DictValueParam extends BaseParam {
     /**
-     * 字典键ID
+     * 字典项ID
      */
-    private Long keyId;
+    private Long entryId;
     /**
      * 字典键，如：GENDER
      */
-    private String key;
+    private String dictKey;
     /**
      * 字典代码，如：1
      */
@@ -22,20 +22,20 @@ public class DictValueParam extends BaseParam {
      */
     private String remark;
 
-    public Long getKeyId() {
-        return keyId;
+    public Long getEntryId() {
+        return entryId;
     }
 
-    public void setKeyId(Long keyId) {
-        this.keyId = keyId;
+    public void setEntryId(Long entryId) {
+        this.entryId = entryId;
     }
 
-    public String getKey() {
-        return key;
+    public String getDictKey() {
+        return dictKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDictKey(String dictKey) {
+        this.dictKey = dictKey;
     }
 
     public Integer getCode() {

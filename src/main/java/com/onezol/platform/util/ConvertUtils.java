@@ -1,7 +1,7 @@
 package com.onezol.platform.util;
 
 import com.onezol.platform.model.pojo.ListResultWrapper;
-import com.onezol.platform.service.DictKeyService;
+import com.onezol.platform.service.DictEntryService;
 import com.onezol.platform.service.DictValueService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -15,11 +15,11 @@ import java.util.Objects;
 @Component
 @Deprecated
 public class ConvertUtils {
-    private static DictKeyService dictKeyService;
+    private static DictEntryService dictEntryService;
     private static DictValueService dictValueService;
 
-    public ConvertUtils(DictKeyService dictKeyService, DictValueService dictValueService) {
-        ConvertUtils.dictKeyService = dictKeyService;
+    public ConvertUtils(DictEntryService dictEntryService, DictValueService dictValueService) {
+        ConvertUtils.dictEntryService = dictEntryService;
         ConvertUtils.dictValueService = dictValueService;
     }
 

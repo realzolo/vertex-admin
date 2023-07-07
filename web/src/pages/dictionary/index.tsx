@@ -10,7 +10,7 @@ const genericService = new GenericService('dictKey');
 const DictionaryPage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValue, setStepFormValue] = useState<DictKey>();
+  const [stepFormValue, setStepFormValue] = useState<DictEntry>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [dictValueVisible, setDictValueVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
@@ -28,7 +28,7 @@ const DictionaryPage: React.FC = () => {
     }
     const res = await genericService.queryList(param);
     return {
-      data: res.items as DictKey[],
+      data: res.items as DictEntry[],
       total: res.total,
     }
   }
@@ -37,10 +37,10 @@ const DictionaryPage: React.FC = () => {
    * 新建
    * @param values
    */
-  const doCreate = async (values: DictKey) => {
+  const doCreate = async (values: DictEntry) => {
     values = {
       ...values,
-      key: values.key.toUpperCase()
+      entryKey: values.entryKey.toUpperCase()
     }
     const res = await genericService.save(values);
     handleModalVisible(false);
@@ -73,19 +73,19 @@ const DictionaryPage: React.FC = () => {
    * 查看字典值
    * @param record
    */
-  const onViewDictValue = (record: DictKey) => {
+  const onViewDictValue = (record: DictEntry) => {
     setStepFormValue(record);
     setDictValueVisible(true);
   }
 
-  const columns: ProDescriptionsItemProps<DictKey>[] = [
+  const columns: ProDescriptionsItemProps<DictEntry>[] = [
     {
       title: '序号',
       valueType: 'index',
     },
     {
       title: '字典名称',
-      dataIndex: 'name',
+      dataIndex: 'entryName',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -100,7 +100,7 @@ const DictionaryPage: React.FC = () => {
     },
     {
       title: '唯一标识',
-      dataIndex: 'key',
+      dataIndex: 'entryKey',
       valueType: 'text',
       copyable: true,
       formItemProps: {

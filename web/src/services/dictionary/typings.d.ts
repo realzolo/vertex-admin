@@ -1,7 +1,7 @@
-declare interface DictKey {
+declare interface DictEntry {
   id?: number;
-  name: string;
-  key: string;
+  entryName: string;
+  entryKey: string;
   remark: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -9,8 +9,8 @@ declare interface DictKey {
 
 declare interface DictValue {
   id?: number;
-  keyId: number;
-  key: string;
+  entryId: number;
+  dictKey: string;
   code: number;
   value: string;
   remark: string;

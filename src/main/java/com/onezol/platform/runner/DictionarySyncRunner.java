@@ -35,7 +35,7 @@ public class DictionarySyncRunner implements ApplicationRunner {
         List<DictValue> dictValues = ConvertUtils.convertTo(values, DictValue.class);
         HashMap<String, DictValue> dictionaryMap = new HashMap<>();
         dictValues.forEach(dictValue -> {
-            dictionaryMap.put(dictValue.getKey(), dictValue);
+            dictionaryMap.put(dictValue.getDictKey(), dictValue);
         });
 
         // 将字典数据保存到Redis缓存中

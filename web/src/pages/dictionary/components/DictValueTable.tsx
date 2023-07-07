@@ -27,7 +27,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
           code
         },
         eq: {
-          keyId: itemKey
+          entryId: itemKey
         }
       }
     }
@@ -49,8 +49,8 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
     }
     values = {
       ...values,
-      keyId: itemKey,
-      key: (data as DictKey).key.toUpperCase() + "." + values.key.toUpperCase(),
+      entryId: itemKey,
+      dictKey: (data as DictEntry).entryKey.toUpperCase() + "." + values.dictKey.toUpperCase(),
     }
     const res = await genericService.save(values);
     if (res) {
@@ -100,7 +100,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
     },
     {
       title: '唯一标识',
-      dataIndex: 'key',
+      dataIndex: 'dictKey',
       valueType: 'text',
       copyable: true,
       formItemProps: {

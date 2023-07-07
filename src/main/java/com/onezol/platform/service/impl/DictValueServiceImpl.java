@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.platform.mapper.DictValueMapper;
 import com.onezol.platform.model.dto.DictOption;
 import com.onezol.platform.model.dto.DictValue;
-import com.onezol.platform.model.entity.DictKeyEntity;
+import com.onezol.platform.model.entity.DictEntryEntity;
 import com.onezol.platform.model.entity.DictValueEntity;
-import com.onezol.platform.service.DictKeyService;
+import com.onezol.platform.service.DictEntryService;
 import com.onezol.platform.service.DictValueService;
 import com.onezol.platform.util.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private DictKeyService dictKeyService;
+    private DictEntryService dictEntryService;
 
     /**
      * 根据字典键获取字典值
@@ -40,7 +40,7 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
         if (dictValue != null) {
             return ConvertUtils.convertMapToObject((Map) dictValue, DictValue.class);
         }
-        DictValueEntity entity = this.getOne(Wrappers.<DictValueEntity>lambdaQuery().eq(DictValueEntity::getKey, key));
+        DictValueEntity entity = this.getOne(Wrappers.<DictValueEntity>lambdaQuery().eq(DictValueEntity::getDictKey, key));
         return ConvertUtils.convertTo(entity, DictValue.class);
     }
 
@@ -56,22 +56,22 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
         if (dictValue == null) {
             return new DictOption[0];
         }
-        DictKeyEntity dictKeyEntity = dictKeyService.getOne(
-                Wrappers.<DictKeyEntity>lambdaQuery()
-                        .select(DictKeyEntity::getId)
-                        .eq(DictKeyEntity::getKey, key)
+        DictEntryEntity dictEntryEntity = dictEntryService.getOne(
+                Wrappers.<DictEntryEntity>lambdaQuery()
+                        .select(DictEntryEntity::getId)
+                        .eq(DictEntryEntity::getEntryKey, key)
         );
-        if (dictKeyEntity == null) {
+        if (dictEntryEntity == null) {
             return new DictOption[0];
         }
         List<DictValueEntity> entities = this.list(
                 Wrappers.<DictValueEntity>lambdaQuery()
-                        .eq(DictValueEntity::getKeyId, dictKeyEntity.getId())
+                        .eq(DictValueEntity::getEntryId, dictEntryEntity.getId())
         );
         DictOption[] options = new DictOption[entities.size()];
         for (int i = 0; i < entities.size(); i++) {
             options[i] = new DictOption();
-            options[i].setKey(entities.get(i).getKey());
+            options[i].setKey(entities.get(i).getDictKey());
             options[i].setValue(entities.get(i).getValue());
             options[i].setCode(entities.get(i).getCode());
         }

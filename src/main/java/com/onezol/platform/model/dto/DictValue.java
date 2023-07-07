@@ -1,14 +1,16 @@
 package com.onezol.platform.model.dto;
 
+import java.time.LocalDateTime;
+
 public class DictValue extends BaseDTO {
     /**
-     * 字典键ID
+     * 字典项ID
      */
-    private Long keyId;
+    private Long entryId;
     /**
      * 字典键，如：GENDER
      */
-    private String key;
+    private String dictKey;
     /**
      * 字典代码，如：1
      */
@@ -22,20 +24,25 @@ public class DictValue extends BaseDTO {
      */
     private String remark;
 
-    public Long getKeyId() {
-        return keyId;
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createdAt;
+
+    public Long getEntryId() {
+        return entryId;
     }
 
-    public void setKeyId(Long keyId) {
-        this.keyId = keyId;
+    public void setEntryId(Long entryId) {
+        this.entryId = entryId;
     }
 
-    public String getKey() {
-        return key;
+    public String getDictKey() {
+        return dictKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDictKey(String dictKey) {
+        this.dictKey = dictKey;
     }
 
     public Integer getCode() {
@@ -60,5 +67,13 @@ public class DictValue extends BaseDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

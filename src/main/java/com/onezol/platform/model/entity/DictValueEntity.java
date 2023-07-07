@@ -1,6 +1,5 @@
 package com.onezol.platform.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.platform.annotation.InsertStrategy;
 import com.onezol.platform.constant.enums.FieldStrategy;
@@ -9,15 +8,14 @@ import com.onezol.platform.constant.enums.FieldStrategy;
 @TableName("pf_dict_value")
 public class DictValueEntity extends BaseEntity {
     /**
-     * 字典键ID
+     * 字典项ID
      */
-    private Long keyId;
+    private Long entryId;
     /**
      * 字典值键，如：PERSON.GENDER
      */
-    @TableField("`key`")
     @InsertStrategy(FieldStrategy.UNIQUE)
-    private String key;
+    private String dictKey;
     /**
      * 字典代码，如：1
      */
@@ -32,20 +30,20 @@ public class DictValueEntity extends BaseEntity {
      */
     private String remark;
 
-    public Long getKeyId() {
-        return keyId;
+    public Long getEntryId() {
+        return entryId;
     }
 
-    public void setKeyId(Long keyId) {
-        this.keyId = keyId;
+    public void setEntryId(Long entryId) {
+        this.entryId = entryId;
     }
 
-    public String getKey() {
-        return key;
+    public String getDictKey() {
+        return dictKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDictKey(String dictKey) {
+        this.dictKey = dictKey;
     }
 
     public Integer getCode() {
