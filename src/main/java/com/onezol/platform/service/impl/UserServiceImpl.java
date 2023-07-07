@@ -11,20 +11,23 @@ import com.onezol.platform.mapper.UserMapper;
 import com.onezol.platform.model.dto.User;
 import com.onezol.platform.model.entity.UserEntity;
 import com.onezol.platform.model.param.UserSignupParam;
+import com.onezol.platform.service.MailService;
 import com.onezol.platform.service.PermissionService;
 import com.onezol.platform.service.RoleService;
 import com.onezol.platform.service.UserService;
-import com.onezol.platform.util.EncryptionUtils;
-import com.onezol.platform.util.JwtUtils;
-import com.onezol.platform.util.StringUtils;
+import com.onezol.platform.util.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import static com.onezol.platform.constant.Constant.P_RK_EMAIL_CODE;
 import static com.onezol.platform.constant.Constant.P_RK_USER;
 
 @Service
@@ -35,6 +38,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private MailService mailService;
 
     /**
      * 用户注册
@@ -125,7 +130,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
             put("user", user);
             put("jwt", new HashMap<String, Object>() {{
                 put("token", finalToken);
-                put("expire", JwtUtils.EXPIRE);
+                put("expire", JwtUtils.EXPIRE / 1000);
             }});
         }};
     }
@@ -139,8 +144,50 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
      */
     @Override
     public Map<String, Object> signinByEmail(String email, String code) {
-        // TODO: 通过邮箱验证码登录
-        return null;
+        if (StringUtils.isAnyBlank(email, code)) {
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "邮箱或验证码不能为空");
+        }
+        // 校验邮箱验证码
+        String emailCode = (String) redisTemplate.opsForValue().get(P_RK_EMAIL_CODE + email);
+        if (emailCode == null || !emailCode.equals(code)) {
+            AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(email, LoginStatus.CAPTCHA_ERROR));
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "邮箱或验证码错误");
+        }
+
+        // 校验邮箱是否已注册
+        UserEntity userEntity = this.getOne(Wrappers.<UserEntity>lambdaQuery().eq(UserEntity::getEmail, email));
+        if (userEntity == null) {
+            throw new BusinessException(HttpStatus.LOGIN_FAILURE, "邮箱未注册");
+        }
+
+        // 将用户信息转换为User对象
+        User user = new User();
+        BeanUtils.copyProperties(userEntity, user);
+        user.setRoles(roleService.getKeysByUserId(user.getId()));
+        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
+
+        // 生成token
+        String token;
+        try {
+            // TODO: 生成token时使用用户名/用户ID, 否则无法根据token获取用户信息
+            token = JwtUtils.generateToken(email);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 将用户信息存入Redis
+        redisTemplate.opsForValue().set(P_RK_USER + email, user, JwtUtils.EXPIRE);
+
+        AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(email, LoginStatus.SUCCESS));
+
+        final String finalToken = token;
+        return new HashMap<String, Object>() {{
+            put("user", user);
+            put("jwt", new HashMap<String, Object>() {{
+                put("token", finalToken);
+                put("expire", JwtUtils.EXPIRE / 1000);
+            }});
+        }};
     }
 
     /**
@@ -163,6 +210,41 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         user.setRoles(roleService.getKeysByUserId(user.getId()));
         user.setPermissions(permissionService.getKeysByUserId(user.getId()));
         return user;
+    }
+
+    /**
+     * 发送邮箱验证码
+     *
+     * @param email 邮箱
+     */
+    @Override
+    public void sendEmailCode(String email) {
+        // 校验邮箱是否合法
+        if (!RegexUtils.isEmail(email)) {
+            throw new BusinessException("邮箱格式不正确");
+        }
+        // 校验邮箱验证码是否已发送
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(P_RK_EMAIL_CODE + email))) {
+            throw new BusinessException("验证码已发送,请勿重复发送");
+        }
+        // 加载邮件模板
+        String template;
+        try {
+            template = ResourceUtils.readFile("template/mail/email-code.html");
+        } catch (IOException e) {
+            throw new BusinessException("邮件模板加载失败,请联系管理员");
+        }
+        // 生成验证码
+        String code = RandomStringUtils.randomNumeric(6);
+        // 发送邮件
+        String content = template.replace("${code}", code);
+        try {
+            mailService.sendMail(email, "验证码", content);
+        } catch (Exception e) {
+            throw new BusinessException("邮件发送失败,请联系管理员");
+        }
+        // 将验证码存入Redis
+        redisTemplate.opsForValue().set(P_RK_EMAIL_CODE + email, code, 5, TimeUnit.MINUTES);
     }
 
     /**

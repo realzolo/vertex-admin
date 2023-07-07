@@ -40,4 +40,11 @@ public interface UserService extends BaseService<UserEntity> {
      * @return 用户信息
      */
     User getUserByUsername(String username);
+
+    /**
+     * 发送邮箱验证码
+     *
+     * @param email 邮箱
+     */
+    void sendEmailCode(String email);
 }

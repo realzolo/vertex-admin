@@ -6,10 +6,11 @@ import {
   UserOutlined,
   WeiboOutlined,
 } from '@ant-design/icons';
+import type {ProFormInstance} from '@ant-design/pro-components';
 import {LoginFormPage, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import {Alert, Button, Divider, message, Space, Tabs} from 'antd';
 import type {CSSProperties} from 'react';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import service, {LoginResult} from "@/services/login";
 import {useNavigate} from "@umijs/max";
 
@@ -26,6 +27,17 @@ const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const [loginMsg, setLoginMsg] = useState<string>('');
   const navigate = useNavigate();
+  const formRef = useRef<ProFormInstance>();
+
+  const sendEmailCode = async (): Promise<void> => {
+    const validateRes = await formRef.current?.validateFields(['email']);
+    if (!validateRes) {
+      return;
+    }
+    const email = formRef.current?.getFieldValue('email');
+    await service.sendEmailCode(email);
+    message.success('验证码发送成功');
+  }
   /**
    * 提交表单
    */
@@ -89,6 +101,7 @@ const LoginPage = () => {
         logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
         title="Github"
         onFinish={onSubmit}
+        formRef={formRef}
         subTitle="全球最大的代码托管平台"
         message={
           loginMsg ? (
@@ -269,9 +282,7 @@ const LoginPage = () => {
                   message: '请输入验证码！',
                 },
               ]}
-              onGetCaptcha={async () => {
-                message.success('获取验证码成功！验证码为：1234');
-              }}
+              onGetCaptcha={sendEmailCode}
             />
           </>
         )}
