@@ -84,7 +84,6 @@ const LoginPage = () => {
    */
   const afterFailure = (values: API.AjaxResult<LoginResult>) => {
     const {code, message} = values;
-    console.log(code, message);
     setLoginMsg(message);
   }
 

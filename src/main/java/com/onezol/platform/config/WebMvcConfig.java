@@ -20,6 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addInterceptor(jwtAuthenticationInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/user/sign*")
+                .excludePathPatterns("/user/send-email-code/*")
         ;
     }
 

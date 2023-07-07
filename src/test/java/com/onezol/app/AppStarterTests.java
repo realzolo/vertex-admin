@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.mail.MessagingException;
+
 @SpringBootTest
 class AppStarterTests {
     @Autowired
@@ -15,7 +17,11 @@ class AppStarterTests {
         String to = "zolo@onezol.com";
         String subject = "Test Email";
         String content = "This is a test email.";
-        mailService.sendMail(to, subject, content);
+        try {
+            mailService.sendMail(to, subject, content);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

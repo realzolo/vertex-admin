@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.onezol.platform.constant.Constant.P_RK_EMAIL_CODE;
-import static com.onezol.platform.constant.Constant.P_RK_USER;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> implements UserService {
@@ -106,33 +105,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
             throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
         }
 
-        // 将用户信息转换为User对象
-        User user = new User();
-        BeanUtils.copyProperties(userEntity, user);
-        user.setRoles(roleService.getKeysByUserId(user.getId()));
-        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
-
-        // 生成token
-        String token;
-        try {
-            token = JwtUtils.generateToken(username);
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
-
-        // 将用户信息存入Redis
-        redisTemplate.opsForValue().set(P_RK_USER + username, user, JwtUtils.EXPIRE);
-
-        AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.SUCCESS));
-
-        final String finalToken = token;
-        return new HashMap<String, Object>() {{
-            put("user", user);
-            put("jwt", new HashMap<String, Object>() {{
-                put("token", finalToken);
-                put("expire", JwtUtils.EXPIRE / 1000);
-            }});
-        }};
+        return afterLoginSuccess(userEntity);
     }
 
     /**
@@ -160,34 +133,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
             throw new BusinessException(HttpStatus.LOGIN_FAILURE, "邮箱未注册");
         }
 
-        // 将用户信息转换为User对象
-        User user = new User();
-        BeanUtils.copyProperties(userEntity, user);
-        user.setRoles(roleService.getKeysByUserId(user.getId()));
-        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
-
-        // 生成token
-        String token;
-        try {
-            // TODO: 生成token时使用用户名/用户ID, 否则无法根据token获取用户信息
-            token = JwtUtils.generateToken(email);
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
-
-        // 将用户信息存入Redis
-        redisTemplate.opsForValue().set(P_RK_USER + email, user, JwtUtils.EXPIRE);
-
-        AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(email, LoginStatus.SUCCESS));
-
-        final String finalToken = token;
-        return new HashMap<String, Object>() {{
-            put("user", user);
-            put("jwt", new HashMap<String, Object>() {{
-                put("token", finalToken);
-                put("expire", JwtUtils.EXPIRE / 1000);
-            }});
-        }};
+        return afterLoginSuccess(userEntity);
     }
 
     /**
@@ -245,6 +191,40 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         }
         // 将验证码存入Redis
         redisTemplate.opsForValue().set(P_RK_EMAIL_CODE + email, code, 5, TimeUnit.MINUTES);
+    }
+
+    /**
+     * 登录成功后的操作
+     *
+     * @param userEntity 用户信息
+     * @return 用户信息(包含token)
+     */
+    private HashMap<String, Object> afterLoginSuccess(final UserEntity userEntity) {
+        final String username = userEntity.getUsername();
+        // 将用户信息转换为User对象
+        User user = new User();
+        BeanUtils.copyProperties(userEntity, user);
+        user.setRoles(roleService.getKeysByUserId(user.getId()));
+        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
+
+        // 生成token
+        String token;
+        try {
+            token = JwtUtils.generateToken(username);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+
+        AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.SUCCESS));
+
+        final String finalToken = token;
+        return new HashMap<String, Object>() {{
+            put("user", user);
+            put("jwt", new HashMap<String, Object>() {{
+                put("token", finalToken);
+                put("expire", JwtUtils.EXPIRE / 1000);
+            }});
+        }};
     }
 
     /**
