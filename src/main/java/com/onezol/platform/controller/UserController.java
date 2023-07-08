@@ -10,6 +10,7 @@ import com.onezol.platform.model.entity.UserEntity;
 import com.onezol.platform.model.param.*;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import com.onezol.platform.service.UserService;
+import com.onezol.platform.util.ModelUtils;
 import com.onezol.platform.util.RegexUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -80,15 +81,14 @@ public class UserController extends GenericController<UserEntity, BaseParam> {
         return super.list(param);
     }
 
-    /**
-     * 保存/更新： /{controllerName}/save
-     *
-     * @param param 通用参数
-     * @return 保存/更新后的实体
-     */
-    @Override
-    public BaseDTO save(BaseParam param) {
-        return super.save(param);
+    @PutMapping
+    @PreAuthorize("admin:user:update")
+    public boolean update(@RequestBody UserUpdateParam param) {
+        if (param.getId() == null) {
+            throw new BusinessException("用户ID不能为空");
+        }
+        UserEntity entity = ModelUtils.convert(param, UserEntity.class);
+        return userService.updateById(entity);
     }
 
     /**

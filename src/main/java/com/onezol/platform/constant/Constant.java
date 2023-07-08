@@ -25,8 +25,11 @@ public interface Constant {
     // NULL值标识符
     String S_CONTROLLER_NULL_RESP = "::SYMBOL::4CCA07368BEB40DA0DB2101421C9E46B::";
 
-    // Redis key: 字典键
+    // Redis key: 字典
     String RK_DICTIONARY = "dictionary";
+
+    // Redis key: 枚举选项
+    String RK_ENUM_OPTIONS = "enumOptions";
 
     // 最大页大小
     int MAX_PAGE_SIZE = 500;

@@ -54,6 +54,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return 下划线字符串
      */
     public static String camelCaseToUnderline(String input) {
+        if (input == null || EMPTY.equals(input.trim())) {
+            return EMPTY;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
@@ -62,6 +65,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             } else {
                 sb.append(c);
             }
+        }
+        // 如果下划线在开头则去掉
+        if (sb.charAt(0) == UNDERLINE) {
+            sb.deleteCharAt(0);
         }
         return sb.toString();
     }

@@ -21,16 +21,6 @@ public interface EnumService {
         return null;
     }
 
-    static <T extends EnumService> T getEnumByCodeOrValue(Class<T> enumClass, String codeOrValue) {
-        T[] enumConstants = enumClass.getEnumConstants();
-        for (T enumConstant : enumConstants) {
-            if (enumConstant.getCode() == Integer.parseInt(codeOrValue) || enumConstant.getValue().equals(codeOrValue)) {
-                return enumConstant;
-            }
-        }
-        return null;
-    }
-
     static <T extends EnumService> boolean isEnumCode(Class<T> enumClass, int code) {
         T[] enumConstants = enumClass.getEnumConstants();
         for (T enumConstant : enumConstants) {

@@ -1,8 +1,8 @@
 package com.onezol.platform.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.onezol.platform.model.pojo.DictType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -14,12 +14,12 @@ public class User extends BaseDTO {
     private String avatar;
     private String gender;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     private String phone;
     private String email;
     private Set<String> roles;
     private Set<String> permissions;
-    private DictType status;
+    private String status;
     private LocalDateTime createdAt;
 
     public String getUsername() {
@@ -70,11 +70,11 @@ public class User extends BaseDTO {
         this.gender = gender;
     }
 
-    public LocalDateTime getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDateTime birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -110,11 +110,11 @@ public class User extends BaseDTO {
         this.permissions = permissions;
     }
 
-    public DictType getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(DictType status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

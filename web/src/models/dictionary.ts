@@ -19,13 +19,22 @@ export default () => {
     return dictionary[entryKey] || [];
   }
 
-  const generateOptions = (entryKey: string) => {
-    return getDictionary(entryKey);
+  const getOptions = (entryKey: string) => {
+    entryKey = entryKey
+      .replace(/([A-Z])/g, "_$1")
+      .replace(/^_/, "")
+      .toUpperCase();
+    return getDictionary(entryKey).map((item) => {
+      return {
+        label: item.label,
+        value: item.label
+      }
+    });
   }
 
   return {
     dictionary,
     getDictionary,
-    generateOptions
+    getOptions
   }
 }

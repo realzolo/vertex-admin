@@ -1,6 +1,10 @@
 package com.onezol.platform.util;
 
 import com.onezol.platform.annotation.DictDefinition;
+import com.onezol.platform.constant.EnumService;
+import com.onezol.platform.model.dto.BaseDTO;
+import com.onezol.platform.model.entity.BaseEntity;
+import com.onezol.platform.model.param.BaseParam;
 import com.onezol.platform.model.pojo.ListResultWrapper;
 import org.springframework.util.Assert;
 
@@ -192,15 +196,45 @@ public class ModelUtils {
      * @param targetField 目标属性
      */
     private static <S, T> void handleDifferentTypes(S source, T target, Field sourceField, Field targetField) {
-        Type sourceFieldType = sourceField.getGenericType();
-        Type targetFieldType = targetField.getGenericType();
-        DictDefinition dictDefinition = sourceField.getAnnotation(DictDefinition.class);
+        Class<?> sourceFieldType = sourceField.getType();
+        Class<?> targetFieldType = targetField.getType();
 
-        // 处理字典类型
+        // 1. 字典/枚举 -> String(Entity -> DTO)
+        if (source instanceof BaseEntity && target instanceof BaseDTO) {
+            dictToString(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
+            enumToString(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
+            return;
+        }
+        // 2. String -> 字典/枚举(Param -> Entity)
+        if (source instanceof BaseParam && target instanceof BaseEntity) {
+            stringToDict(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
+            stringToEnum(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
+            return;
+        }
+
+        // 处理泛型类型
+        handleGenericType(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
+
+        // 处理基本类型和包装类型的转换
+        handlePrimitiveTypeConversion(source, target, sourceField, targetField);
+    }
+
+    /**
+     * 字典 -> String
+     *
+     * @param source          源对象
+     * @param target          目标对象
+     * @param sourceField     源属性
+     * @param targetField     目标属性
+     * @param sourceFieldType 源属性类型
+     * @param targetFieldType 目标属性类型
+     */
+    private static <S, T> void dictToString(S source, T target, Field sourceField, Field targetField, Class<?> sourceFieldType, Class<?> targetFieldType) {
+        DictDefinition dictDefinition = sourceField.getAnnotation(DictDefinition.class);
         if (dictDefinition != null) {
             // 目标属性是否为String类型, 非String类型不处理
             if (!targetFieldType.equals(String.class)) {
-                throw new RuntimeException("目标属性不是String类型, 无法转换");
+                throw new RuntimeException("字典值转换失败：目标属性不是String类型, 无法转换");
             }
             String entryKey = dictDefinition.value();  // 字典项的key
             Integer code;
@@ -211,7 +245,6 @@ public class ModelUtils {
             }
             if (StringUtils.isNotBlank(entryKey)) {
                 String value = DictUtils.getDictValue(entryKey, code);
-                // 字典项存在时进行赋值
                 try {
                     targetField.set(target, value);
                 } catch (IllegalAccessException e) {
@@ -219,11 +252,121 @@ public class ModelUtils {
                 }
             }
         }
+    }
 
-        // 处理泛型类型
-        if (sourceFieldType instanceof ParameterizedType && targetFieldType instanceof ParameterizedType) {
-            ParameterizedType sourceParamType = (ParameterizedType) sourceFieldType;
-            ParameterizedType targetParamType = (ParameterizedType) targetFieldType;
+    /**
+     * 枚举 -> String
+     *
+     * @param source          源对象
+     * @param target          目标对象
+     * @param sourceField     源属性
+     * @param targetField     目标属性
+     * @param sourceFieldType 源属性类型
+     * @param targetFieldType 目标属性类型
+     */
+    private static <S, T> void enumToString(S source, T target, Field sourceField, Field targetField, Class<?> sourceFieldType, Class<?> targetFieldType) {
+        if (sourceFieldType.isEnum() && EnumService.class.isAssignableFrom(sourceFieldType)) {
+            // 目标属性是否为String类型, 非String类型不处理
+            if (!targetFieldType.equals(String.class)) {
+                throw new RuntimeException("枚举值转换失败：目标属性不是String类型, 无法转换");
+            }
+            try {
+                EnumService aEnum = (EnumService) sourceField.get(source);
+                if (aEnum != null) {
+                    String value = aEnum.getValue();
+                    targetField.set(target, value);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * String -> 字典
+     *
+     * @param source          源对象
+     * @param target          目标对象
+     * @param sourceField     源属性
+     * @param targetField     目标属性
+     * @param sourceFieldType 源属性类型
+     * @param targetFieldType 目标属性类型
+     */
+    private static <S, T> void stringToDict(S source, T target, Field sourceField, Field targetField, Class<?> sourceFieldType, Class<?> targetFieldType) {
+        DictDefinition dictDefinition = targetField.getAnnotation(DictDefinition.class);
+        if (dictDefinition != null) {
+            // 源属性是否为String类型, 非String类型不处理
+            if (!sourceFieldType.equals(String.class)) {
+                throw new RuntimeException("字典值转换失败：源属性不是String类型, 无法转换");
+            }
+            String entryKey = dictDefinition.value();  // 字典项的key
+            String value;
+            try {
+                value = (String) sourceField.get(source);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (StringUtils.isNotBlank(entryKey)) {
+                Integer code = DictUtils.getDictCode(entryKey, value);
+                try {
+                    targetField.set(target, code);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * String -> 枚举
+     *
+     * @param source          源对象
+     * @param target          目标对象
+     * @param sourceField     源属性
+     * @param targetField     目标属性
+     * @param sourceFieldType 源属性类型
+     * @param targetFieldType 目标属性类型
+     */
+    @SuppressWarnings("unchecked")
+    private static <S, T> void stringToEnum(S source, T target, Field sourceField, Field targetField, Class<?> sourceFieldType, Class<?> targetFieldType) {
+        if (targetFieldType.isEnum() && EnumService.class.isAssignableFrom(targetFieldType)) {
+            // 源属性是否为String类型, 非String类型不处理
+            if (!sourceFieldType.equals(String.class)) {
+                throw new RuntimeException("枚举值转换失败：源属性不是String类型, 无法转换");
+            }
+            String value;
+            try {
+                value = (String) sourceField.get(source);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (StringUtils.isNotBlank(value)) {
+                EnumService aEnum = EnumService.getEnumByValue((Class<? extends EnumService>) targetFieldType, value);
+                try {
+                    targetField.set(target, aEnum);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理泛型
+     *
+     * @param source          源对象
+     * @param target          目标对象
+     * @param sourceField     源属性
+     * @param targetField     目标属性
+     * @param sourceFieldType 源属性类型
+     * @param targetFieldType 目标属性类型
+     */
+    private static <S, T> void handleGenericType(S source, T target, Field sourceField, Field targetField, Class<?> sourceFieldType, Class<?> targetFieldType) {
+        Type sourceFieldGenericType = sourceField.getGenericType();
+        Type targetFieldGenericType = targetField.getGenericType();
+        if (sourceFieldGenericType instanceof ParameterizedType && targetFieldGenericType instanceof ParameterizedType) {
+            ParameterizedType sourceParamType = (ParameterizedType) sourceFieldGenericType;
+            ParameterizedType targetParamType = (ParameterizedType) targetFieldGenericType;
 
             Type[] sourceTypeArgs = sourceParamType.getActualTypeArguments();
             Type[] targetTypeArgs = targetParamType.getActualTypeArguments();
@@ -240,9 +383,6 @@ public class ModelUtils {
                     convertSetToList(source, target, sourceField, targetField);
                 }
             }
-        } else {
-            // 处理基本类型和包装类型的转换
-            handlePrimitiveTypeConversion(source, target, sourceField, targetField);
         }
     }
 

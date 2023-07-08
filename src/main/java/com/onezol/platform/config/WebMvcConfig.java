@@ -18,7 +18,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/user/sign*",
             "/user/send-email-code/*",
             "/dict-value",
-            "/role/select-options"
+            "/dictionary",
+            "/role/select-options",
+            "/enum/select-options"
     };
 
     @Override

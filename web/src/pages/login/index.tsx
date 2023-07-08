@@ -11,7 +11,7 @@ import {LoginFormPage, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant
 import {Alert, Button, Divider, message, Space, Tabs} from 'antd';
 import type {CSSProperties} from 'react';
 import {useRef, useState} from 'react';
-import service, {LoginResult} from "@/services/login";
+import service, {LoginResult} from "@/services/user";
 import {useNavigate} from "@umijs/max";
 
 type LoginType = 'account' | 'email';

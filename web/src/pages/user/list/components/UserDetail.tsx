@@ -1,10 +1,11 @@
-import React, {FC, useState} from "react";
-import {Avatar, Button, Drawer, Space, Typography} from "antd";
+import React, {FC, useRef, useState} from "react";
+import {Avatar, Button, Drawer, message, Space, Typography} from "antd";
 import {DEFAULT_DRAWER_PROPS} from "@/constants";
 import {
   ProForm,
   ProFormDatePicker,
   ProFormGroup,
+  ProFormInstance,
   ProFormSelect,
   ProFormText,
   ProFormTextArea
@@ -12,6 +13,7 @@ import {
 import GenericService from "@/services/common";
 import {AntDesignOutlined} from "@ant-design/icons";
 import {useModel} from "@umijs/max";
+import service from "@/services/user";
 
 interface User {
   id?: number;
@@ -34,9 +36,9 @@ const genericService = new GenericService('user');
 const IGNORE_ROLE = ['user'];
 const UserDetail: FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
-  const [readonly, setReadonly] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
-  const {generateOptions} = useModel("dictionary");
+  const {getOptions} = useModel("dictionary");
+  const formRef = useRef<ProFormInstance>();
 
   const fetchData = async () => {
     const res = await genericService.query(itemKey as number) as User;
@@ -49,11 +51,25 @@ const UserDetail: FC<SubPageProps> = (props) => {
       }
     });
     res.roles = roles.filter(item => !!item) as string[];
-    console.log(res.roles)
     setUser(res);
     return {
       ...res
     };
+  }
+
+  /**
+   * 保存
+   */
+  const save = async () => {
+    await formRef.current?.validateFields();
+
+    const values = {
+      ...formRef.current?.getFieldsValue(),
+      id: itemKey
+    };
+    await service.update(values);
+    message.success('保存成功');
+    hide(true);
   }
 
   const close = () => {
@@ -74,23 +90,19 @@ const UserDetail: FC<SubPageProps> = (props) => {
           }}
         >
           <Space wrap>
-            <Button type="primary">保存</Button>
+            <Button type="primary" onClick={save}>保存</Button>
             <Button onClick={close}>取消</Button>
           </Space>
         </div>
       }
     >
       <ProForm
-        readonly={readonly}
         name="validate_other"
+        formRef={formRef}
         request={fetchData}
-        onValuesChange={(_, values) => {
-          console.log(values);
-        }}
         submitter={{
           render: (_, dom) => null,
         }}
-        onFinish={async (value) => console.log(value)}
       >
         <div style={{
           display: 'flex',
@@ -109,7 +121,12 @@ const UserDetail: FC<SubPageProps> = (props) => {
                             style={{marginTop: 10}}>{`${user?.nickname}(${user?.username})`}</Typography.Title>
         </div>
         <ProFormGroup>
-          <ProFormText width="md" name="nickname" label="用户昵称"/>
+          <ProFormText
+            width="md"
+            name="nickname"
+            label="用户昵称"
+            rules={[{required: true, message: '请填写用户昵称!'}]}
+          />
           <ProFormText width="md" name="name" label="用户姓名"/>
         </ProFormGroup>
         <ProFormGroup>
@@ -121,17 +138,25 @@ const UserDetail: FC<SubPageProps> = (props) => {
             name="gender"
             label="性别"
             width='md'
-            options={generateOptions("gender")}
+            options={getOptions("gender")}
             placeholder="请选择"
             rules={[{required: true, message: '请选择性别!'}]}
           />
           <ProFormDatePicker width='md' name="birthday" label="生日"/>
         </ProFormGroup>
         <ProFormGroup>
-          <ProFormTextArea width={1000} name="introduce" label="个人简介" placeholder="请输入个人简介"/>
+          <ProFormTextArea width={1000} name="introduction" label="个人简介" placeholder="请输入个人简介"/>
         </ProFormGroup>
         <ProFormGroup>
-          <ProFormText width="md" name="status" label="账户状态"/>
+          <ProFormSelect
+            name="status"
+            label="账户状态"
+            readonly={user?.username === 'admin'}
+            width='md'
+            options={getOptions("AccountStatus")}
+            placeholder="请选择"
+            rules={[{required: true, message: '请选择账户状态!'}]}
+          />
         </ProFormGroup>
         <ProFormGroup>
           <ProFormText width="md" name="createdAt" label="注册日期" readonly={true}/>

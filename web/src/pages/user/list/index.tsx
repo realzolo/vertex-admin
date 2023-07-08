@@ -11,7 +11,7 @@ const genericService = new GenericService('user');
 const UserListPage = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValue, setStepFormValue] = useState<Role>();
+  const [stepFormValue, setStepFormValue] = useState<User>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [detailVisible, setDetailVisible] = useState<boolean>(false);
   const [roleOptions, setRoleOptions] = useState<SelectOption[]>([]);
@@ -35,7 +35,7 @@ const UserListPage = () => {
     }
     const res = await genericService.queryList(param);
     return {
-      data: res.items as Role[],
+      data: res.items as User[],
       total: res.total,
     }
   }
@@ -49,7 +49,7 @@ const UserListPage = () => {
    * 新建
    * @param values
    */
-  const doCreate = async (values: Role) => {
+  const doCreate = async (values: User) => {
     values = {
       ...values,
     }
@@ -84,12 +84,22 @@ const UserListPage = () => {
    * 查看
    * @param record
    */
-  const onViewDictValue = (record: Role) => {
+  const onViewDictValue = (record: User) => {
     setStepFormValue(record);
     setDetailVisible(true);
   }
 
-  const columns: ProDescriptionsItemProps<Role>[] = [
+  /**
+   * 隐藏子页面
+   */
+  const hideSubPage = (flush?: boolean) => {
+    if (flush) {
+      actionRef.current?.reloadAndRest?.();
+    }
+    setDetailVisible(false);
+  }
+
+  const columns: ProDescriptionsItemProps<User>[] = [
     {
       title: '序号',
       valueType: 'index',
@@ -180,7 +190,7 @@ const UserListPage = () => {
       </CreateForm>
       <UserDetail
         visible={detailVisible}
-        hide={() => setDetailVisible(false)}
+        hide={hideSubPage}
         itemKey={stepFormValue?.id}
         data={roleOptions}
       />

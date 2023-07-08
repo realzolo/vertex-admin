@@ -1,7 +1,7 @@
 // 子页Props
 interface SubPageProps {
   visible: boolean;
-  hide: () => void;
+  hide: (flush?: boolean) => void;
   itemKey: string | number | undefined;
   data?: unknown;
 }
