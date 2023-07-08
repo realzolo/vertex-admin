@@ -47,6 +47,11 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, @NonNull MethodParameter returnType, @NonNull MediaType mediaType,
                                   @NonNull Class<? extends HttpMessageConverter<?>> converterType, @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
+        // 如果mediaType不是json，则不进行处理
+        if (!Objects.equals(mediaType.getSubtype(), "json")) {
+            return body;
+        }
+
         // 1. controller 返回 void
         if (Objects.isNull(body)) {
             return AjaxResult.success(null);

@@ -159,3 +159,27 @@ CREATE TABLE pf_user_login_log
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户登录日志表';
+
+-- pf_file_detail
+DROP TABLE IF EXISTS pf_file_detail;
+CREATE TABLE pf_file_detail
+(
+    id                BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    file_name         VARCHAR(50)         DEFAULT NULL COMMENT '文件名称',
+    original_filename VARCHAR(50)         DEFAULT NULL COMMENT '原始文件名称',
+    size              BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '文件大小',
+    type              VARCHAR(50)         DEFAULT NULL COMMENT '文件类型',
+    ext               VARCHAR(50)         DEFAULT NULL COMMENT '文件后缀',
+    content_type      VARCHAR(50)         DEFAULT NULL COMMENT '文件contentType',
+    user_id           BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '用户ID',
+    path              VARCHAR(500)        DEFAULT NULL COMMENT '文件路径',
+    url               VARCHAR(500)        DEFAULT NULL COMMENT '文件url',
+    temp_key          VARCHAR(100)        DEFAULT NULL COMMENT '临时文件key',
+    expired_at        DATETIME COMMENT '过期时间',
+    attr              VARCHAR(500)        DEFAULT NULL COMMENT '文件属性',
+    created_at        DATETIME COMMENT '创建时间',
+    updated_at        DATETIME COMMENT '更新时间',
+    deleted           TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='文件详情表';

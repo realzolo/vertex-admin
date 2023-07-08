@@ -21,7 +21,6 @@ spring:
     url: jdbc:mysql://db.onezol.com:3306/wbp?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    # Druid配置
     druid:
       initial-size: 5
       min-idle: 5
@@ -40,6 +39,7 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
+  # 邮件配置
   mail:
     host: smtp.exmail.qq.com
     port: 465
@@ -51,7 +51,19 @@ spring:
         smtp:
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
-
+  # 文件存储配置
+  file-storage:
+    default-platform: aws-s3
+    aws-s3:
+      - platform: aws-s3
+        enable-storage: true
+        access-key: AKIDBC*************EAoBJDq
+        secret-key: RcXBZT*************q8AvObZ
+        region: ap-shanghai
+        end-point: https://cos.${spring.file-storage.aws-s3[0].region}.myqcloud.com
+        bucket-name: test-1301333510
+        domain: https://test-1301333510.cos.ap-shanghai.myqcloud.com/
+        base-path: ${spring.application.name}/
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

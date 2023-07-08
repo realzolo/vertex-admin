@@ -53,6 +53,11 @@ export default [
     ]
   },
   {
+    name: '文件管理',
+    path: '/file/:path',
+    component: '@/pages/file',
+  },
+  {
     name: '字典管理',
     path: '/dictionary',
     component: '@/pages/dictionary',

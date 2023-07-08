@@ -1,6 +1,7 @@
 package com.onezol.app;
 
 import com.onezol.platform.service.DictValueService;
+import com.onezol.platform.service.FileService;
 import com.onezol.platform.service.MailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ class AppStarterTests {
     private MailService mailService;
     @Autowired
     private DictValueService dictValueService;
+    @Autowired
+    private FileService fileService;
 
     @Test
     void testSendEmail() {
@@ -32,4 +35,10 @@ class AppStarterTests {
         dictValueService.getDictionary();
     }
 
+    @Test
+    void testFileService() {
+        String tempUrl = fileService.getTempUrl(1L);
+        System.out.println("tempUrl: " + tempUrl);
+        System.out.println(tempUrl);
+    }
 }

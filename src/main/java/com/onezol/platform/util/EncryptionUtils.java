@@ -51,8 +51,23 @@ public class EncryptionUtils {
      * @return 加密后的字符串
      */
     public static String encryptSha512(String str) {
+        return encrypt(str, "SHA-512");
+    }
+
+    public static String encryptMd5(String str) {
+        return encrypt(str, "MD5");
+    }
+
+    /**
+     * 对字符串进行特定算法加密
+     *
+     * @param str       待加密的字符串
+     * @param algorithm 加密算法
+     * @return 加密后的字符串
+     */
+    public static String encrypt(String str, String algorithm) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(str.getBytes());
             byte[] bytes = md.digest();
             StringBuilder sb = new StringBuilder();

@@ -31,8 +31,8 @@ public interface EnumService {
         return false;
     }
 
-    int getCode();
-
     String getValue();
+
+    int getCode();
 }
 

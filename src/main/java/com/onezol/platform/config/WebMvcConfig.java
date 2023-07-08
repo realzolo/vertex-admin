@@ -20,7 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/dict-value",
             "/dictionary",
             "/role/select-options",
-            "/enum/select-options"
+            "/enum/select-options",
+            "/file/temp/*",
     };
 
     @Override

@@ -13,3 +13,11 @@ export const DEFAULT_DRAWER_PROPS = {
   mask: true,
   destroyOnClose: true,
 }
+
+export const FILE_TYPE_MAP = {
+  'image': '图片',
+  'video': '视频',
+  'audio': '音频',
+  'document': '文档',
+  'others': '其它',
+}
