@@ -22,7 +22,7 @@ public class RedisCacheProvider {
     }
 
     public boolean contains(String key) {
-        return redisTemplate.hasKey(key);
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 
     public void evict(String key) {

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-
 @Service
 public class FileServiceImpl extends GenericServiceImpl<FileDetailMapper, FileDetailEntity> implements FileService, FileRecorder {
 

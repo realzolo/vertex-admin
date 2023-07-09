@@ -1,6 +1,5 @@
 package com.onezol.vertex.core.service;
 
-
 import com.onezol.vertex.core.model.entity.FileDetailEntity;
 
 public interface FileService extends GenericService<FileDetailEntity> {

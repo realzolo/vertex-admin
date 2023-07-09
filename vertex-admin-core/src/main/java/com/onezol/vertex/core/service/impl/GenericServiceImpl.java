@@ -29,7 +29,6 @@ import java.util.Objects;
 
 import static com.onezol.vertex.common.constant.CommonConstant.MAX_PAGE_SIZE;
 
-
 public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> extends BaseServiceImpl<M, T> implements GenericService<T> {
 
     /**

@@ -5,7 +5,6 @@ import com.onezol.vertex.common.annotation.InsertStrategy;
 import com.onezol.vertex.common.constant.enums.FieldStrategy;
 import com.onezol.vertex.common.model.BaseEntity;
 
-
 @TableName("pf_dict_value")
 public class DictValueEntity extends BaseEntity {
     /**

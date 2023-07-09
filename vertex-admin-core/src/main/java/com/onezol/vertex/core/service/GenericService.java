@@ -1,6 +1,5 @@
 package com.onezol.vertex.core.service;
 
-
 import com.onezol.vertex.common.model.BaseEntity;
 import com.onezol.vertex.common.model.BaseParam;
 import com.onezol.vertex.common.pojo.ListResultWrapper;

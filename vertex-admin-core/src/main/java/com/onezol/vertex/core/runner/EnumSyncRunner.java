@@ -2,7 +2,7 @@ package com.onezol.vertex.core.runner;
 
 import com.onezol.vertex.common.constant.enums.EnumService;
 import com.onezol.vertex.common.util.StringUtils;
-import com.onezol.vertex.core.model.dto.SelectOption;
+import com.onezol.vertex.core.model.pojo.SelectOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

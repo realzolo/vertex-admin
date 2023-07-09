@@ -1,6 +1,5 @@
 package com.onezol.vertex.core.model.dto;
 
-
 import com.onezol.vertex.core.model.pojo.system.*;
 
 import java.util.List;

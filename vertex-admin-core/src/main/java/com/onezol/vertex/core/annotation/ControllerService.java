@@ -1,6 +1,5 @@
 package com.onezol.vertex.core.annotation;
 
-
 import com.onezol.vertex.common.model.BaseDTO;
 import com.onezol.vertex.core.service.GenericService;
 

@@ -1,6 +1,5 @@
 package com.onezol.vertex.core.service;
 
-
 import com.onezol.vertex.core.model.dto.SystemInfoWrapper;
 
 public interface MonitorService {

@@ -1,9 +1,8 @@
 package com.onezol.vertex.core.service;
 
-
 import com.onezol.vertex.core.model.dto.DictValue;
-import com.onezol.vertex.core.model.dto.SelectOption;
 import com.onezol.vertex.core.model.entity.DictValueEntity;
+import com.onezol.vertex.core.model.pojo.SelectOption;
 
 import java.util.List;
 import java.util.Map;

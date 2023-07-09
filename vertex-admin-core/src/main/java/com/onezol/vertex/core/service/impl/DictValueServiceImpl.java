@@ -3,9 +3,9 @@ package com.onezol.vertex.core.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.core.mapper.DictValueMapper;
 import com.onezol.vertex.core.model.dto.DictValue;
-import com.onezol.vertex.core.model.dto.SelectOption;
 import com.onezol.vertex.core.model.entity.DictEntryEntity;
 import com.onezol.vertex.core.model.entity.DictValueEntity;
+import com.onezol.vertex.core.model.pojo.SelectOption;
 import com.onezol.vertex.core.service.DictEntryService;
 import com.onezol.vertex.core.service.DictValueService;
 import com.onezol.vertex.core.util.ModelUtils;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static com.onezol.vertex.common.constant.CommonConstant.RK_DICTIONARY;
-
 
 @Service
 public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, DictValueEntity> implements DictValueService {

@@ -18,7 +18,6 @@ import java.util.List;
 
 import static com.onezol.vertex.common.constant.CommonConstant.RK_DICTIONARY;
 
-
 @Component
 public class DictionarySyncRunner implements ApplicationRunner {
     public static final Logger logger = LoggerFactory.getLogger(DictionarySyncRunner.class);

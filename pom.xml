@@ -19,7 +19,8 @@
         <module>vertex-admin-common</module>
         <module>vertex-admin-scheduler</module>
         <module>vertex-admin-core</module>
-        <module>vertex-admin-api</module>
+        <module>vertex-admin-business</module>
+        <module>vertex-admin-security</module>
     </modules>
     <properties>
         <java.version>8</java.version>
