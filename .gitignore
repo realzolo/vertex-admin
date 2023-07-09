@@ -34,12 +34,12 @@ build/
 
 /src/main/resources/static/
 
-/web/node_modules/
-/web/.env.local
-/web/.umirc.local.ts
-/web/config/config.local.ts
-/web/src/.umi
-/web/src/.umi-production
-/web/src/.umi-test
-/web/dist/
-/web/.swc
+/vertex-admin-webapp/node_modules/
+/vertex-admin-webapp/.env.local
+/vertex-admin-webapp/.umirc.local.ts
+/vertex-admin-webapp/config/config.local.ts
+/vertex-admin-webapp/src/.umi
+/vertex-admin-webapp/src/.umi-production
+/vertex-admin-webapp/src/.umi-test
+/vertex-admin-webapp/dist/
+/vertex-admin-webapp/.swc
