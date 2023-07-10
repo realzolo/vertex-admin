@@ -20,7 +20,7 @@ import static com.onezol.vertex.common.constant.CommonConstant.RK_DICTIONARY;
 @Service
 public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, DictValueEntity> implements DictValueService {
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
     @Autowired
     private DictEntryService dictEntryService;
     @Autowired

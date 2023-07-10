@@ -23,7 +23,7 @@ public class DictionarySyncRunner implements ApplicationRunner {
     public static final Logger logger = LoggerFactory.getLogger(DictionarySyncRunner.class);
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
     @Autowired
     private DictValueService dictValueService;
 

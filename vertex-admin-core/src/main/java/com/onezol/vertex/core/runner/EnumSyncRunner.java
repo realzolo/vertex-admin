@@ -22,7 +22,7 @@ public class EnumSyncRunner implements ApplicationRunner {
     public static final Logger logger = LoggerFactory.getLogger(EnumSyncRunner.class);
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
 
     @Override

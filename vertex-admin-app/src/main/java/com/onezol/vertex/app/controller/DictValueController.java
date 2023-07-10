@@ -25,7 +25,7 @@ public class DictValueController extends GenericController<DictValueEntity, Dict
     @Autowired
     private DictValueService dictValueService;
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @GetMapping
     public Object get() {

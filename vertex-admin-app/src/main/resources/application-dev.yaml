@@ -64,9 +64,9 @@ spring:
         bucket-name: test-1301333510
         domain: https://test-1301333510.cos.ap-shanghai.myqcloud.com/
         base-path: ${spring.application.name}/
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # Frp配置
 frp:
@@ -76,6 +76,6 @@ frp:
 encryption:
   jwt:
     secret: C61270901C4A455A89A0196CBCED9803
-    expire: 7200
+    expire: 10
   password: FA1F437D388544B8B848F1AAD8BF52F0
   iterations: 1000

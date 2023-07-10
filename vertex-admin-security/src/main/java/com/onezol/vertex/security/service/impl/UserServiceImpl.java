@@ -1,11 +1,13 @@
 package com.onezol.vertex.security.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.nimbusds.jose.JOSEException;
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.constant.enums.LoginStatus;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.util.*;
+import com.onezol.vertex.common.util.EncryptionUtils;
+import com.onezol.vertex.common.util.RegexUtils;
+import com.onezol.vertex.common.util.ResourceUtils;
+import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.manager.AsyncManager;
 import com.onezol.vertex.core.service.MailService;
 import com.onezol.vertex.core.service.impl.GenericServiceImpl;
@@ -18,6 +20,7 @@ import com.onezol.vertex.security.model.param.UserSignupParam;
 import com.onezol.vertex.security.service.PermissionService;
 import com.onezol.vertex.security.service.RoleService;
 import com.onezol.vertex.security.service.UserService;
+import com.onezol.vertex.security.util.JwtUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,7 @@ import static com.onezol.vertex.common.constant.CommonConstant.P_RK_EMAIL_CODE;
 @Service
 public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> implements UserService {
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
     @Autowired
     private RoleService roleService;
     @Autowired
@@ -232,12 +235,7 @@ public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> 
         user.setPermissions(permissionService.getKeysByUserId(user.getId()));
 
         // 生成token
-        String token;
-        try {
-            token = JwtUtils.generateToken(username);
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
+        String token = JwtUtils.generateToken(username);
 
         AsyncManager.asyncManager().execute(AsyncFactory.recordLoginLog(username, LoginStatus.SUCCESS));
 

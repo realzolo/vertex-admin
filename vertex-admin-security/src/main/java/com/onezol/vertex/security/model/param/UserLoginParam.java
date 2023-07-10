@@ -1,20 +1,11 @@
 package com.onezol.vertex.security.model.param;
 
 
-public class UserSigninParam {
-    private String type;
+public class UserLoginParam {
     private String username;
     private String password;
     private String email;
     private String captcha;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getUsername() {
         return username;

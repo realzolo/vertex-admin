@@ -1,4 +1,4 @@
-package com.onezol.vertex.common.util;
+package com.onezol.vertex.security.util;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -23,20 +23,24 @@ public class JwtUtils {
      *
      * @param username 用户名
      * @return Token
-     * @throws JOSEException JOSE 异常
      */
-    public static String generateToken(String username) throws JOSEException {
-        JWSSigner signer = new MACSigner(SECRET);
+    public static String generateToken(String username) {
+        SignedJWT signedJWT = null;
+        try {
+            JWSSigner signer = new MACSigner(SECRET);
 
-        Instant now = Instant.now();
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
-                .expirationTime(Date.from(now.plusMillis(EXPIRE)))
-                .issueTime(Date.from(now))
-                .build();
+            Instant now = Instant.now();
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(username)
+                    .expirationTime(Date.from(now.plusMillis(EXPIRE)))
+                    .issueTime(Date.from(now))
+                    .build();
 
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
-        signedJWT.sign(signer);
+            signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+            signedJWT.sign(signer);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
 
         return signedJWT.serialize();
     }
