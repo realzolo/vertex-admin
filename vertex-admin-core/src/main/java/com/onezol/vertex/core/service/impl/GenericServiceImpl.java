@@ -16,7 +16,7 @@ import com.onezol.vertex.core.mapper.BaseMapper;
 import com.onezol.vertex.core.model.param.GenericParam;
 import com.onezol.vertex.core.service.GenericService;
 import com.onezol.vertex.core.util.DictUtils;
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 

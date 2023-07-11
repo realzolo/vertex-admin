@@ -2,18 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.12</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+
     <groupId>com.onezol</groupId>
     <artifactId>vertex-admin</artifactId>
     <version>1.0.0</version>
+
     <name>vertex-admin</name>
     <description>vertex-admin-project</description>
     <packaging>pom</packaging>
+
     <modules>
         <module>vertex-admin-app</module>
         <module>vertex-admin-common</module>
@@ -22,12 +19,15 @@
         <module>vertex-admin-business</module>
         <module>vertex-admin-security</module>
     </modules>
+
     <properties>
-        <java.version>8</java.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <vertex.version>1.0.0</vertex.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <druid.version>1.2.15</druid.version>
-        <jose-jwt.version>9.31</jose-jwt.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <jasypt.version>1.9.2</jasypt.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <oshi-core.version>6.4.3</oshi-core.version>
@@ -36,118 +36,130 @@
         <spring-file-storage.version>0.7.0</spring-file-storage.version>
         <aws-java-sdk-s3.version>1.12.502</aws-java-sdk-s3.version>
     </properties>
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- MySQL: https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-        </dependency>
-        <!-- PostgreSQL :https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <!-- Redis: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- AOP: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- Mail: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <!-- CommonUtils: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <!-- MyBatis Plus: https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-        <!-- Druid: https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
-        <!-- JWT: https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>${jose-jwt.version}</version>
-        </dependency>
-        <!-- jasypt(数据加密): https://mvnrepository.com/artifact/org.jasypt/jasypt -->
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>${jasypt.version}</version>
-        </dependency>
-        <!-- commons-beanutils(JavaBean工具包): https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons-beanutils.version}</version>
-        </dependency>
-        <!-- oshi-core(系统监控): https://mvnrepository.com/artifact/com.github.oshi/oshi-core -->
-        <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>${oshi-core.version}</version>
-        </dependency>
-        <!-- UserAgentUtils(User-Agent解析工具): https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils -->
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>${user-agent-utils.version}</version>
-        </dependency>
-        <!-- fastjson2(JSON解析库)： https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>${fastjson2.version}</version>
-        </dependency>
-        <!-- spring-file-storage(文件服务)： https://mvnrepository.com/artifact/cn.xuyanwu/spring-file-storage -->
-        <dependency>
-            <groupId>cn.xuyanwu</groupId>
-            <artifactId>spring-file-storage</artifactId>
-            <version>${spring-file-storage.version}</version>
-        </dependency>
-        <!-- AWS S3： https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws-java-sdk-s3.version}</version>
-        </dependency>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- SpringBoot 依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.7.12</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- AOP:https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>
+            <!-- MyBatis Plus:https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- Druid:https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- jasypt(数据加密):https://mvnrepository.com/artifact/org.jasypt/jasypt -->
+            <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>${jasypt.version}</version>
+            </dependency>
+            <!-- oshi-core(系统监控):https://mvnrepository.com/artifact/com.github.oshi/oshi-core -->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi-core.version}</version>
+            </dependency>
+            <!-- UserAgentUtils(User-Agent解析工具):https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils -->
+            <dependency>
+                <groupId>eu.bitwalker</groupId>
+                <artifactId>UserAgentUtils</artifactId>
+                <version>${user-agent-utils.version}</version>
+            </dependency>
+            <!-- fastjson2(JSON解析库): https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
+            <!-- spring-file-storage(文件服务): https://mvnrepository.com/artifact/cn.xuyanwu/spring-file-storage -->
+            <dependency>
+                <groupId>cn.xuyanwu</groupId>
+                <artifactId>spring-file-storage</artifactId>
+                <version>${spring-file-storage.version}</version>
+            </dependency>
+            <!-- AWS S3: https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
+            </dependency>
+            <!-- JJWT: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- vertex-admin-app 程序入口 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-app</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-common 通用包 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-common</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-core 核心包 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-core</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-business 业务包 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-business</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-security 安全包 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-security</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-scheduler 定时任务包 -->
+            <dependency>
+                <groupId>com.onezol.vertex</groupId>
+                <artifactId>vertex-admin-scheduler</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
 
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
-        <finalName>app</finalName>
+        <finalName>vertex-admin</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

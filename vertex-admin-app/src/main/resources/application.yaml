@@ -1,9 +1,3 @@
 spring:
   profiles:
     active: dev
-
-# 日志配置
-logging:
-  level:
-    root: info
-    com.baomidou.mybatisplus.core.metadata.TableInfoHelper: error

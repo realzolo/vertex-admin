@@ -2,21 +2,26 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.onezol</groupId>
         <artifactId>vertex-admin</artifactId>
         <version>1.0.0</version>
     </parent>
+
     <groupId>com.onezol.vertex.app</groupId>
     <artifactId>vertex-admin-app</artifactId>
     <version>1.0.0</version>
-    <name>vertex-app</name>
+
     <packaging>jar</packaging>
     <description>主入口</description>
-    <properties>
-        <vewertex.version>1.0.0</vewertex.version>
-    </properties>
+
     <dependencies>
+        <!-- SpringBoot: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.onezol.vertex</groupId>
             <artifactId>vertex-admin-common</artifactId>

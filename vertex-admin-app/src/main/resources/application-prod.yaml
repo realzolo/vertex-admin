@@ -1,5 +1,11 @@
 # 当前配置文件环境为：prod
+server:
+  port: 10240
+  servlet:
+    context-path: /api
 spring:
+  application:
+    name: vertex-admin-app
   config:
     activate:
       on-profile: prod
