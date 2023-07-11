@@ -48,7 +48,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
 
             // 从Redis中获取用户信息
-            UserIdentity user = redisCache.getCacheObject(USER_PREFIX + token);
+            String subject = JwtUtils.getSubjectFromToken(token);
+            UserIdentity user = redisCache.getCacheObject(USER_PREFIX + subject);
 
             if (Objects.isNull(user)) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());

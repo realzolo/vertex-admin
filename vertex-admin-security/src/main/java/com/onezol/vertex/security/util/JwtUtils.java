@@ -1,137 +1,81 @@
 package com.onezol.vertex.security.util;
 
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.text.ParseException;
-import java.time.Instant;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
-    public static long EXPIRE = 2 * 60 * 60 * 1000; // 过期时间, 单位: 毫秒, 默认: 2小时
-    private static String SECRET = "E08B28641AFE4425937E7B3315FE673F"; // 密钥
+    /**
+     * JWT 密钥
+     */
+    private static String secretKey;
+    /**
+     * JWT 过期时间, 单位: 秒
+     */
+    private static Integer expirationTime;
 
     /**
-     * 生成 Token
+     * 生成 JWT
      *
-     * @param username 用户名
-     * @return Token
+     * @param subject JWT 主题
+     * @return JWT
      */
-    public static String generateToken(String username) {
-        SignedJWT signedJWT = null;
-        try {
-            JWSSigner signer = new MACSigner(SECRET);
+    public static String generateToken(String subject) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + expirationTime * 1000);
 
-            Instant now = Instant.now();
-            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(username)
-                    .expirationTime(Date.from(now.plusMillis(EXPIRE)))
-                    .issueTime(Date.from(now))
-                    .build();
-
-            signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
-            signedJWT.sign(signer);
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
-
-        return signedJWT.serialize();
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
     /**
-     * 刷新 Token
+     * 验证 JWT
      *
-     * @param token 原始 Token
-     * @return 新的 Token
-     * @throws JOSEException  JOSE 异常
-     * @throws ParseException 解析异常
-     */
-    public static String refreshToken(String token) throws JOSEException, ParseException {
-        if (StringUtils.hasText(token)) {
-            throw new JOSEException("Token 不可为空");
-        }
-
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        JWSVerifier verifier = new MACVerifier(SECRET);
-
-        if (!signedJWT.verify(verifier)) {
-            throw new JOSEException("Token 验证失败");
-        }
-
-        JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
-        Instant now = Instant.now();
-
-        if (claimsSet.getExpirationTime().before(Date.from(now.plusMillis(EXPIRE / 2)))) {
-            // 如果 JWT 即将过期，则重新生成一个新的 JWT
-            return generateToken(claimsSet.getSubject());
-        } else {
-            // 否则，返回原始 JWT
-            return token;
-        }
-    }
-
-    /**
-     * 从 Token 中获取用户名
-     *
-     * @param token Token
-     * @return 用户名
-     * @throws JOSEException  JOSE 异常
-     * @throws ParseException 解析异常
-     */
-    public static String getUsernameFromToken(String token) throws JOSEException, ParseException {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        JWSVerifier verifier = new MACVerifier(SECRET);
-        if (signedJWT.verify(verifier)) {
-            return signedJWT.getJWTClaimsSet().getSubject();
-        } else {
-            throw new JOSEException("Token 验证失败");
-        }
-    }
-
-    /**
-     * 验证 Token 是否有效
-     *
-     * @param token Token
+     * @param token JWT
      * @return 是否有效
      */
     public static boolean validateToken(String token) {
-        JWTClaimsSet claimsSet;
         try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-
-            JWSVerifier verifier = new MACVerifier(SECRET);
-
-            if (!signedJWT.verify(verifier)) {
-                return false;
-            }
-
-            claimsSet = signedJWT.getJWTClaimsSet();
-        } catch (ParseException | JOSEException e) {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            // JWT 验证失败
             return false;
         }
-
-        Date expirationTime = claimsSet.getExpirationTime();
-        return expirationTime == null || !expirationTime.before(new Date());
     }
 
-    @Value("${encryption.jwt.secret}")
-    public void setSecret(String secret) {
-        // 判断 secret 是否符合要求
-        if (secret.length() < 32) {
-            throw new IllegalArgumentException("The secret length must be at least 256 bits");
+    /**
+     * 从 JWT 中获取 subject
+     *
+     * @param token JWT
+     * @return subject
+     */
+    public static String getSubjectFromToken(String token) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            // JWT 解析失败或无效
+            return null;
         }
-        JwtUtils.SECRET = secret;
     }
 
-    @Value("${encryption.jwt.expire}")
-    public void setExpire(Long expire) {
-        JwtUtils.EXPIRE = expire * 1000;
+    @Value("${spring.jwt.secret-key}")
+    public void setSecret(String secretKey) {
+        JwtUtils.secretKey = secretKey;
+    }
+
+    @Value("${spring.jwt.expiration-time}")
+    public void setExpire(Integer expirationTime) {
+        JwtUtils.expirationTime = expirationTime;
     }
 }

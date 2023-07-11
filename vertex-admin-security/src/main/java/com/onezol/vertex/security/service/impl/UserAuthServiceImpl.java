@@ -16,6 +16,7 @@ import com.onezol.vertex.security.model.entity.UserEntity;
 import com.onezol.vertex.security.service.UserAuthService;
 import com.onezol.vertex.security.util.JwtUtils;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,6 +35,9 @@ import static com.onezol.vertex.security.constant.RedisConstant.USER_PREFIX;
 public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> implements UserAuthService {
     private final RedisCache redisCache;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${spring.jwt.expiration-time}")
+    private Integer expirationTime;
 
     public UserAuthServiceImpl(RedisCache redisCache, AuthenticationManager authenticationManager) {
         this.redisCache = redisCache;
@@ -111,13 +115,14 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
      */
     private Map<String, Object> afterLoginSuccess(final UserIdentity userIdentity) {
         // 生成token
-        String token = JwtUtils.generateToken(userIdentity.getUsername());
+        String username = userIdentity.getUsername();
+        String token = JwtUtils.generateToken(username);
 
         // 用户登录追踪
         this.recordLoginDetails(userIdentity);
 
         // 将用户信息放入缓存
-        redisCache.setCacheObject(USER_PREFIX + token, userIdentity, Integer.parseInt(Long.valueOf(JwtUtils.EXPIRE).toString()), TimeUnit.MILLISECONDS);
+        redisCache.setCacheObject(USER_PREFIX + username, userIdentity, expirationTime, TimeUnit.SECONDS);
 
         // 处理返回信息
         UserEntity userEntity = userIdentity.getUser();
@@ -131,7 +136,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
             put("user", user);
             put("jwt", new HashMap<String, Object>() {{
                 put("token", token);
-                put("expire", JwtUtils.EXPIRE / 1000);
+                put("expire", expirationTime);
             }});
         }};
     }
