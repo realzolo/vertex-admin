@@ -2,7 +2,7 @@ package com.onezol.vertex.security.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.core.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.mapper.PermissionGroupMapper;
 import com.onezol.vertex.security.model.dto.PermissionGroup;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
 @Service
 public class PermissionGroupServiceImpl extends GenericServiceImpl<PermissionGroupMapper, PermissionGroupEntity> implements PermissionGroupService {
     @Autowired

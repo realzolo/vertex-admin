@@ -1,6 +1,7 @@
 package com.onezol.vertex.core.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.mapper.DictValueMapper;
 import com.onezol.vertex.core.model.dto.DictValue;
 import com.onezol.vertex.core.model.entity.DictEntryEntity;

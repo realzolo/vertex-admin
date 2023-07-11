@@ -1,6 +1,6 @@
 package com.onezol.vertex.security.service;
 
-import com.onezol.vertex.core.service.BaseService;
+import com.onezol.vertex.core.common.service.BaseService;
 import com.onezol.vertex.security.model.dto.UserIdentity;
 import com.onezol.vertex.security.model.entity.UserEntity;
 

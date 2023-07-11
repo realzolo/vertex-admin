@@ -1,4 +1,4 @@
-package com.onezol.vertex.app.controller;
+package com.onezol.vertex.core.controller;
 
 import com.onezol.vertex.core.model.dto.SystemInfoWrapper;
 import com.onezol.vertex.core.service.MonitorService;

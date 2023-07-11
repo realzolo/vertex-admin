@@ -1,16 +1,15 @@
-package com.onezol.vertex.app.controller;
+package com.onezol.vertex.security.controller;
 
-import com.onezol.vertex.common.model.BaseDTO;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
-import com.onezol.vertex.core.annotation.ControllerService;
-import com.onezol.vertex.core.model.param.DeleteParam;
-import com.onezol.vertex.core.model.param.GenericParam;
+import com.onezol.vertex.core.common.controller.GenericController;
+import com.onezol.vertex.core.common.model.dto.DTO;
+import com.onezol.vertex.core.common.model.param.GenericParam;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.model.dto.PermissionGroup;
-import com.onezol.vertex.security.model.entity.PermissionGroupEntity;
 import com.onezol.vertex.security.model.param.PermissionGroupParam;
 import com.onezol.vertex.security.service.PermissionGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,46 +18,48 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/permission-group")
-@ControllerService(service = PermissionGroupService.class, retClass = PermissionGroup.class)
-public class PermissionGroupController extends GenericController<PermissionGroupEntity, PermissionGroupParam> {
+public class PermissionGroupController extends GenericController<PermissionGroupService> {
 
     @Autowired
     private PermissionGroupService permissionGroupService;
 
     /**
-     * 查询列表： /{controllerName}/list
+     * 获取DTO的Class(返回给前端的数据类型, 避免Entity直接暴露给前端)
      *
-     * @param param 通用参数
-     * @return 结果列表
+     * @return DTO Class
      */
     @Override
-//    @PreAuthorize("admin:permission:list")
-    public ListResultWrapper<? extends BaseDTO> list(@RequestBody GenericParam param) {
-        return super.list(param);
+    protected Class<? extends DTO> getDtoClass() {
+        return PermissionGroup.class;
     }
 
     /**
-     * 保存/更新： /{controllerName}/save
+     * 查询列表： /xxx/list
+     */
+    @Override
+    @PostMapping("/list")
+    protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericParam param) {
+        return super.queryList(param);
+    }
+
+    /**
+     * 保存/更新： /xxx/save
      *
      * @param param 通用参数
      * @return 保存/更新后的实体
      */
-    @Override
-//    @PreAuthorize("admin:permission:save")
-    public BaseDTO save(@RequestBody PermissionGroupParam param) {
+    public DTO save(@RequestBody PermissionGroupParam param) {
         boolean autoGeneratePermission = !Objects.isNull(param.getAutoGeneratePermission()) && param.getAutoGeneratePermission();
         PermissionGroup permissionGroup = ModelUtils.convert(param, PermissionGroup.class);
         return permissionGroupService.createPermissionGroup(permissionGroup, autoGeneratePermission);
     }
 
     /**
-     * 删除： /{controllerName}/delete
-     *
-     * @param param 删除参数
+     * 删除： /xxx/delete
      */
     @Override
-//    @PreAuthorize("admin:permission:delete")
-    public void delete(@RequestBody DeleteParam param) {
+    @PostMapping("/delete")
+    protected void delete(@RequestBody GenericParam param) {
         super.delete(param);
     }
 }

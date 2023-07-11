@@ -1,6 +1,6 @@
 package com.onezol.vertex.security.service.impl;
 
-import com.onezol.vertex.core.service.impl.BaseServiceImpl;
+import com.onezol.vertex.core.common.service.impl.BaseServiceImpl;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.mapper.UserLoginLogMapper;
 import com.onezol.vertex.security.model.dto.UserLoginLog;

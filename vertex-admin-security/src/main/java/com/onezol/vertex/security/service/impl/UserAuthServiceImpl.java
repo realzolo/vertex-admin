@@ -5,7 +5,7 @@ import com.onezol.vertex.common.util.NetUtils;
 import com.onezol.vertex.common.util.RequestUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.cache.RedisCache;
-import com.onezol.vertex.core.service.impl.BaseServiceImpl;
+import com.onezol.vertex.core.common.service.impl.BaseServiceImpl;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.exception.LoginException;
 import com.onezol.vertex.security.mapper.UserMapper;

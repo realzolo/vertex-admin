@@ -1,4 +1,4 @@
-package com.onezol.vertex.common.model;
+package com.onezol.vertex.core.common.model.param;
 
 public abstract class BaseParam {
     private Long id;

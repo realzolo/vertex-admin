@@ -1,7 +1,7 @@
 package com.onezol.vertex.security.service;
 
+import com.onezol.vertex.core.common.service.GenericService;
 import com.onezol.vertex.core.model.pojo.SelectOption;
-import com.onezol.vertex.core.service.GenericService;
 import com.onezol.vertex.security.model.dto.Role;
 import com.onezol.vertex.security.model.entity.RoleEntity;
 

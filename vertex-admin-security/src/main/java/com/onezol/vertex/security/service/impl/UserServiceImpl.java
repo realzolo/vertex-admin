@@ -1,7 +1,7 @@
 package com.onezol.vertex.security.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.onezol.vertex.core.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.mapper.UserMapper;
 import com.onezol.vertex.security.model.dto.User;

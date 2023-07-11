@@ -1,26 +1,47 @@
-package com.onezol.vertex.core.model.param;
+package com.onezol.vertex.core.common.model.param;
 
 
 import java.util.Map;
 
-public class GenericParam {
-    // 当前页
+public final class GenericParam extends BaseParam {
+    /**
+     * 当前页码(查询操作)
+     */
     private Integer page;
 
-    // 每页大小
+    /**
+     * 每页显示条数(查询操作)
+     */
     private Integer pageSize;
 
-    // 排序字段与方式
+    /**
+     * 排序字段(查询操作)
+     */
     private String orderBy;
 
-    // 查询字段
+    /**
+     * 查询字段(查询操作)
+     */
     private String[] fields;
 
-    // 条件表达式
+    /**
+     * 查询条件(查询操作)
+     */
     private Map<String, Map<String, Object>> condition;
 
-    // 数据
+    /**
+     * 提交数据(保存/更新操作)
+     */
     private Map<String, Object> data;
+    /**
+     * ID数组(删除操作)
+     */
+    private Long[] ids;
+
+    /**
+     * 是否物理删除(删除操作)
+     */
+    private Boolean physicalDelete;
 
     public Integer getPage() {
         return page;
@@ -68,5 +89,21 @@ public class GenericParam {
 
     public void setData(Map<String, Object> data) {
         this.data = data;
+    }
+
+    public Long[] getIds() {
+        return ids;
+    }
+
+    public void setIds(Long[] ids) {
+        this.ids = ids;
+    }
+
+    public Boolean getPhysicalDelete() {
+        return physicalDelete;
+    }
+
+    public void setPhysicalDelete(Boolean physicalDelete) {
+        this.physicalDelete = physicalDelete;
     }
 }

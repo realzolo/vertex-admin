@@ -1,7 +1,7 @@
-package com.onezol.vertex.core.service;
+package com.onezol.vertex.core.common.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.onezol.vertex.common.model.BaseEntity;
+import com.onezol.vertex.core.common.model.entity.Entity;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @param <T> BaseEntity的子类
  */
-public interface BaseService<T extends BaseEntity> extends com.baomidou.mybatisplus.extension.service.IService<T> {
+public interface BaseService<T extends Entity> extends com.baomidou.mybatisplus.extension.service.IService<T> {
     /**
      * 物理删除
      *

@@ -1,6 +1,6 @@
 package com.onezol.vertex.core.model.dto;
 
-import com.onezol.vertex.common.model.BaseDTO;
+import com.onezol.vertex.core.common.model.dto.BaseDTO;
 
 import java.time.LocalDateTime;
 

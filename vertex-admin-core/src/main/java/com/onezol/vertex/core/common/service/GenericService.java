@@ -1,11 +1,12 @@
-package com.onezol.vertex.core.service;
+package com.onezol.vertex.core.common.service;
 
-import com.onezol.vertex.common.model.BaseEntity;
-import com.onezol.vertex.common.model.BaseParam;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
-import com.onezol.vertex.core.model.param.GenericParam;
+import com.onezol.vertex.core.common.model.entity.Entity;
+import com.onezol.vertex.core.common.model.param.GenericParam;
 
-public interface GenericService<T extends BaseEntity> extends BaseService<T> {
+import java.util.Map;
+
+public interface GenericService<T extends Entity> extends BaseService<T> {
     /**
      * 根据id查询
      *
@@ -43,5 +44,5 @@ public interface GenericService<T extends BaseEntity> extends BaseService<T> {
      * @param data 数据
      * @return 保存/更新结果
      */
-    T save(BaseParam data);
+    T save(Map<String, Object> data);
 }

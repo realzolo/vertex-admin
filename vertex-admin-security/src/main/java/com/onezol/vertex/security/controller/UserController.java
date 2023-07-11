@@ -1,13 +1,11 @@
-package com.onezol.vertex.app.controller;
+package com.onezol.vertex.security.controller;
 
 import com.onezol.vertex.common.annotation.PreAuthorize;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.model.BaseDTO;
-import com.onezol.vertex.common.model.BaseParam;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
-import com.onezol.vertex.core.annotation.ControllerService;
-import com.onezol.vertex.core.model.param.DeleteParam;
-import com.onezol.vertex.core.model.param.GenericParam;
+import com.onezol.vertex.core.common.controller.GenericController;
+import com.onezol.vertex.core.common.model.dto.DTO;
+import com.onezol.vertex.core.common.model.param.GenericParam;
 import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.model.dto.User;
 import com.onezol.vertex.security.model.entity.UserEntity;
@@ -17,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-@ControllerService(service = UserService.class, retClass = User.class)
-public class UserController extends GenericController<UserEntity, BaseParam> {
+public class UserController extends GenericController<UserService> {
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -31,22 +28,17 @@ public class UserController extends GenericController<UserEntity, BaseParam> {
      * @param id 主键
      * @return 结果
      */
-    @Override
     @GetMapping("/{id}")
-    public BaseDTO getById(@PathVariable Long id) {
+    public User getById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
     /**
-     * 查询列表： /{controllerName}/list
-     *
-     * @param param 通用参数
-     * @return 结果列表
+     * 查询列表： /xxx/list
      */
     @Override
-    @PreAuthorize("admin:user:list")
-    public ListResultWrapper<? extends BaseDTO> list(@RequestBody GenericParam param) {
-        return super.list(param);
+    protected ListResultWrapper<? extends DTO> queryList(GenericParam param) {
+        return super.queryList(param);
     }
 
     @PutMapping
@@ -61,13 +53,21 @@ public class UserController extends GenericController<UserEntity, BaseParam> {
 
     /**
      * 删除： /{controllerName}/delete
-     *
-     * @param param 删除参数
      */
     @Override
     @PreAuthorize("admin:user:delete")
-    public void delete(@RequestBody DeleteParam param) {
+    public void delete(@RequestBody GenericParam param) {
         param.setPhysicalDelete(false);
         super.delete(param);
+    }
+
+    /**
+     * 获取DTO的Class(返回给前端的数据类型, 避免Entity直接暴露给前端)
+     *
+     * @return DTO Class
+     */
+    @Override
+    protected Class<? extends DTO> getDtoClass() {
+        return User.class;
     }
 }

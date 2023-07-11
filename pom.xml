@@ -35,6 +35,7 @@
         <fastjson2.version>2.0.34</fastjson2.version>
         <spring-file-storage.version>0.7.0</spring-file-storage.version>
         <aws-java-sdk-s3.version>1.12.502</aws-java-sdk-s3.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +108,13 @@
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+
 
             <!-- vertex-admin-app 程序入口 -->
             <dependency>

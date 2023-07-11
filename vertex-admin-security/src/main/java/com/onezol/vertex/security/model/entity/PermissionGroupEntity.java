@@ -2,7 +2,7 @@ package com.onezol.vertex.security.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.onezol.vertex.common.model.BaseEntity;
+import com.onezol.vertex.core.common.model.entity.BaseEntity;
 
 @TableName("pf_permission_group")
 public class PermissionGroupEntity extends BaseEntity {

@@ -1,5 +1,6 @@
 package com.onezol.vertex.core.service;
 
+import com.onezol.vertex.core.common.service.GenericService;
 import com.onezol.vertex.core.model.dto.DictValue;
 import com.onezol.vertex.core.model.entity.DictValueEntity;
 import com.onezol.vertex.core.model.pojo.SelectOption;

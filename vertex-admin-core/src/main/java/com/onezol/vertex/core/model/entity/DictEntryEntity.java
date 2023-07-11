@@ -3,7 +3,7 @@ package com.onezol.vertex.core.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.vertex.common.annotation.InsertStrategy;
 import com.onezol.vertex.common.constant.enums.FieldStrategy;
-import com.onezol.vertex.common.model.BaseEntity;
+import com.onezol.vertex.core.common.model.entity.BaseEntity;
 
 @TableName("pf_dict_entry")
 public class DictEntryEntity extends BaseEntity {

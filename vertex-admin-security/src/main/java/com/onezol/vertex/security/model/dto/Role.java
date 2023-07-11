@@ -1,6 +1,6 @@
 package com.onezol.vertex.security.model.dto;
 
-import com.onezol.vertex.common.model.BaseDTO;
+import com.onezol.vertex.core.common.model.dto.BaseDTO;
 
 public class Role extends BaseDTO {
     private String name;

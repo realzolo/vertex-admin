@@ -1,4 +1,4 @@
-package com.onezol.vertex.core.service.impl;
+package com.onezol.vertex.core.common.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -7,16 +7,15 @@ import com.onezol.vertex.common.annotation.DictDefinition;
 import com.onezol.vertex.common.annotation.InsertStrategy;
 import com.onezol.vertex.common.constant.enums.FieldStrategy;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.model.BaseEntity;
-import com.onezol.vertex.common.model.BaseParam;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
 import com.onezol.vertex.common.util.ConditionUtils;
 import com.onezol.vertex.common.util.StringUtils;
-import com.onezol.vertex.core.mapper.BaseMapper;
-import com.onezol.vertex.core.model.param.GenericParam;
-import com.onezol.vertex.core.service.GenericService;
+import com.onezol.vertex.core.common.mapper.BaseMapper;
+import com.onezol.vertex.core.common.model.entity.BaseEntity;
+import com.onezol.vertex.core.common.model.param.GenericParam;
+import com.onezol.vertex.core.common.service.GenericService;
 import com.onezol.vertex.core.util.DictUtils;
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,8 @@ import java.util.Objects;
 
 import static com.onezol.vertex.common.constant.CommonConstant.MAX_PAGE_SIZE;
 
-public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> extends BaseServiceImpl<M, T> implements GenericService<T> {
+public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity>
+        extends BaseServiceImpl<M, T> implements GenericService<T> {
 
     /**
      * 根据id查询
@@ -141,14 +141,17 @@ public class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> e
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public T save(BaseParam data) {
+    public T save(Map<String, Object> data) {
+        if (Objects.isNull(data) || data.isEmpty()) {
+            throw new BusinessException("保存失败, 无效的数据");
+        }
         Class<T> entityClass = this.entityClass;
 
         // 创建实例并设置字段
         T t;
         try {
             t = entityClass.getDeclaredConstructor().newInstance();
-            BeanUtils.copyProperties(t, data);
+            BeanUtils.populate(t, data);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
             throw new RuntimeException(e);

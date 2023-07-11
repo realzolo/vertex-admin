@@ -1,9 +1,8 @@
-package com.onezol.vertex.common.model;
+package com.onezol.vertex.core.common.model.dto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class BaseDTO implements Serializable {
+public abstract class BaseDTO extends DTO {
     private Long id;
     private LocalDateTime createdAt;
 

@@ -1,4 +1,4 @@
-package com.onezol.vertex.common.model;
+package com.onezol.vertex.core.common.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,13 +9,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * 基于MyBatis-Plus的基础实体类
  */
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity extends Entity {
     @TableId(type = IdType.AUTO)
     private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

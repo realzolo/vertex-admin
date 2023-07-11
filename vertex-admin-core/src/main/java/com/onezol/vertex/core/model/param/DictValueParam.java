@@ -1,6 +1,6 @@
 package com.onezol.vertex.core.model.param;
 
-import com.onezol.vertex.common.model.BaseParam;
+import com.onezol.vertex.core.common.model.param.BaseParam;
 
 public class DictValueParam extends BaseParam {
     /**

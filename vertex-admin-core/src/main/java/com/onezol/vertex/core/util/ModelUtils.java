@@ -2,11 +2,11 @@ package com.onezol.vertex.core.util;
 
 import com.onezol.vertex.common.annotation.DictDefinition;
 import com.onezol.vertex.common.constant.enums.EnumService;
-import com.onezol.vertex.common.model.BaseDTO;
-import com.onezol.vertex.common.model.BaseEntity;
-import com.onezol.vertex.common.model.BaseParam;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
 import com.onezol.vertex.common.util.StringUtils;
+import com.onezol.vertex.core.common.model.dto.BaseDTO;
+import com.onezol.vertex.core.common.model.entity.BaseEntity;
+import com.onezol.vertex.core.common.model.param.BaseParam;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
@@ -161,7 +161,8 @@ public class ModelUtils {
                 Field field = getField(targetClass, fieldName);
                 if (field != null) {
                     field.setAccessible(true);
-                    field.set(target, fieldValue);
+//                    field.set(target, fieldValue);
+                    field.set(target, convert(fieldValue, field.getType()));
                 }
             }
 

@@ -1,7 +1,7 @@
 package com.onezol.vertex.security.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.onezol.vertex.common.model.BaseEntity;
+import com.onezol.vertex.core.common.model.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 

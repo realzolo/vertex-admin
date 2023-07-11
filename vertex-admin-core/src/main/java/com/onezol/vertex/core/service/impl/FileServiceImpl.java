@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onezol.vertex.common.util.EncryptionUtils;
+import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.mapper.FileDetailMapper;
 import com.onezol.vertex.core.model.entity.FileDetailEntity;
 import com.onezol.vertex.core.service.FileService;
@@ -170,4 +171,5 @@ public class FileServiceImpl extends GenericServiceImpl<FileDetailMapper, FileDe
         String arg = fileDetail.toString() + System.currentTimeMillis();
         return EncryptionUtils.encryptMd5(arg);
     }
+
 }

@@ -1,7 +1,7 @@
 package com.onezol.vertex.security.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.onezol.vertex.common.model.BaseDTO;
+import com.onezol.vertex.core.common.model.dto.BaseDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

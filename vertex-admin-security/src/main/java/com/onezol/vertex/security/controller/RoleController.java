@@ -1,12 +1,11 @@
-package com.onezol.vertex.app.controller;
+package com.onezol.vertex.security.controller;
 
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.core.annotation.ControllerService;
+import com.onezol.vertex.core.common.controller.GenericController;
+import com.onezol.vertex.core.common.model.dto.DTO;
 import com.onezol.vertex.core.model.pojo.SelectOption;
 import com.onezol.vertex.security.model.dto.Role;
-import com.onezol.vertex.security.model.entity.RoleEntity;
-import com.onezol.vertex.security.model.param.RoleParam;
 import com.onezol.vertex.security.service.RoleService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/role")
-@ControllerService(service = RoleService.class, retClass = Role.class)
-public class RoleController extends GenericController<RoleEntity, RoleParam> {
+public class RoleController extends GenericController<RoleService> {
     @Autowired
     private RoleService roleService;
 
@@ -40,5 +38,15 @@ public class RoleController extends GenericController<RoleEntity, RoleParam> {
     @GetMapping("/select-options")
     public List<SelectOption> selectOptions() {
         return roleService.getRoleOptions();
+    }
+
+    /**
+     * 获取DTO的Class(返回给前端的数据类型, 避免Entity直接暴露给前端)
+     *
+     * @return DTO Class
+     */
+    @Override
+    protected Class<? extends DTO> getDtoClass() {
+        return Role.class;
     }
 }
