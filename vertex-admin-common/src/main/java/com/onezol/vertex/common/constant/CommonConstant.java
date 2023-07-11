@@ -14,6 +14,7 @@ public interface CommonConstant {
     String P_PROTOCOL_HTTPS = "https://";
 
     // Authorization header 前缀
+    @Deprecated
     String P_AUTHORIZATION_HEADER = "Bearer ";
 
     // Redis key: 用户信息前缀

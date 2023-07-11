@@ -30,6 +30,12 @@ const requestInterceptors: any[] = [
  */
 const responseInterceptors: any[] = [
   (response: any) => {
+    // 获取headers中的Authorization, 如果存在则表示需要更新token(token续期)
+    const authorization = response.headers['authorization'];
+    if (authorization) {
+      const token = authorization.replace('Bearer ', '');
+      localStorage.setItem('token', token);
+    }
     return response;
   },
 ];

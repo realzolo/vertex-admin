@@ -69,6 +69,21 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * 从 JWT 中获取 claims
+     *
+     * @param token JWT
+     * @return claims
+     */
+    public static Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            // JWT 解析失败或无效
+            return null;
+        }
+    }
+
     @Value("${spring.jwt.secret-key}")
     public void setSecret(String secretKey) {
         JwtUtils.secretKey = secretKey;

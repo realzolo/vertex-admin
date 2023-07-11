@@ -67,7 +67,9 @@ spring:
   # JWT配置
   jwt:
     secret-key: C61270901C4A455A89A0196CBCED9803
-    expiration-time: 30
+    expiration-time: 3600  # token有效期, 1小时
+    renew-threshold: 900   # token续期的阈值, 15分钟
+
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
