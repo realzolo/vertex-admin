@@ -1,6 +1,6 @@
 package com.onezol.vertex.security.service.impl;
 
-import com.onezol.vertex.common.exception.BusinessException;
+import com.onezol.vertex.security.exception.LoginException;
 import com.onezol.vertex.security.model.dto.UserIdentity;
 import com.onezol.vertex.security.model.entity.UserEntity;
 import com.onezol.vertex.security.service.PermissionService;
@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPa
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userAuthService.getUserByUsername(username);
         if (userEntity == null) {
-            throw new BusinessException("用户 [" + username + "] 不存在");
+            throw new LoginException("用户名或密码错误");
         }
 
         UserIdentity user = new UserIdentity(userEntity);

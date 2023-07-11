@@ -1,5 +1,6 @@
 package com.onezol.vertex.security.model.dto;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
 import com.onezol.vertex.security.model.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -60,12 +61,14 @@ public class UserIdentity implements UserDetails {
     }
 
     @Override
+    @JSONField(serialize = false)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 此处设置了角色和权限后fastjson2反序列化会报错，暂时不知道原因
         return null;
     }
 
     @Override
+    @JSONField(serialize = false)
     public String getPassword() {
         return user.getPassword();
     }
@@ -76,23 +79,27 @@ public class UserIdentity implements UserDetails {
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonExpired() {
-        return true;
+        return user.getStatus() != AccountStatus.EXPIRED;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonLocked() {
-        return user.getStatus() == AccountStatus.NORMAL;
+        return user.getStatus() != AccountStatus.LOCKED;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isEnabled() {
-        return true;
+        return user.getStatus() != AccountStatus.DISABLED;
     }
 
     public String getUuid() {

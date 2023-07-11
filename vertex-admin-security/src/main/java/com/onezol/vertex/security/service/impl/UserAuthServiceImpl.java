@@ -1,14 +1,13 @@
 package com.onezol.vertex.security.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.onezol.vertex.common.constant.enums.HttpStatus;
-import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.util.NetUtils;
 import com.onezol.vertex.common.util.RequestUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.cache.RedisCache;
 import com.onezol.vertex.core.service.impl.BaseServiceImpl;
 import com.onezol.vertex.core.util.ModelUtils;
+import com.onezol.vertex.security.exception.LoginException;
 import com.onezol.vertex.security.mapper.UserMapper;
 import com.onezol.vertex.security.model.dto.User;
 import com.onezol.vertex.security.model.dto.UserIdentity;
@@ -86,17 +85,20 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(authenticationToken);
-        } catch (AuthenticationException e) {
-            if (e instanceof BadCredentialsException) {
-                throw new BusinessException(HttpStatus.LOGIN_FAILURE, "用户名或密码错误");
+        } catch (AuthenticationException ex) {
+            if (ex instanceof BadCredentialsException) {
+                throw new LoginException("用户名或密码错误");
             }
-            if (e instanceof DisabledException) {
-                throw new BusinessException(HttpStatus.LOGIN_FAILURE, "账号已被禁用");
+            if (ex instanceof AccountExpiredException) {
+                throw new LoginException("账号已过期");
             }
-            if (e instanceof LockedException) {
-                throw new BusinessException(HttpStatus.LOGIN_FAILURE, "账号已被锁定");
+            if (ex instanceof DisabledException) {
+                throw new LoginException("账号已被禁用");
             }
-            throw new BusinessException(HttpStatus.LOGIN_FAILURE, e.getMessage());
+            if (ex instanceof LockedException) {
+                throw new LoginException("账号已被锁定");
+            }
+            throw new LoginException(ex.getMessage());
         }
 
         // 获取用户信息
@@ -114,15 +116,15 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
      * @return 登录成功后的处理结果
      */
     private Map<String, Object> afterLoginSuccess(final UserIdentity userIdentity) {
-        // 生成token
-        String username = userIdentity.getUsername();
-        String token = JwtUtils.generateToken(username);
-
-        // 用户登录追踪
+        // 记录用户登录信息
         this.recordLoginDetails(userIdentity);
 
+        // 生成token
+        String uuid = userIdentity.getUuid();
+        String token = JwtUtils.generateToken(uuid);
+
         // 将用户信息放入缓存
-        redisCache.setCacheObject(USER_PREFIX + username, userIdentity, expirationTime, TimeUnit.SECONDS);
+        redisCache.setCacheObject(USER_PREFIX + uuid, userIdentity, expirationTime, TimeUnit.SECONDS);
 
         // 处理返回信息
         UserEntity userEntity = userIdentity.getUser();
@@ -142,7 +144,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
     }
 
     /**
-     * 用户登录追踪
+     * 记录用户登录信息
      *
      * @param user 用户信息
      */

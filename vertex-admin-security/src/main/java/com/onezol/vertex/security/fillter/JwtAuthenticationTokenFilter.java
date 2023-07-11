@@ -1,11 +1,12 @@
 package com.onezol.vertex.security.fillter;
 
+import com.onezol.vertex.common.util.ResponseUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.cache.RedisCache;
+import com.onezol.vertex.security.exception.AuthenticationException;
 import com.onezol.vertex.security.model.dto.UserIdentity;
 import com.onezol.vertex.security.util.JwtUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -43,7 +44,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 验证token有效性
             boolean ok = JwtUtils.validateToken(token);
             if (!ok) {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                // token无效, 返回错误信息
+                ResponseUtils.write(response, new AuthenticationException("用户会话已过期, 请重新登录"));
                 return;
             }
 
@@ -52,7 +54,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             UserIdentity user = redisCache.getCacheObject(USER_PREFIX + subject);
 
             if (Objects.isNull(user)) {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                ResponseUtils.write(response, new AuthenticationException("用户会话已过期, 请重新登录"));
                 return;
             }
 

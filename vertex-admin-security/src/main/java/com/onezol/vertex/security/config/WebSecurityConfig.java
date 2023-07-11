@@ -1,7 +1,8 @@
 package com.onezol.vertex.security.config;
 
 import com.onezol.vertex.security.fillter.JwtAuthenticationTokenFilter;
-import com.onezol.vertex.security.handler.SecurityLogoutSuccessHandler;
+import com.onezol.vertex.security.handler.AuthenticationEntryPointIHandler;
+import com.onezol.vertex.security.handler.UserLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,10 +17,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    public final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    /**
+     * JWT 认证过滤器
+     */
+    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    /**
+     * 认证入口点处理器(认证失败处理器)
+     */
+    private final AuthenticationEntryPointIHandler authenticationEntryPointIHandler;
 
-    public WebSecurityConfig(JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter) {
+    /**
+     * 用户注销处理器
+     */
+    private final UserLogoutSuccessHandler userLogoutSuccessHandler;
+
+
+    public WebSecurityConfig(JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, AuthenticationEntryPointIHandler authenticationEntryPointIHandler, UserLogoutSuccessHandler userLogoutSuccessHandler) {
         this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
+        this.authenticationEntryPointIHandler = authenticationEntryPointIHandler;
+        this.userLogoutSuccessHandler = userLogoutSuccessHandler;
     }
 
     @Bean
@@ -41,8 +57,10 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated().and()
                 // JWT 认证过滤器
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                // 认证入口点处理器
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPointIHandler).and()
                 // Logout 处理器
-                .logout().logoutUrl("/logout").logoutSuccessHandler(new SecurityLogoutSuccessHandler()).and()
+                .logout().logoutUrl("/logout").logoutSuccessHandler(userLogoutSuccessHandler).and()
                 // 禁用 csrf
                 .csrf().disable()
                 // 禁用 session

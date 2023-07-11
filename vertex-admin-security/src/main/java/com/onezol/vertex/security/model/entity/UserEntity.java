@@ -30,6 +30,8 @@ public class UserEntity extends BaseEntity {
 
     private String email;
 
+    private LocalDate pwdExpDate;
+
     private AccountStatus status;
 
     public String getUsername() {
@@ -110,6 +112,14 @@ public class UserEntity extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LocalDate getPwdExpDate() {
+        return pwdExpDate;
+    }
+
+    public void setPwdExpDate(LocalDate pwdExpDate) {
+        this.pwdExpDate = pwdExpDate;
     }
 
     public AccountStatus getStatus() {

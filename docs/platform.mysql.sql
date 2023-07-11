@@ -13,6 +13,7 @@ CREATE TABLE pf_user
     birthday     DATETIME            DEFAULT NULL COMMENT '生日',
     phone        VARCHAR(20)         DEFAULT NULL COMMENT '手机号',
     email        VARCHAR(50)         DEFAULT NULL COMMENT '邮箱',
+    pwd_exp_date DATETIME            DEFAULT NULL COMMENT '密码过期时间',
     status       TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '账号状态',
     created_at   DATETIME COMMENT '创建时间',
     updated_at   DATETIME COMMENT '更新时间',

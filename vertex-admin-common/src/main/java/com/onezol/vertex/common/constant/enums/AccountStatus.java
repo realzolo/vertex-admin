@@ -6,9 +6,10 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
  * 账户状态枚举
  */
 public enum AccountStatus implements EnumService {
-    NORMAL(0, "正常"),
+    ACTIVE(0, "正常"),
     LOCKED(1, "锁定"),
-    DISABLED(2, "禁用");
+    DISABLED(2, "禁用"),
+    EXPIRED(3, "过期");
 
     @EnumValue
     private final int code;
