@@ -1,7 +1,7 @@
 package com.onezol.vertex.security.authentication.controller;
 
+import com.onezol.vertex.security.authentication.model.UserLoginPayload;
 import com.onezol.vertex.security.authentication.service.UserAuthService;
-import com.onezol.vertex.security.management.model.payload.UserLoginPayload;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

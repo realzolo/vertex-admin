@@ -1,6 +1,6 @@
 import {request} from "@umijs/max";
 
-interface LoginParams {
+interface LoginPayload {
   type: string;
   username?: string;
   password?: string;
@@ -33,8 +33,8 @@ export default {
    * 账号密码登录
    * @param values 登录参数
    */
-  signin: async (values: LoginParams): Promise<API.AjaxResult<LoginResult>> => {
-    return await request<API.AjaxResult<LoginResult>>('/api/user/signin', {
+  signin: async (values: LoginPayload): Promise<API.AjaxResult<LoginResult>> => {
+    return await request<API.AjaxResult<LoginResult>>('/api/auth/login', {
       method: 'POST',
       data: values
     });
@@ -56,7 +56,7 @@ export default {
    * @param values
    */
   update: async (values: UserUpdateParam): Promise<boolean> => {
-    const res = await request<API.AjaxResult<boolean>>(`/api/user`, {
+    const res = await request<API.AjaxResult<boolean>>(`/api/user/save`, {
       method: 'PUT',
       data: {
         ...values

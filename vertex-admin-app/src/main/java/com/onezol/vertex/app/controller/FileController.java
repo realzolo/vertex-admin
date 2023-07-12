@@ -6,10 +6,12 @@ import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.common.controller.GenericController;
 import com.onezol.vertex.core.module.file.FileService;
 import com.onezol.vertex.core.module.file.model.dto.FileDetail;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 @RequestMapping("/file")
 public class FileController extends GenericController<FileService> {
     @Override
@@ -31,7 +33,6 @@ public class FileController extends GenericController<FileService> {
      */
     @Override
     @PostMapping("/list")
-    @PreAuthorize("hasAuthority('file:list')")
     protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
         return super.queryList(payload);
     }

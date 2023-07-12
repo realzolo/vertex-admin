@@ -3,9 +3,9 @@ import {ActionType, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-co
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 
-const genericService = new GenericService('dictValue');
+const genericService = new GenericService('dictionary');
 const DictValueTable: React.FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
@@ -17,7 +17,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
 
   const fetchData = async (params: any) => {
     const {current: page, pageSize, value, key, code} = params;
-    const param: GenericParam = {
+    const payload: GenericPayload = {
       page,
       pageSize,
       condition: {
@@ -31,7 +31,7 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
         }
       }
     }
-    const res = await genericService.queryList(param);
+    const res = await genericService.queryList(payload);
     return {
       data: res.items as DictValue[],
       total: res.total,

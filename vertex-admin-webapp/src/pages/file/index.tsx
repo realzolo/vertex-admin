@@ -3,7 +3,7 @@ import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProT
 import {Button, message, Modal, Typography} from "antd";
 import {DEFAULT_PRO_TABLE_PROPS, FILE_TYPE_MAP} from "@/constants";
 import CreateForm from "@/components/CreateForm";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 import FileDetail from "./components/FileDetail";
 import {bytesToSize} from "@/utils/format";
 
@@ -20,7 +20,7 @@ const FileListPage = () => {
   const fetchData = async (params: any) => {
     const {current: page, pageSize, originalFilename, type} = params;
     const typeKey = Object.keys(FILE_TYPE_MAP).find(key => FILE_TYPE_MAP[key as FileType] === type);
-    const param: GenericParam = {
+    const payload: GenericPayload = {
       page,
       pageSize,
       condition: {
@@ -30,7 +30,7 @@ const FileListPage = () => {
         }
       }
     }
-    const res = await genericService.queryList(param);
+    const res = await genericService.queryList(payload);
     return {
       data: res.items as File[],
       success: true,

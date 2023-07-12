@@ -46,7 +46,7 @@ const responseInterceptors: any[] = [
 const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
   errorThrower: (res: API.AjaxResult<null>) => {
     const {code, success, data, message} = res;
-    if (!success) {
+    if (!success && code !== 10002) {   // 10002: 登录失败, 不抛出异常
       const error: any = new Error(message);
       error.name = 'BusinessError';
       error.info = {code, success, data, message};
@@ -59,7 +59,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
     if (error.name === 'BusinessError') {
       const {code, success, message, data} = error.info as API.AjaxResult<null>;
       switch (code) {
-        case 10001: // 通用失败
+        case 10001: // 操作失败
         case 10003: // 无访问权限
         case 10004: // 禁止访问
         case 10006: // 请求参数错误

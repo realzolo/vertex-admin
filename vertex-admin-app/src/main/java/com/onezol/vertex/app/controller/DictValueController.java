@@ -42,6 +42,7 @@ public class DictValueController extends GenericController<DictValueService> {
      * 查询列表： /xxx/list
      */
     @Override
+    @PostMapping("/list")
     protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
         return super.queryList(payload);
     }
@@ -51,6 +52,7 @@ public class DictValueController extends GenericController<DictValueService> {
      *
      */
     @Override
+    @PostMapping("/save")
     protected DTO save(@RequestBody GenericPayload payload) {
         return super.save(payload);
     }
@@ -60,6 +62,7 @@ public class DictValueController extends GenericController<DictValueService> {
      *
      */
     @Override
+    @PostMapping("/delete")
     protected void delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
     }

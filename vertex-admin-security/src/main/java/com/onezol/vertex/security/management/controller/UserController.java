@@ -1,6 +1,5 @@
 package com.onezol.vertex.security.management.controller;
 
-import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
@@ -22,39 +21,44 @@ public class UserController extends GenericController<UserService> {
     }
 
     /**
-     * 查询: /{controllerName}/{id}
+     * 查询: /xxx/query
      *
-     * @param id 主键
-     * @return 结果
+     * @param payload 查询参数
      */
-    @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    @Override
+    @PostMapping("/query")
+    protected DTO queryById(@RequestBody GenericPayload payload) {
+        return super.queryById(payload);
     }
 
     /**
      * 查询列表： /xxx/list
+     *
+     * @param payload 查询参数
      */
     @Override
-    protected ListResultWrapper<? extends DTO> queryList(GenericPayload payload) {
+    @PostMapping("/list")
+    protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
         return super.queryList(payload);
     }
 
-    @PutMapping
-    public boolean update(@RequestBody UserUpdatePayload payload) {
-        if (payload.getId() == null) {
-            throw new BusinessException("用户ID不能为空");
-        }
-        UserEntity entity = ModelUtils.convert(payload, UserEntity.class);
-        return userService.updateById(entity);
+    /**
+     * 更新： /xxx/save
+     */
+    @PutMapping("/save")
+    protected boolean save(@RequestBody UserUpdatePayload payload) {
+        UserEntity user = ModelUtils.convert(payload, UserEntity.class);
+        return userService.updateById(user);
     }
 
     /**
-     * 删除： /{controllerName}/delete
+     * 删除： /xxx/delete
+     *
+     * @param payload 删除参数
      */
     @Override
-    public void delete(@RequestBody GenericPayload payload) {
-        payload.setPhysicalDelete(false);
+    @PostMapping("/delete")
+    protected void delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
     }
 

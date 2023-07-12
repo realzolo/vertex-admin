@@ -3,6 +3,8 @@ package com.onezol.vertex.security.management.controller;
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.model.dto.DTO;
+import com.onezol.vertex.common.model.payload.GenericPayload;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.core.common.controller.GenericController;
 import com.onezol.vertex.security.management.model.dto.Role;
@@ -38,6 +40,17 @@ public class RoleController extends GenericController<RoleService> {
     @GetMapping("/select-options")
     public List<SelectOption> selectOptions() {
         return roleService.getRoleOptions();
+    }
+
+    /**
+     * 查询列表： /xxx/list
+     *
+     * @param payload 查询参数
+     */
+    @Override
+    @PostMapping("/list")
+    protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
+        return super.queryList(payload);
     }
 
     /**

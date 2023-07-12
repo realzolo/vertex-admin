@@ -1,4 +1,4 @@
-package com.onezol.vertex.security.management.model.payload;
+package com.onezol.vertex.security.authentication.model;
 
 
 public class UserLoginPayload {

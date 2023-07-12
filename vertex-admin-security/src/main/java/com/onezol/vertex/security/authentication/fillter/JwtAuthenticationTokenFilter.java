@@ -1,10 +1,8 @@
 package com.onezol.vertex.security.authentication.fillter;
 
 import com.onezol.vertex.common.util.JwtUtils;
-import com.onezol.vertex.common.util.ResponseUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.cache.RedisCache;
-import com.onezol.vertex.security.authentication.exception.AuthenticationException;
 import com.onezol.vertex.security.authentication.model.UserIdentity;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -65,7 +63,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 验证token有效性
             boolean ok = JwtUtils.validateToken(token);
             if (!ok) {
-                ResponseUtils.write(response, new AuthenticationException("用户会话已过期, 请重新登录"));
+                filterChain.doFilter(request, response);
                 return;
             }
 
@@ -73,7 +71,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String subject = JwtUtils.getSubjectFromToken(token);
             UserIdentity user = redisCache.getCacheObject(USER_PREFIX + subject);
             if (Objects.isNull(user)) {
-                ResponseUtils.write(response, new AuthenticationException("用户会话已过期, 请重新登录"));
+                filterChain.doFilter(request, response);
                 return;
             }
 
@@ -85,7 +83,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 String renewedToken = renewToken(claims);
                 response.setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_HEADER + renewedToken);
                 // 续期Redis中的用户信息
-                boolean expire = redisCache.expire(USER_PREFIX + subject, expirationTime, TimeUnit.SECONDS);
+                redisCache.expire(USER_PREFIX + subject, expirationTime, TimeUnit.SECONDS);
                 logger.info("用户[{}]的token已续期", subject);
             }
 
