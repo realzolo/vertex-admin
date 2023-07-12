@@ -32,11 +32,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- JJWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-        </dependency>
         <!-- UserAgentUtils(User-Agent解析工具) -->
         <dependency>
             <groupId>eu.bitwalker</groupId>

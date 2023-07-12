@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.onezol.vertex.common.model.entity.BaseEntity;
 import com.onezol.vertex.core.common.mapper.BaseMapper;
-import com.onezol.vertex.core.common.model.entity.BaseEntity;
 import com.onezol.vertex.core.common.service.BaseService;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,8 @@
 package com.onezol.vertex.core.common.service;
 
-import com.onezol.vertex.common.pojo.ListResultWrapper;
-import com.onezol.vertex.core.common.model.entity.Entity;
-import com.onezol.vertex.core.common.model.param.GenericParam;
+import com.onezol.vertex.common.model.entity.Entity;
+import com.onezol.vertex.common.model.payload.GenericPayload;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 
 import java.util.Map;
 
@@ -18,9 +18,9 @@ public interface GenericService<T extends Entity> extends BaseService<T> {
     /**
      * 条件查询
      *
-     * @param param 查询参数
+     * @param payload 查询参数
      */
-    ListResultWrapper<T> queryList(GenericParam param);
+    ListResultWrapper<T> queryList(GenericPayload payload);
 
     /**
      * 删除

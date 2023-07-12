@@ -37,4 +37,9 @@ public interface CommonConstant {
 
     // unknown
     String UNKNOWN = "unknown";
+// ---------------------------------------------------------------------------------------------------------------------
+    /**
+     * Authorization header 前缀
+     */
+    String AUTHORIZATION_HEADER = "Bearer ";
 }

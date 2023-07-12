@@ -1,9 +1,9 @@
 package com.onezol.vertex.core.runner;
 
 
-import com.onezol.vertex.core.model.dto.DictValue;
-import com.onezol.vertex.core.model.entity.DictValueEntity;
-import com.onezol.vertex.core.service.DictValueService;
+import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
+import com.onezol.vertex.core.module.dictionary.model.entity.DictValueEntity;
+import com.onezol.vertex.core.module.dictionary.service.DictValueService;
 import com.onezol.vertex.core.util.ModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

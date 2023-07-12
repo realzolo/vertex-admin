@@ -1,9 +1,9 @@
 package com.onezol.vertex.core.common.controller;
 
-import com.onezol.vertex.common.pojo.ListResultWrapper;
-import com.onezol.vertex.core.common.model.dto.DTO;
-import com.onezol.vertex.core.common.model.entity.Entity;
-import com.onezol.vertex.core.common.model.param.GenericParam;
+import com.onezol.vertex.common.model.dto.DTO;
+import com.onezol.vertex.common.model.entity.Entity;
+import com.onezol.vertex.common.model.payload.GenericPayload;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.common.service.GenericService;
 import com.onezol.vertex.core.util.ModelUtils;
 
@@ -26,8 +26,8 @@ public abstract class GenericController<S extends GenericService<? extends Entit
     /**
      * 查询: /xxx/query
      */
-    protected DTO queryById(GenericParam param) {
-        Long id = param.getId();
+    protected DTO queryById(GenericPayload payload) {
+        Long id = payload.getId();
         if (Objects.isNull(id)) {
             throw new IllegalArgumentException("id can not be null");
         }
@@ -38,16 +38,16 @@ public abstract class GenericController<S extends GenericService<? extends Entit
     /**
      * 查询列表： /xxx/list
      */
-    protected ListResultWrapper<? extends DTO> queryList(GenericParam param) {
-        ListResultWrapper<? extends Entity> resultWrapper = service.queryList(param);
+    protected ListResultWrapper<? extends DTO> queryList(GenericPayload payload) {
+        ListResultWrapper<? extends Entity> resultWrapper = service.queryList(payload);
         return ModelUtils.convert(resultWrapper, dtoClass);
     }
 
     /**
      * 保存/更新： /xxx/save
      */
-    protected DTO save(GenericParam param) {
-        Map<String, Object> data = param.getData();
+    protected DTO save(GenericPayload payload) {
+        Map<String, Object> data = payload.getData();
         if (Objects.isNull(data) || data.isEmpty()) {
             throw new IllegalArgumentException("data can not be null");
         }
@@ -58,12 +58,12 @@ public abstract class GenericController<S extends GenericService<? extends Entit
     /**
      * 删除： /xxx/delete
      */
-    protected void delete(GenericParam param) {
-        Long[] ids = param.getIds();
+    protected void delete(GenericPayload payload) {
+        Long[] ids = payload.getIds();
         if (Objects.isNull(ids) || ids.length == 0) {
             return;
         }
-        boolean physicalDelete = !Objects.isNull(param.getPhysicalDelete()) && param.getPhysicalDelete();
+        boolean physicalDelete = !Objects.isNull(payload.getPhysicalDelete()) && payload.getPhysicalDelete();
         service.delete(ids, physicalDelete);
     }
 

@@ -1,7 +1,7 @@
 package com.onezol.vertex.core.common.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.onezol.vertex.core.common.model.entity.Entity;
+import com.onezol.vertex.common.model.entity.Entity;
 
 import java.io.Serializable;
 

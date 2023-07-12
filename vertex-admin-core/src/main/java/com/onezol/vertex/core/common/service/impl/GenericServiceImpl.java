@@ -7,12 +7,12 @@ import com.onezol.vertex.common.annotation.DictDefinition;
 import com.onezol.vertex.common.annotation.InsertStrategy;
 import com.onezol.vertex.common.constant.enums.FieldStrategy;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.pojo.ListResultWrapper;
+import com.onezol.vertex.common.model.entity.BaseEntity;
+import com.onezol.vertex.common.model.payload.GenericPayload;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.common.util.ConditionUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.common.mapper.BaseMapper;
-import com.onezol.vertex.core.common.model.entity.BaseEntity;
-import com.onezol.vertex.core.common.model.param.GenericParam;
 import com.onezol.vertex.core.common.service.GenericService;
 import com.onezol.vertex.core.util.DictUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -45,15 +45,15 @@ public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends Base
     /**
      * 条件查询
      *
-     * @param param 查询参数
+     * @param payload 查询参数
      */
     @Override
-    public ListResultWrapper<T> queryList(GenericParam param) {
-        String[] fields = param.getFields();
-        Integer page = param.getPage();
-        Integer pageSize = param.getPageSize();
-        Map<String, Map<String, Object>> condition = param.getCondition();
-        String orderBy = param.getOrderBy();
+    public ListResultWrapper<T> queryList(GenericPayload payload) {
+        String[] fields = payload.getFields();
+        Integer page = payload.getPage();
+        Integer pageSize = payload.getPageSize();
+        Map<String, Map<String, Object>> condition = payload.getCondition();
+        String orderBy = payload.getOrderBy();
 
         QueryWrapper<T> wrapper = new QueryWrapper<>();
 

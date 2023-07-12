@@ -1,7 +1,7 @@
 package com.onezol.vertex.common.exception;
 
 import com.onezol.vertex.common.constant.enums.HttpStatus;
-import com.onezol.vertex.common.pojo.AjaxResult;
+import com.onezol.vertex.common.model.record.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;

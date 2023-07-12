@@ -2,7 +2,7 @@ package com.onezol.vertex.core.common.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.onezol.vertex.core.common.model.entity.Entity;
+import com.onezol.vertex.common.model.entity.Entity;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

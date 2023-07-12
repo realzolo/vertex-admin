@@ -1,8 +1,8 @@
 package com.onezol.vertex.core.util;
 
 import com.onezol.vertex.common.util.SpringUtils;
-import com.onezol.vertex.core.model.dto.DictValue;
-import com.onezol.vertex.core.service.DictValueService;
+import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
+import com.onezol.vertex.core.module.dictionary.service.DictValueService;
 import org.springframework.util.Assert;
 
 public class DictUtils {

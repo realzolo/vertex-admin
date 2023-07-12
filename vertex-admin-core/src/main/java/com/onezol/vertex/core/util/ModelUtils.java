@@ -2,11 +2,11 @@ package com.onezol.vertex.core.util;
 
 import com.onezol.vertex.common.annotation.DictDefinition;
 import com.onezol.vertex.common.constant.enums.EnumService;
-import com.onezol.vertex.common.pojo.ListResultWrapper;
+import com.onezol.vertex.common.model.dto.DTO;
+import com.onezol.vertex.common.model.entity.Entity;
+import com.onezol.vertex.common.model.payload.Payload;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.common.util.StringUtils;
-import com.onezol.vertex.core.common.model.dto.BaseDTO;
-import com.onezol.vertex.core.common.model.entity.BaseEntity;
-import com.onezol.vertex.core.common.model.param.BaseParam;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
@@ -202,13 +202,13 @@ public class ModelUtils {
         Class<?> targetFieldType = targetField.getType();
 
         // 1. 字典/枚举 -> String(Entity -> DTO)
-        if (source instanceof BaseEntity && target instanceof BaseDTO) {
+        if (source instanceof Entity && target instanceof DTO) {
             dictToString(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
             enumToString(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
             return;
         }
-        // 2. String -> 字典/枚举(Param -> Entity)
-        if (source instanceof BaseParam && target instanceof BaseEntity) {
+        // 2. String -> 字典/枚举(Payload -> Entity)
+        if (source instanceof Payload && target instanceof Entity) {
             stringToDict(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
             stringToEnum(source, target, sourceField, targetField, sourceFieldType, targetFieldType);
             return;

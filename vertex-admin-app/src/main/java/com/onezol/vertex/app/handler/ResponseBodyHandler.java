@@ -1,6 +1,6 @@
 package com.onezol.vertex.app.handler;
 
-import com.onezol.vertex.common.pojo.AjaxResult;
+import com.onezol.vertex.common.model.record.AjaxResult;
 import com.onezol.vertex.common.util.JsonUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -16,8 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.onezol.vertex.common.constant.CommonConstant.S_CONTROLLER_NULL_RESP;
-
-
 @ControllerAdvice
 public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
 

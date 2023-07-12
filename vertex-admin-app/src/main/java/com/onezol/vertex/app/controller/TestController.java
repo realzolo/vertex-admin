@@ -1,15 +1,13 @@
 package com.onezol.vertex.app.controller;
 
-import com.onezol.vertex.common.pojo.ListResultWrapper;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
 @RequestMapping("/test")
 public class TestController {
 
