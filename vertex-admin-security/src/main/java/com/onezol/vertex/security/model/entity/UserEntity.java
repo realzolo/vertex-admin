@@ -1,5 +1,6 @@
 package com.onezol.vertex.security.model.entity;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.vertex.common.annotation.DictDefinition;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
@@ -46,6 +47,8 @@ public class UserEntity extends BaseEntity {
         return password;
     }
 
+
+    @JSONField(serialize = false)
     public void setPassword(String password) {
         this.password = password;
     }

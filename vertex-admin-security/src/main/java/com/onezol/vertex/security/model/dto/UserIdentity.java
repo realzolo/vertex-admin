@@ -4,11 +4,13 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
 import com.onezol.vertex.security.model.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserIdentity implements UserDetails {
     /**
@@ -56,6 +58,11 @@ public class UserIdentity implements UserDetails {
      */
     private UserEntity user;
 
+    /**
+     * 权限列表
+     */
+    private Set<GrantedAuthority> authorities;
+
     public UserIdentity(UserEntity user) {
         this.user = user;
     }
@@ -63,14 +70,18 @@ public class UserIdentity implements UserDetails {
     @Override
     @JSONField(serialize = false)
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 此处设置了角色和权限后fastjson2反序列化会报错，暂时不知道原因
-        return null;
+        if (authorities == null) {
+            authorities = permissions.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        }
+        return authorities;
     }
 
     @Override
     @JSONField(serialize = false)
     public String getPassword() {
-        return user.getPassword();
+        String password = user.getPassword();
+        user.setPassword(null);
+        return password;
     }
 
     @Override

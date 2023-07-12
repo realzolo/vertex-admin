@@ -1,6 +1,5 @@
 package com.onezol.vertex.security.controller;
 
-import com.onezol.vertex.common.annotation.PreAuthorize;
 import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.pojo.ListResultWrapper;
 import com.onezol.vertex.core.common.controller.GenericController;
@@ -42,7 +41,6 @@ public class UserController extends GenericController<UserService> {
     }
 
     @PutMapping
-    @PreAuthorize("admin:user:update")
     public boolean update(@RequestBody UserUpdateParam param) {
         if (param.getId() == null) {
             throw new BusinessException("用户ID不能为空");
@@ -55,7 +53,6 @@ public class UserController extends GenericController<UserService> {
      * 删除： /{controllerName}/delete
      */
     @Override
-    @PreAuthorize("admin:user:delete")
     public void delete(@RequestBody GenericParam param) {
         param.setPhysicalDelete(false);
         super.delete(param);

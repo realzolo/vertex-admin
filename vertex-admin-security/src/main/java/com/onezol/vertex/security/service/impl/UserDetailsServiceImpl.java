@@ -49,7 +49,6 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPa
         Set<String> roles = roleService.getKeysByUserId(userEntity.getId());
         Set<String> perms = permissionService.getKeysByUserId(userEntity.getId());
         user.setRoles(roles);
-
         user.setPermissions(perms);
 
         return user;
