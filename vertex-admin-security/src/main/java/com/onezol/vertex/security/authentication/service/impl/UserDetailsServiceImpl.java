@@ -4,7 +4,7 @@ import com.onezol.vertex.security.authentication.exception.LoginException;
 import com.onezol.vertex.security.authentication.model.UserIdentity;
 import com.onezol.vertex.security.authentication.service.UserAuthService;
 import com.onezol.vertex.security.management.model.entity.UserEntity;
-import com.onezol.vertex.security.management.service.PermissionService;
+import com.onezol.vertex.security.management.service.MenuService;
 import com.onezol.vertex.security.management.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPasswordService {
     public static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private final UserAuthService userAuthService;
-    private final PermissionService permissionService;
+    private final MenuService menuService;
     private final RoleService roleService;
 
     @Autowired
-    public UserDetailsServiceImpl(@Lazy UserAuthService userAuthService, PermissionService permissionService, RoleService roleService) {
+    public UserDetailsServiceImpl(@Lazy UserAuthService userAuthService, MenuService menuService, RoleService roleService) {
         this.userAuthService = userAuthService;
-        this.permissionService = permissionService;
+        this.menuService = menuService;
         this.roleService = roleService;
     }
 
@@ -47,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPa
 
         UserIdentity user = new UserIdentity(userEntity);
         Set<String> roles = roleService.getKeysByUserId(userEntity.getId());
-        Set<String> perms = permissionService.getKeysByUserId(userEntity.getId());
+        Set<String> perms = menuService.getPermsByUserId(userEntity.getId());
         user.setRoles(roles);
         user.setPermissions(perms);
 

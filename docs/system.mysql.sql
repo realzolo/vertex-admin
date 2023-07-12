@@ -166,21 +166,63 @@ DROP TABLE IF EXISTS sys_file_detail;
 CREATE TABLE sys_file_detail
 (
     id                BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    file_name         VARCHAR(50)         DEFAULT NULL COMMENT '文件名称',
-    original_filename VARCHAR(50)         DEFAULT NULL COMMENT '原始文件名称',
+    file_name         VARCHAR(50)  DEFAULT NULL COMMENT '文件名称',
+    original_filename VARCHAR(50)  DEFAULT NULL COMMENT '原始文件名称',
     size              BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '文件大小',
-    type              VARCHAR(50)         DEFAULT NULL COMMENT '文件类型',
-    ext               VARCHAR(50)         DEFAULT NULL COMMENT '文件后缀',
-    content_type      VARCHAR(50)         DEFAULT NULL COMMENT '文件contentType',
+    type              VARCHAR(50)  DEFAULT NULL COMMENT '文件类型',
+    ext               VARCHAR(50)  DEFAULT NULL COMMENT '文件后缀',
+    content_type      VARCHAR(50)  DEFAULT NULL COMMENT '文件contentType',
     user_id           BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '用户ID',
-    path              VARCHAR(500)        DEFAULT NULL COMMENT '文件路径',
-    url               VARCHAR(500)        DEFAULT NULL COMMENT '文件url',
-    temp_key          VARCHAR(100)        DEFAULT NULL COMMENT '临时文件key',
+    path              VARCHAR(500) DEFAULT NULL COMMENT '文件路径',
+    url               VARCHAR(500) DEFAULT NULL COMMENT '文件url',
+    temp_key          VARCHAR(100) DEFAULT NULL COMMENT '临时文件key',
     expired_at        DATETIME COMMENT '过期时间',
-    attr              VARCHAR(500)        DEFAULT NULL COMMENT '文件属性',
+    attr              VARCHAR(500) DEFAULT NULL COMMENT '文件属性',
     created_at        DATETIME COMMENT '创建时间',
     updated_at        DATETIME COMMENT '更新时间',
     deleted           TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='文件详情表';
+
+-- sys_menu
+DROP TABLE IF EXISTS sys_menu;
+CREATE TABLE sys_menu
+(
+    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    menu_name   VARCHAR(50)  DEFAULT NULL COMMENT '菜单名称',
+    path        VARCHAR(500) DEFAULT NULL COMMENT '路由地址',
+    component   VARCHAR(500) DEFAULT NULL COMMENT '组件路径',
+    icon        VARCHAR(50)  DEFAULT NULL COMMENT '菜单图标',
+    menu_type   VARCHAR(50)  DEFAULT NULL COMMENT '类型（M目录 C菜单 F按钮）',
+    visible     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '显示状态（true显示 false隐藏）',
+    status      TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '菜单状态（true正常 false停用）',
+    perms       VARCHAR(500) DEFAULT NULL COMMENT '权限字符串',
+    parent_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '父菜单ID',
+    parent_name VARCHAR(50)  DEFAULT NULL COMMENT '父菜单名称',
+    order_num   INT          DEFAULT NULL COMMENT '显示顺序',
+    is_frame    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否为外链（true是 false否）',
+    is_cache    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否缓存（true缓存 false不缓存）',
+    query       VARCHAR(500) DEFAULT NULL COMMENT '路由参数',
+    remark      VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    created_at  DATETIME COMMENT '创建时间',
+    updated_at  DATETIME COMMENT '更新时间',
+    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='菜单表';
+
+-- sys_role_menu
+DROP TABLE IF EXISTS sys_role_menu;
+CREATE TABLE sys_role_menu
+(
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    role_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
+    menu_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '菜单ID',
+    created_at DATETIME COMMENT '创建时间',
+    updated_at DATETIME COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id),
+    UNIQUE KEY idx_sys_role_menu_role_id_menu_id (`role_id`, `menu_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='角色菜单关联表';

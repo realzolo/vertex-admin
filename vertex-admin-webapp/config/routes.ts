@@ -41,9 +41,9 @@ export default [
     path: '/security',
     routes: [
       {
-        name: '权限管理',
-        path: '/security/permission',
-        component: '@/pages/security/permission',
+        name: '菜单管理',
+        path: '/security/menu',
+        component: '@/pages/security/menu',
       },
       {
         name: '角色管理',

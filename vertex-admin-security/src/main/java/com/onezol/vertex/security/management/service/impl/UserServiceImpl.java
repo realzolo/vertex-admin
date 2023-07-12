@@ -6,7 +6,7 @@ import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.management.mapper.UserMapper;
 import com.onezol.vertex.security.management.model.dto.User;
 import com.onezol.vertex.security.management.model.entity.UserEntity;
-import com.onezol.vertex.security.management.service.PermissionService;
+import com.onezol.vertex.security.management.service.MenuService;
 import com.onezol.vertex.security.management.service.RoleService;
 import com.onezol.vertex.security.management.service.UserService;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> implements UserService {
     private final RoleService roleService;
-    private final PermissionService permissionService;
+    private final MenuService menuService;
 
-    public UserServiceImpl(RoleService roleService, PermissionService permissionService) {
+    public UserServiceImpl(RoleService roleService, MenuService menuService) {
         this.roleService = roleService;
-        this.permissionService = permissionService;
+        this.menuService = menuService;
     }
 
     /**
@@ -65,7 +65,7 @@ public class UserServiceImpl extends GenericServiceImpl<UserMapper, UserEntity> 
         User user = ModelUtils.convert(userEntity, User.class);
         assert user != null;
         user.setRoles(roleService.getKeysByUserId(user.getId()));
-        user.setPermissions(permissionService.getKeysByUserId(user.getId()));
+        user.setPermissions(menuService.getPermsByUserId(user.getId()));
         return user;
     }
 }

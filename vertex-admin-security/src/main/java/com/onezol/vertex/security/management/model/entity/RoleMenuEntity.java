@@ -3,10 +3,17 @@ package com.onezol.vertex.security.management.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.onezol.vertex.common.model.entity.BaseEntity;
 
-@TableName("sys_role_permission")
-public class RolePermissionEntity extends BaseEntity {
+@TableName("sys_role_menu")
+public class RoleMenuEntity extends BaseEntity {
+    /**
+     * 角色ID
+     */
     private Long roleId;
-    private Long permissionId;
+
+    /**
+     * 菜单ID
+     */
+    private Long menuId;
 
     public Long getRoleId() {
         return roleId;
@@ -16,11 +23,11 @@ public class RolePermissionEntity extends BaseEntity {
         this.roleId = roleId;
     }
 
-    public Long getPermissionId() {
-        return permissionId;
+    public Long getMenuId() {
+        return menuId;
     }
 
-    public void setPermissionId(Long permissionId) {
-        this.permissionId = permissionId;
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
     }
 }

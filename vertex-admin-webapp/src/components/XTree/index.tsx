@@ -1,7 +1,6 @@
 import {Card, Tree} from "antd";
 import {useEffect, useState} from "react";
-import {defaultTreeData, treeDataHandler} from "@/utils/treeify";
-import {AntTree} from "./typings";
+import {buildTree, defaultTreeData} from "@/utils/treeify";
 import styles from './style.less';
 
 interface Props {
@@ -16,7 +15,7 @@ const XTree: React.FC<Props> = (props) => {
   const [treeData, setTreeData] = useState<AntTree.TreeNode[]>(defaultTreeData(rootTitle));
 
   useEffect(() => {
-    const treeData = treeDataHandler(treeNodes, rootTitle);
+    const treeData = buildTree(treeNodes, rootTitle);
     setTreeData([...treeData]);
   }, [treeNodes]);
 

@@ -4,7 +4,7 @@ import {Button, message, Modal} from "antd";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import PermissionTransfer from "./components/PermissionTransfer";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 
 const genericService = new GenericService('role');
 const RolePage: React.FC = () => {
@@ -16,7 +16,7 @@ const RolePage: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
-    const param: GenericParam = {
+    const payload: GenericPayload = {
       page,
       pageSize,
       condition: {
@@ -26,7 +26,7 @@ const RolePage: React.FC = () => {
         }
       }
     }
-    const res = await genericService.queryList(param);
+    const res = await genericService.queryList(payload);
     return {
       data: res.items as Role[],
       total: res.total,

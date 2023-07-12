@@ -5,7 +5,7 @@ import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import PermissionTable from "./components/PermissionTable";
 import service from "@/services/security";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 
 const genericService = new GenericService("PermissionGroup");
 const PermissionPage: React.FC = () => {
@@ -16,7 +16,7 @@ const PermissionPage: React.FC = () => {
   const [subTableVisible, setSubTableVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
-    const param: GenericParam = {
+    const payload: GenericPayload = {
       page: params.current,
       pageSize: params.pageSize,
       condition: {
@@ -26,7 +26,7 @@ const PermissionPage: React.FC = () => {
         }
       }
     }
-    const res = await genericService.queryList(param);
+    const res = await genericService.queryList(payload);
     return {
       data: res.items as PermissionGroup[],
       total: res.total,

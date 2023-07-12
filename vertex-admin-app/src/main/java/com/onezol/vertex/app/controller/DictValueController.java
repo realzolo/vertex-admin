@@ -1,33 +1,40 @@
 package com.onezol.vertex.app.controller;
 
+import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
+import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.core.cache.RedisCache;
 import com.onezol.vertex.core.common.controller.GenericController;
 import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
 import com.onezol.vertex.core.module.dictionary.service.DictValueService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping({"/dict-value", "/dictionary"})
 public class DictValueController extends GenericController<DictValueService> {
-    @Autowired
-    private DictValueService dictValueService;
+    private final DictValueService dictValueService;
+    private final RedisCache redisCache;
 
-//    @GetMapping
-//    public Object get() {
-//        // 枚举
-//        Map<Object, Object> enums = redisTemplate.opsForHash().entries(RK_ENUM_OPTIONS);
-//        // 字典
-//        Map<String, List<SelectOption>> dictionary = dictValueService.getDictionary();
-//
-//        enums.putAll(dictionary);
-//
-//        return enums;
-//    }
+    public DictValueController(DictValueService dictValueService, RedisCache redisCache) {
+        this.dictValueService = dictValueService;
+        this.redisCache = redisCache;
+    }
+
+    @GetMapping
+    public Object get() {
+        // 枚举
+        Map<String, Object> enums = redisCache.getCacheMap(RedisKey.ENUM);
+        // 字典
+        Map<String, List<SelectOption>> dictionary = dictValueService.getDictionary();
+
+        enums.putAll(dictionary);
+        return enums;
+    }
 
     /**
      * 查询: /xxx/query

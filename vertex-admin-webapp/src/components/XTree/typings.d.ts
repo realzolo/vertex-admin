@@ -1,4 +1,4 @@
-import {TreeProps} from "antd/es/tree";
+// import {TreeProps} from "antd";
 
 declare namespace AntTree {
   /**
@@ -12,5 +12,6 @@ declare namespace AntTree {
     children?: TreeNode[];
   }
 
-  type onSelected = TreeProps['onSelect']
+  // type onSelected = TreeProps['onSelect']
+  type onSelected = any
 }

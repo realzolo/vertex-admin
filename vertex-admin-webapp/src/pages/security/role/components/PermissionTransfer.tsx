@@ -2,7 +2,7 @@ import {Button, Drawer, message, Space, Spin, Transfer} from "antd";
 import React, {useEffect, useState} from "react";
 import {TransferDirection, TransferItem} from "antd/es/transfer";
 import {DEFAULT_DRAWER_PROPS} from "@/constants";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 import service from "@/services/security";
 
 const genericService = new GenericService('permission');
@@ -22,11 +22,11 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
   const fetchData = async () => {
     setLoading(true);
     // 获取所有权限
-    let param: GenericParam = {
+    let payload: GenericPayload = {
       page: 1,
       pageSize: 1000,
     }
-    let res = await genericService.queryList(param);
+    let res = await genericService.queryList(payload);
     const perms = res.items as Permission[];
     const sourceData = perms.map((item: Permission) => {
       return {
@@ -37,8 +37,8 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
     });
 
     // 获取角色权限
-    param = {
-      ...param,
+    payload = {
+      ...payload,
       fields: ['permissionId'],
       condition: {
         eq: {
@@ -46,7 +46,7 @@ const PermissionTransfer: React.FC<SubPageProps> = (props) => {
         }
       }
     }
-    res = await new GenericService('RolePermission').queryList(param);
+    res = await new GenericService('RolePermission').queryList(payload);
     const rolePerms = res.items as RolePermission[];
     const targetData: number[] = rolePerms.map((item: RolePermission) => item.permissionId);
 
