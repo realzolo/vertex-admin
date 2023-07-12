@@ -1,6 +1,7 @@
 package com.onezol.vertex.core.runner;
 
 
+import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
 import com.onezol.vertex.core.module.dictionary.model.entity.DictValueEntity;
 import com.onezol.vertex.core.module.dictionary.service.DictValueService;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static com.onezol.vertex.common.constant.CommonConstant.RK_DICTIONARY;
 
 @Component
 public class DictionarySyncRunner implements ApplicationRunner {
@@ -38,7 +37,7 @@ public class DictionarySyncRunner implements ApplicationRunner {
         });
 
         // 将字典数据保存到Redis缓存中
-        redisTemplate.opsForHash().putAll(RK_DICTIONARY, dictionaryMap);
+        redisTemplate.opsForHash().putAll(RedisKey.DICTIONARY, dictionaryMap);
         logger.info("字典数据已同步到Redis缓存中，共 {} 项", dictionaryMap.size());
     }
 }

@@ -1,6 +1,7 @@
 package com.onezol.vertex.core.module.dictionary.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.module.dictionary.mapper.DictValueMapper;
@@ -15,8 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import static com.onezol.vertex.common.constant.CommonConstant.RK_DICTIONARY;
 
 @Service
 public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, DictValueEntity> implements DictValueService {
@@ -38,7 +37,7 @@ public class DictValueServiceImpl extends GenericServiceImpl<DictValueMapper, Di
         if (key == null) {
             return null;
         }
-        Object dictValue = redisTemplate.opsForHash().get(RK_DICTIONARY, key);
+        Object dictValue = redisTemplate.opsForHash().get(RedisKey.DICTIONARY, key);
         if (dictValue != null) {
             return ModelUtils.toObject((Map) dictValue, DictValue.class);
         }

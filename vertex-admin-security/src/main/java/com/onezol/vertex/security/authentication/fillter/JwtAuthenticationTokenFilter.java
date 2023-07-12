@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.onezol.vertex.common.constant.CommonConstant.AUTHORIZATION_HEADER;
-import static com.onezol.vertex.common.constant.RedisConstant.USER_PREFIX;
+import static com.onezol.vertex.common.constant.Constants.AUTHORIZATION_HEADER;
+import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 
 /**

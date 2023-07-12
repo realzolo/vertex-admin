@@ -1,5 +1,6 @@
 package com.onezol.vertex.core.runner;
 
+import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.constant.enums.EnumService;
 import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.common.util.StringUtils;
@@ -13,9 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.*;
-
-import static com.onezol.vertex.common.constant.CommonConstant.RK_ENUM_OPTIONS;
-
 
 @Component
 public class EnumSyncRunner implements ApplicationRunner {
@@ -56,8 +54,8 @@ public class EnumSyncRunner implements ApplicationRunner {
         }
         logger.info("枚举选项数据生成完成, 共 {} 类 {} 项", optionMap.size(), total);
 
-        redisTemplate.delete(RK_ENUM_OPTIONS);
-        redisTemplate.opsForHash().putAll(RK_ENUM_OPTIONS, optionMap);
+        redisTemplate.delete(RedisKey.ENUM);
+        redisTemplate.opsForHash().putAll(RedisKey.ENUM, optionMap);
     }
 
     public List<Class<?>> findInterfaceImplementations(Class<?> interfaceClass) {

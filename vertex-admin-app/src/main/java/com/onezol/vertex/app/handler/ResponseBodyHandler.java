@@ -15,7 +15,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.onezol.vertex.common.constant.CommonConstant.S_CONTROLLER_NULL_RESP;
+import static com.onezol.vertex.common.constant.Constants.CONTROLLER_NULL_RESP;
+
 @ControllerAdvice
 public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
 
@@ -62,7 +63,7 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
         // controller 返回 String
         if (body instanceof String) {
             // 返回 null
-            if (Objects.equals(body, S_CONTROLLER_NULL_RESP)) {
+            if (Objects.equals(body, CONTROLLER_NULL_RESP)) {
                 return JsonUtils.toJson(AjaxResult.success(null));
             }
             return JsonUtils.toJson(AjaxResult.success(body));

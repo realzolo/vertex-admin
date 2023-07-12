@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.onezol.vertex.common.constant.CommonConstant.AUTHORIZATION_HEADER;
-import static com.onezol.vertex.common.constant.RedisConstant.USER_PREFIX;
+import static com.onezol.vertex.common.constant.Constants.AUTHORIZATION_HEADER;
+import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 
 /**

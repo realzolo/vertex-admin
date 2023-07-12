@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.onezol.vertex.common.constant.RedisConstant.USER_PREFIX;
+import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 @Service
 public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> implements UserAuthService {

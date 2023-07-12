@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.onezol.vertex.common.constant.CommonConstant.MAX_PAGE_SIZE;
+import static com.onezol.vertex.common.constant.Constants.DEFAULT_PAGE_SIZE;
+import static com.onezol.vertex.common.constant.Constants.MAX_PAGE_SIZE;
 
 public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends BaseEntity>
         extends BaseServiceImpl<M, T> implements GenericService<T> {
@@ -235,7 +236,7 @@ public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends Base
             page = 1;
         }
         if (Objects.isNull(pageSize) || pageSize < 1) {
-            pageSize = 10;
+            pageSize = DEFAULT_PAGE_SIZE;
         }
         // 限制最大查询数量
         pageSize = Math.min(pageSize, MAX_PAGE_SIZE);
