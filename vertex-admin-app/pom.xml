@@ -17,10 +17,15 @@
     <description>主入口</description>
 
     <dependencies>
-        <!-- SpringBoot: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+        <!-- Spring Boot Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>com.onezol.vertex</groupId>
