@@ -2,7 +2,7 @@ import {request} from "@@/plugin-request";
 import React from "react";
 
 export const getRoutes = async (userId: number) => {
-  const res = await request<any>(`/api/menu/list/${userId}`);
+  const res = await request<any>(`/api/menu/list-by-user/${userId}`);
   return buildRoutes(res.data, '0');
 };
 

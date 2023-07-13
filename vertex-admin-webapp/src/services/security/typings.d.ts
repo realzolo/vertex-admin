@@ -20,16 +20,15 @@ declare interface Permission {
 declare interface Menu {
   id?: number;
   menuName: string;
-  path: string;
-  component: string;
-  icon: string;
+  path?: string;
+  component?: string;
+  icon?: string;
   menuType: string;
   visible: boolean;
   status: boolean;
-  perms: string;
+  perms?: string;
   parentId: number;
-  parentName: string;
-  orderNum: number;
+  orderNum?: number;
   isFrame: boolean;
   isCache: boolean;
   query: string;

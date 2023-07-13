@@ -21,3 +21,12 @@ export const FILE_TYPE_MAP = {
   'document': '文档',
   'others': '其它',
 }
+
+/** 默认的最小加载时间 */
+export const DEFAULT_MIN_LOADER_TIME = 500;
+
+/** 是否选项枚举 */
+export const YES_OR_NO_OPTIONS = {
+  true: {text: '是', status: 'Success'},
+  false: {text: '否', status: 'Error'},
+}

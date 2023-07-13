@@ -1,6 +1,5 @@
 import {RequestConfig} from '@umijs/max';
 import {RunTimeLayoutConfig} from "@@/plugin-layout/types";
-import React from "react";
 import requestConfig from '../config/request';
 import {patchRoutes} from "@/utils";
 import {getRoutes} from "@/services/common/global";

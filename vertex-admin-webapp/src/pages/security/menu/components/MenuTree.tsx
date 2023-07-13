@@ -2,29 +2,34 @@ import {FC, useEffect, useState} from "react";
 import {Spin, Tree} from "antd";
 import {DownOutlined} from "@ant-design/icons";
 import {buildTree, getAllKeys} from "@/utils/treeify";
+import service from "@/services/security";
+import {DEFAULT_MIN_LOADER_TIME} from "@/constants";
 
 interface Props {
-  data: Menu[];
   onSelect: AntTree.onSelected;
+  needRefresh: boolean;
 }
 
 const MenuTree: FC<Props> = (props) => {
-  const {data, onSelect} = props;
+  const {onSelect, needRefresh} = props;
   const [treeData, setTreeData] = useState<AntTree.TreeNode[]>([]);
   const [allKeys, setAllKeys] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    if (!data) return;
-    buildMenuTree();
-    onSelect?.(['root']);  // 选中根节点
-  }, [data]);
 
-  /**
-   * 构建菜单树
-   */
-  const buildMenuTree = () => {
+  useEffect(() => {
+    fetchData().finally();
+  }, [needRefresh]);
+
+  /** 获取菜单数据 */
+  const fetchData = async () => {
+    const res = await service.getMenuTree();
+    buildMenuTree(res as Menu[])
+  }
+
+  /**  构建菜单树 */
+  const buildMenuTree = (menus: Menu[]) => {
     setLoading(true);
-    const treeNode = data.map(item => ({
+    const treeNode = menus.map(item => ({
       id: item.id,
       title: item.menuName,
       key: item.id?.toString(),
@@ -36,7 +41,7 @@ const MenuTree: FC<Props> = (props) => {
     setTreeData(treeData);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, DEFAULT_MIN_LOADER_TIME);
   }
 
   return (

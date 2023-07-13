@@ -40,4 +40,35 @@ export default {
     const res = await request<API.AjaxResult<SelectOption[]>>('/api/role/select-options');
     return res.data;
   },
+
+  /**
+   * 获取菜单树
+   */
+  getMenuTree: async () => {
+    const res = await request<API.AjaxResult<Menu[]>>('/api/menu/tree');
+    return res.data;
+  },
+
+  /**
+   * 获取菜单列表
+   * @param parentId 父级菜单ID
+   * @param page 页码
+   * @param pageSize 页大小
+   */
+  getMenuList: async (parentId: number, page: number, pageSize: number) => {
+    const res = await request<API.AjaxResult<Record<string, any>>>(`/api/menu/list/${parentId}/${page}/${pageSize}`);
+    return res.data;
+  },
+
+  /**
+   * 创建目录/菜单/按钮(权限)
+   * @param values 菜单信息
+   */
+  createMenu: async (values: Menu) => {
+    const res = await request<API.AjaxResult<void>>('/api/menu/save', {
+      method: 'POST',
+      data: values
+    });
+    return res.data;
+  }
 }
