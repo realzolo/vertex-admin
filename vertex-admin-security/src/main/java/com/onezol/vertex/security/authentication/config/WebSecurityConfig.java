@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                 // 授权请求
                 .authorizeRequests()
                 // 放行请求
-                .antMatchers("/auth/*", "/dictionary").permitAll()
+                .antMatchers("/auth/*", "/dictionary", "/menu/list/*").permitAll()
                 // 其他请求需要认证
                 .anyRequest().authenticated().and()
                 // Logout 处理器

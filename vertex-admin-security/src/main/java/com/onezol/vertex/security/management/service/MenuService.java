@@ -1,8 +1,10 @@
 package com.onezol.vertex.security.management.service;
 
 import com.onezol.vertex.core.common.service.GenericService;
+import com.onezol.vertex.security.management.model.dto.Menu;
 import com.onezol.vertex.security.management.model.entity.MenuEntity;
 
+import java.util.List;
 import java.util.Set;
 
 public interface MenuService extends GenericService<MenuEntity> {
@@ -13,4 +15,12 @@ public interface MenuService extends GenericService<MenuEntity> {
      * @return permissions
      */
     Set<String> getPermsByUserId(Long userId);
+
+    /**
+     * 查询用户菜单列表
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<Menu> getMenuListByUserId(Long userId);
 }

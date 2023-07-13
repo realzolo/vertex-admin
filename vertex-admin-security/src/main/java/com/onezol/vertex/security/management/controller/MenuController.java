@@ -6,14 +6,22 @@ import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.common.controller.GenericController;
 import com.onezol.vertex.security.management.model.dto.Menu;
 import com.onezol.vertex.security.management.service.MenuService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/menu")
 public class MenuController extends GenericController<MenuService> {
+    private final MenuService menuService;
+
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
+
+
     /**
      * 查询列表： /xxx/list
      *
@@ -23,6 +31,19 @@ public class MenuController extends GenericController<MenuService> {
     @PostMapping("/list")
     protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
         return super.queryList(payload);
+    }
+
+    /**
+     * 查询用户菜单列表
+     *
+     * @param userId 用户ID
+     */
+    @GetMapping("/list/{userId}")
+    protected List<Menu> queryList(@PathVariable Long userId) {
+        if (Objects.isNull(userId) || userId <= 0) {
+            return Collections.emptyList();
+        }
+        return menuService.getMenuListByUserId(userId);
     }
 
     /**

@@ -3,7 +3,7 @@ import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProT
 import {Button, message, Modal} from "antd";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 import UserDetail from "@/pages/user/list/components/UserDetail";
 import service from "@/services/security";
 
@@ -23,7 +23,7 @@ const UserListPage = () => {
 
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
-    const param: GenericParam = {
+    const param: GenericPayload = {
       page,
       pageSize,
       condition: {

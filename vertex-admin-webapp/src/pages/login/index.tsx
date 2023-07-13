@@ -13,6 +13,7 @@ import type {CSSProperties} from 'react';
 import {useRef, useState} from 'react';
 import service, {LoginResult} from "@/services/user";
 import {useNavigate} from "@umijs/max";
+import {useModel} from "@@/plugin-model";
 
 type LoginType = 'account' | 'email';
 
@@ -28,6 +29,7 @@ const LoginPage = () => {
   const [loginMsg, setLoginMsg] = useState<string>('');
   const navigate = useNavigate();
   const formRef = useRef<ProFormInstance>();
+  const {initialState, setInitialState} = useModel('@@initialState')
 
   const sendEmailCode = async (): Promise<void> => {
     const validateRes = await formRef.current?.validateFields(['email']);
@@ -66,6 +68,10 @@ const LoginPage = () => {
     message.success('登录成功');
     localStorage.setItem('token', jwt.token);
     localStorage.setItem('userInfo', JSON.stringify(user));
+    setInitialState({
+      ...initialState,
+      currentUser: user,
+    });
 
     // 是否需要redirect
     const redirect = new URLSearchParams(window.location.search).get('redirect');

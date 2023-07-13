@@ -19,6 +19,7 @@ const XTree: React.FC<Props> = (props) => {
     setTreeData([...treeData]);
   }, [treeNodes]);
 
+  // @ts-ignore
   const doSelect: AntTree.onSelected = (selectedKeys, info) => {
     onSelect?.(selectedKeys, info);
   };

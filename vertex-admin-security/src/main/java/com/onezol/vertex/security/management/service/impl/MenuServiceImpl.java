@@ -1,11 +1,15 @@
 package com.onezol.vertex.security.management.service.impl;
 
 import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.util.ModelUtils;
 import com.onezol.vertex.security.management.mapper.MenuMapper;
+import com.onezol.vertex.security.management.model.dto.Menu;
 import com.onezol.vertex.security.management.model.entity.MenuEntity;
 import com.onezol.vertex.security.management.service.MenuService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,5 +34,14 @@ public class MenuServiceImpl extends GenericServiceImpl<MenuMapper, MenuEntity> 
             throw new IllegalArgumentException("userId is null or less than 0");
         }
         return menuMapper.selectPermsByUserId(userId);
+    }
+
+    @Override
+    public List<Menu> getMenuListByUserId(Long userId) {
+        if (Objects.isNull(userId) || userId <= 0) {
+            return Collections.emptyList();
+        }
+        List<MenuEntity> menuEntities = menuMapper.selectMenuListByUserId(userId);
+        return ModelUtils.convert(menuEntities, Menu.class);
     }
 }

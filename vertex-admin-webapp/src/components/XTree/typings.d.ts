@@ -8,7 +8,7 @@ declare namespace AntTree {
     id: number;
     title: string;
     key: string;
-    parentId?: number;
+    parentId: number;
     children?: TreeNode[];
   }
 

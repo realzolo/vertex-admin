@@ -77,9 +77,8 @@ public class ModelUtils {
      * @param <S>         源列表元素的类型
      * @param <T>         目标类类型
      * @return 转换后的目标类对象列表
-     * @throws Exception 如果转换过程中发生异常
      */
-    public static <S, T> List<T> convert(List<S> source, Class<T> targetClass) throws Exception {
+    public static <S, T> List<T> convert(List<S> source, Class<T> targetClass) {
         List<T> convertedList = new ArrayList<>();
 
         for (S item : source) {

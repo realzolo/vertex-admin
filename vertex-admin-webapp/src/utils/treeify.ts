@@ -8,6 +8,7 @@ export function defaultTreeData(rootTitle: string): AntTree.TreeNode[] {
       id: 0,
       title: rootTitle,
       key: 'root',
+      parentId: 0,
       children: [],
     }
   ];
@@ -26,10 +27,9 @@ export function buildTree(nodes: AntTree.TreeNode[], rootTitle?: string): AntTre
   // 检查是否存在需要生成最底层的根节点
   if (rootTitle) {
     const rootNode: AntTree.TreeNode = defaultTreeData(rootTitle)[0];
-
-    // 将所有节点挂载到根节点下
+    // 将所有节点挂载到根节点下(parentId===0表示根节点)
     nodes.forEach(node => {
-      if (node.parentId === undefined || node.parentId === null) {
+      if (node.parentId === 0) {
         rootNode.children?.push(node);
       } else {
         const parent = nodeMap[node.parentId];
