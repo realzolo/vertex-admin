@@ -1,4 +1,4 @@
-import {AxiosError, RequestConfig} from "@umijs/max";
+import {AxiosError, history, RequestConfig} from "@umijs/max";
 import {message as Message} from "antd";
 
 Message.config({
@@ -62,6 +62,8 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
         case 10001: // 操作失败
         case 10003: // 无访问权限
         case 10004: // 禁止访问
+          history.replace('/403');
+          break;
         case 10006: // 请求参数错误
           Message.error(message);
           break;

@@ -13,7 +13,13 @@ export default [
   {
     name: '404',
     path: '/*',
-    component: '@/pages/404',
+    component: '@/pages/ErrorPage/404',
     menu: false,
-  }
+  },
+  {
+    name: '无权限',
+    path: '/403',
+    component: '@/pages/ErrorPage/403',
+    menu: false,
+  },
 ]
