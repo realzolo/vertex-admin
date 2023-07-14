@@ -17,21 +17,24 @@ const MenuList: FC<Props> = (props) => {
   const {roleId} = props
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [menuDataLoaded, setMenuDataLoaded] = useState(false);
 
   useEffect(() => {
-    getMenuData().finally();
-  }, []);
+    if (!menuDataLoaded) {
+      getMenuData().finally();
+    }
+  }, [menuDataLoaded]);
 
   useEffect(() => {
-    if (!roleId) return;
     renderRoleMenu(roleId).finally();
-  }, [roleId]);
+  }, [roleId, menuDataLoaded]);
 
   /**
    * 渲染角色已有的菜单
    * @param roleId 角色ID
    */
   const renderRoleMenu = async (roleId: number) => {
+    if (!roleId || !menuDataLoaded) return;
     setLoading(true);
     const roleMenuList = await getRoleMenuIDList(roleId);
     // 递归遍历menuItems，将menuItems存在的角色已有ID项checked设为true, 不存在的设为false
@@ -80,6 +83,7 @@ const MenuList: FC<Props> = (props) => {
       checked: false,
     } as MenuItem));
     setMenuItems(buildTree(menuItems) as MenuItem[]);
+    setMenuDataLoaded(true);
     setTimeout(() => {
       setLoading(false);
     }, DEFAULT_MIN_LOADER_TIME);
