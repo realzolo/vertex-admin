@@ -46,7 +46,7 @@ export function buildTree(nodes: AntTree.TreeNode[], rootTitle?: string): AntTre
     const tree: AntTree.TreeNode[] = [];
 
     nodes.forEach(node => {
-      if (node.parentId === undefined || node.parentId === null) {
+      if (!node.parentId) {  // parentId为0或undefined表示根节点
         tree.push(node);
       } else {
         const parent = nodeMap[node.parentId];

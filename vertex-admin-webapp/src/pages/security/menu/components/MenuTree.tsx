@@ -22,7 +22,7 @@ const MenuTree: FC<Props> = (props) => {
 
   /** 获取菜单数据 */
   const fetchData = async () => {
-    const res = await service.getMenuTree();
+    const res = await service.getMenuList(['M', 'C']);
     buildMenuTree(res as Menu[])
   }
 

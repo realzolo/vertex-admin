@@ -32,7 +32,7 @@ const MenuTable: React.FC<Props> = (props) => {
   /** 获取菜单数据 */
   const fetchData = async (params: any) => {
     const {current: page, pageSize} = params;
-    const res = await service.getMenuList(parentItem.id, page, pageSize);
+    const res = await service.getMenuListByParentId(parentItem.id, page, pageSize);
     if (res.type === 'M') {
       setColumns(columnsForM);
       setTitle('菜单')

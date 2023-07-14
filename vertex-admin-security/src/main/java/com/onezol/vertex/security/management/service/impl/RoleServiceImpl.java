@@ -1,30 +1,37 @@
 package com.onezol.vertex.security.management.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.onezol.vertex.common.constant.enums.HttpStatus;
+import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
 import com.onezol.vertex.security.management.mapper.RoleMapper;
 import com.onezol.vertex.security.management.model.dto.Role;
 import com.onezol.vertex.security.management.model.entity.RoleEntity;
+import com.onezol.vertex.security.management.model.entity.RoleMenuEntity;
 import com.onezol.vertex.security.management.model.entity.UserRoleEntity;
+import com.onezol.vertex.security.management.service.RoleMenuService;
 import com.onezol.vertex.security.management.service.RoleService;
 import com.onezol.vertex.security.management.service.UserRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
+@SuppressWarnings({"Duplicates"})
 public class RoleServiceImpl extends GenericServiceImpl<RoleMapper, RoleEntity> implements RoleService {
-    @Autowired
-    private UserRoleService userRoleService;
-//    @Autowired
-//    private RolePermissionService rolePermissionService;
+    private final UserRoleService userRoleService;
+    private final RoleMenuService roleMenuService;
+
+    public RoleServiceImpl(UserRoleService userRoleService, RoleMenuService roleMenuService) {
+        this.userRoleService = userRoleService;
+        this.roleMenuService = roleMenuService;
+    }
 
     /**
      * 根据用户id获取角色列表
@@ -123,5 +130,34 @@ public class RoleServiceImpl extends GenericServiceImpl<RoleMapper, RoleEntity> 
             option.setKey(roleEntity.getKey());
             return option;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 保存角色菜单
+     *
+     * @param roleId  角色id
+     * @param menuIds 菜单id列表
+     */
+    @Override
+    public void saveRoleMenu(Long roleId, Long[] menuIds) {
+        if (roleId == null || roleId <= 0 || menuIds == null) {
+            throw new BusinessException(HttpStatus.PARAM_ERROR);
+        }
+        // 先删除所有已存在的角色权限
+        boolean ok = roleMenuService.delete(
+                Wrappers.<RoleMenuEntity>lambdaQuery()
+                        .eq(RoleMenuEntity::getRoleId, roleId)
+        );
+        if (ok) {
+            List<RoleMenuEntity> entities = new ArrayList<>(menuIds.length);
+            // 保存角色权限
+            for (Long menuId : menuIds) {
+                RoleMenuEntity entity = new RoleMenuEntity();
+                entity.setRoleId(roleId);
+                entity.setMenuId(menuId);
+                entities.add(entity);
+            }
+            roleMenuService.saveBatch(entities);
+        }
     }
 }

@@ -44,19 +44,26 @@ export default {
   /**
    * 获取菜单树
    */
-  getMenuTree: async () => {
-    const res = await request<API.AjaxResult<Menu[]>>('/api/menu/tree');
+  getMenuList: async (menuTypes: string[]) => {
+    const types = menuTypes.map(item => item.toUpperCase()).join(',');
+    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/list/${types}`);
     return res.data;
   },
-
   /**
-   * 获取菜单列表
+   * 获取菜单权限树
+   */
+  getMenuPermTree: async (roleId: number) => {
+    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/menu-perm-tree/${roleId}`);
+    return res.data;
+  },
+  /**
+   * 根据父级菜单ID获取菜单列表
    * @param parentId 父级菜单ID
    * @param page 页码
    * @param pageSize 页大小
    */
-  getMenuList: async (parentId: number, page: number, pageSize: number) => {
-    const res = await request<API.AjaxResult<Record<string, any>>>(`/api/menu/list/${parentId}/${page}/${pageSize}`);
+  getMenuListByParentId: async (parentId: number, page: number, pageSize: number) => {
+    const res = await request<API.AjaxResult<Record<string, any>>>(`/api/menu/list-by-page/${parentId}/${page}/${pageSize}`);
     return res.data;
   },
 
@@ -68,6 +75,31 @@ export default {
     const res = await request<API.AjaxResult<void>>('/api/menu/save', {
       method: 'POST',
       data: values
+    });
+    return res.data;
+  },
+
+  /**
+   * 根据角色ID获取权限组列表
+   * @param roleId 角色ID
+   */
+  getMenuListByRoleId: async (roleId: number) => {
+    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/list-by-role/${roleId}`);
+    return res.data;
+  },
+
+  /**
+   * 保存角色菜单权限
+   * @param roleId 角色ID
+   * @param menuIds 菜单ID列表
+   */
+  saveRoleMenu: async (roleId: number, menuIds: number[]) => {
+    const res = await request<API.AjaxResult<void>>(`/api/role/save-role-menu`, {
+      method: 'POST',
+      data: {
+        roleId,
+        menuIds
+      }
     });
     return res.data;
   }

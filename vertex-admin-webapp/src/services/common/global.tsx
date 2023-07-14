@@ -22,7 +22,7 @@ const buildRoutes = (menuData: Menu[], parentId = '0'): Route[] => {
         id: menu.id?.toString() || '',
         parentId: menu.parentId === 0 ? 'ant-design-pro-layout' : menu.parentId.toString(),
         name: menu.menuName,
-        path: menu.path,
+        path: menu.path!,
         children: [],
       };
 

@@ -23,4 +23,12 @@ public interface MenuService extends GenericService<MenuEntity> {
      * @return 菜单列表
      */
     List<Menu> getMenuListByUserId(Long userId);
+
+    /**
+     * 根据角色id获取菜单列表
+     *
+     * @param roleId 角色id
+     * @return 菜单列表
+     */
+    List<Menu> getMenuListByRoleId(Long roleId);
 }

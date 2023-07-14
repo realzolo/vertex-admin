@@ -8,6 +8,7 @@ import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.core.common.controller.GenericController;
 import com.onezol.vertex.security.management.model.dto.Role;
+import com.onezol.vertex.security.management.model.payload.RoleMenuPayload;
 import com.onezol.vertex.security.management.service.RoleService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,14 @@ public class RoleController extends GenericController<RoleService> {
     @PostMapping("/list")
     protected ListResultWrapper<? extends DTO> queryList(@RequestBody GenericPayload payload) {
         return super.queryList(payload);
+    }
+
+    @PostMapping("/save-role-menu")
+    public void saveRoleMenu(@RequestBody RoleMenuPayload payload) {
+        if (payload.getRoleId() == null || payload.getRoleId() <= 0 || payload.getMenuIds() == null) {
+            throw new BusinessException(HttpStatus.PARAM_ERROR);
+        }
+        roleService.saveRoleMenu(payload.getRoleId(), payload.getMenuIds());
     }
 
     /**

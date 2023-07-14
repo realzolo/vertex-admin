@@ -11,13 +11,9 @@ import com.onezol.vertex.security.management.model.dto.Menu;
 import com.onezol.vertex.security.management.model.entity.MenuEntity;
 import com.onezol.vertex.security.management.model.payload.MenuPayload;
 import com.onezol.vertex.security.management.service.MenuService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/menu")
@@ -42,23 +38,34 @@ public class MenuController extends GenericController<MenuService> {
     }
 
     /**
-     * 查询菜单树
+     * 菜单管理：查询菜单列表
      */
-    @GetMapping("/tree")
-    @PreAuthorize("hasAuthority('system:menu:list')")
-    protected List<Menu> queryTree() {
+    @GetMapping("/list/{menuTypes}")
+    protected List<Menu> queryMenuList(@PathVariable String menuTypes) {
+        String[] types = menuTypes.toUpperCase().split(",");
         List<MenuEntity> entities = menuService.list(
                 Wrappers.<MenuEntity>lambdaQuery()
-                        .in(MenuEntity::getMenuType, "M", "C")
+                        .in(MenuEntity::getMenuType, Arrays.asList(types))
         );
         return ModelUtils.convert(entities, Menu.class);
     }
 
     /**
-     * 查询菜单列表
+     * 角色管理：根据角色查询所拥有的菜单/权限
      */
-    @GetMapping("/list/{parentId}/{page}/{pageSize}")
-    @PreAuthorize("hasAuthority('system:menu:list')")
+    @GetMapping("/list-by-role/{roleId}")
+    public List<Menu> listBYRole(@PathVariable Long roleId) {
+        if (Objects.isNull(roleId) || roleId <= 0) {
+            return Collections.emptyList();
+        }
+        return menuService.getMenuListByRoleId(roleId);
+    }
+
+    /**
+     * 菜单管理：根据父级ID查询子项菜单列表
+     */
+    @GetMapping("/list-by-page/{parentId}/{page}/{pageSize}")
+//    @PreAuthorize("hasAuthority('system:menu:list')")
     protected HashMap<String, Object> queryListByParentId(@PathVariable Long parentId, @PathVariable Long page, @PathVariable Long pageSize) {
         Page<MenuEntity> objectPage = new Page<>(page, pageSize);
 
@@ -107,7 +114,7 @@ public class MenuController extends GenericController<MenuService> {
      * @param payload 保存参数
      */
     @PostMapping("/save")
-    @PreAuthorize("hasAuthority('system:menu:save')")
+//    @PreAuthorize("hasAuthority('system:menu:save')")
     protected void save(@RequestBody MenuPayload payload) {
         Long parentId = payload.getParentId();
         String menuType = payload.getMenuType();

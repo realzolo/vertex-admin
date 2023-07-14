@@ -18,4 +18,12 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
      * 查询用户菜单列表
      */
     List<MenuEntity> selectMenuListByUserId(Long userId);
+
+    /**
+     * 根据角色id获取菜单列表
+     *
+     * @param roleId 角色id
+     * @return 菜单列表
+     */
+    List<MenuEntity> selectMenuListByRoleId(Long roleId);
 }

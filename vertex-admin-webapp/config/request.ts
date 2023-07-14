@@ -68,8 +68,12 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
           Message.error(message);
           break;
         case 10005: // 未授权
-          Message.error(message);
           if (window.location.pathname.startsWith('/login')) break;
+          if (localStorage.getItem('token')) {
+            Message.error("您的身份已过期，请重新登录。");
+          } else {
+            Message.error(message);
+          }
           setTimeout(() => {
             window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
           }, 1000);

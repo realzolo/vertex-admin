@@ -18,7 +18,7 @@ declare interface Permission {
 }
 
 declare interface Menu {
-  id?: number;
+  id: number;
   menuName: string;
   path?: string;
   component?: string;
@@ -38,7 +38,7 @@ declare interface Menu {
 }
 
 declare interface Role {
-  id?: number;
+  id: number;
   name: string;
   key: string;
   remark: string;

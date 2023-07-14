@@ -39,4 +39,12 @@ public interface RoleService extends GenericService<RoleEntity> {
      * @return options
      */
     List<SelectOption> getRoleOptions();
+
+    /**
+     * 保存角色菜单
+     *
+     * @param roleId  角色id
+     * @param menuIds 菜单id列表
+     */
+    void saveRoleMenu(Long roleId, Long[] menuIds);
 }

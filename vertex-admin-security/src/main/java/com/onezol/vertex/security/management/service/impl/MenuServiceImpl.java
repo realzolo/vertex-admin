@@ -36,12 +36,33 @@ public class MenuServiceImpl extends GenericServiceImpl<MenuMapper, MenuEntity> 
         return menuMapper.selectPermsByUserId(userId);
     }
 
+    /**
+     * 查询用户菜单列表
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
     @Override
     public List<Menu> getMenuListByUserId(Long userId) {
         if (Objects.isNull(userId) || userId <= 0) {
             return Collections.emptyList();
         }
         List<MenuEntity> menuEntities = menuMapper.selectMenuListByUserId(userId);
+        return ModelUtils.convert(menuEntities, Menu.class);
+    }
+
+    /**
+     * 根据角色id获取菜单列表
+     *
+     * @param roleId 角色id
+     * @return 菜单列表
+     */
+    @Override
+    public List<Menu> getMenuListByRoleId(Long roleId) {
+        if (Objects.isNull(roleId) || roleId <= 0) {
+            return Collections.emptyList();
+        }
+        List<MenuEntity> menuEntities = menuMapper.selectMenuListByRoleId(roleId);
         return ModelUtils.convert(menuEntities, Menu.class);
     }
 }

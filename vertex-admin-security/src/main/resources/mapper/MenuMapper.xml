@@ -38,4 +38,18 @@
         ORDER BY m.order_num
     </select>
 
+    <!-- 根据角色id获取菜单列表 -->
+    <select id="selectMenuListByRoleId" resultType="com.onezol.vertex.security.management.model.entity.MenuEntity">
+        SELECT DISTINCT m.id,
+                        m.parent_id,
+                        m.menu_name,
+                        m.menu_type
+        FROM sys_menu m
+                 INNER JOIN sys_role_menu rm ON m.id = rm.menu_id AND rm.deleted = false
+        WHERE rm.role_id = #{roleId}
+          AND m.status = true
+          AND m.visible = true
+          AND m.deleted = false
+    </select>
+
 </mapper>
