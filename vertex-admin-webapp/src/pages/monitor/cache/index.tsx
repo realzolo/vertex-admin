@@ -3,6 +3,7 @@ import service, {CacheInfo} from "@/services/monitor";
 import {PageContainer} from "@ant-design/pro-components";
 import CommentCountChart from "@/pages/monitor/cache/components/CommentCountChart";
 import BasicInfoCard from "@/pages/monitor/cache/components/BasicInfoCard";
+import {DEFAULT_MIN_LOADER_TIME} from "@/constants";
 
 const CacheMonitorPage = () => {
   const [data, setData] = useState<CacheInfo>();
@@ -16,7 +17,9 @@ const CacheMonitorPage = () => {
     setLoading(true);
     const res = await service.getCacheMonitorInfo();
     setData(res);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, DEFAULT_MIN_LOADER_TIME);
   }
 
   if (!data) {

@@ -1,5 +1,5 @@
 import {request} from "@@/plugin-request";
-import React from "react";
+import React, {Fragment} from "react";
 
 export const getRoutes = async (userId: number) => {
   const res = await request<any>(`/api/menu/list-by-user/${userId}`);
@@ -27,9 +27,14 @@ const buildRoutes = (menuData: Menu[], parentId = '0'): Route[] => {
       };
 
       if (menu.component) {
-        const Page = React.lazy(() => import(`../../pages/${menu.component}`));
+        let Page: React.ComponentType<any> | undefined;
+        try {
+          Page = React.lazy(() => import(/* @vite-ignore */`../../pages/${menu.component}`));
+        } catch (e) {
+          console.error(`页面组件${menu.component}加载失败, 请检查路径是否正确`);
+        }
         route.element = (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<Fragment/>}>
             {Page && <Page/>}
           </React.Suspense>
         );

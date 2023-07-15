@@ -7,6 +7,7 @@ import CPUInfoCard from "@/pages/monitor/server/components/CPUInfoCard";
 import MemoryInfoCard from "@/pages/monitor/server/components/MemoryInfoCard";
 import JVMInfoCard from "@/pages/monitor/server/components/JVMInfoCard";
 import FileSystemInfoCard from "@/pages/monitor/server/components/FileSystemInfoCard";
+import {DEFAULT_MIN_LOADER_TIME} from "@/constants";
 
 const ServerMonitorPage = () => {
   const [data, setData] = useState<SystemInfo>();
@@ -20,7 +21,9 @@ const ServerMonitorPage = () => {
     setLoading(true);
     const res = await service.getServerMonitorInfo();
     setData(res);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, DEFAULT_MIN_LOADER_TIME);
   }
 
   if (!data) {
