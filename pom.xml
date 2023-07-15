@@ -17,7 +17,6 @@
         <module>vertex-admin-scheduler</module>
         <module>vertex-admin-core</module>
         <module>vertex-admin-business</module>
-        <module>vertex-admin-security</module>
     </modules>
 
     <properties>
@@ -25,6 +24,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <vertex.version>1.0.0</vertex.version>
+        <spring-boot.version>2.7.12</spring-boot.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <druid.version>1.2.15</druid.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -44,7 +44,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.7.12</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -135,12 +135,6 @@
                 <artifactId>vertex-admin-business</artifactId>
                 <version>${vertex.version}</version>
             </dependency>
-            <!-- vertex-admin-security 安全包 -->
-            <dependency>
-                <groupId>com.onezol.vertex</groupId>
-                <artifactId>vertex-admin-security</artifactId>
-                <version>${vertex.version}</version>
-            </dependency>
             <!-- vertex-admin-scheduler 定时任务包 -->
             <dependency>
                 <groupId>com.onezol.vertex</groupId>
@@ -167,6 +161,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

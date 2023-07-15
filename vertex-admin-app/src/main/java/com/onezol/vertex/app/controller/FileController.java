@@ -3,7 +3,7 @@ package com.onezol.vertex.app.controller;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
-import com.onezol.vertex.core.common.controller.GenericController;
+import com.onezol.vertex.core.base.controller.GenericController;
 import com.onezol.vertex.core.module.file.FileService;
 import com.onezol.vertex.core.module.file.model.dto.FileDetail;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -47,10 +47,5 @@
             <artifactId>vertex-admin-business</artifactId>
             <version>${vertex.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-security</artifactId>
-            <version>${vertex.version}</version>
-        </dependency>
     </dependencies>
 </project>

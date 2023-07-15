@@ -1,6 +1,6 @@
 package com.onezol.vertex.core.module.dictionary.mapper;
 
-import com.onezol.vertex.core.common.mapper.BaseMapper;
+import com.onezol.vertex.core.base.mapper.BaseMapper;
 import com.onezol.vertex.core.module.dictionary.model.entity.DictValueEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onezol.vertex.common.util.EncryptionUtils;
-import com.onezol.vertex.core.common.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.module.file.mapper.FileDetailMapper;
 import com.onezol.vertex.core.module.file.model.entity.FileDetailEntity;
 import org.springframework.stereotype.Service;
