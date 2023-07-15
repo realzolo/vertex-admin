@@ -1,5 +1,6 @@
 package com.onezol.vertex.security.authentication.controller;
 
+import com.onezol.vertex.common.annotation.Anonymous;
 import com.onezol.vertex.security.authentication.model.UserLoginPayload;
 import com.onezol.vertex.security.authentication.service.UserAuthService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * 用户认证相关接口
  */
+@Anonymous
 @RestController
 @RequestMapping("/auth")
 public class UserAuthController {

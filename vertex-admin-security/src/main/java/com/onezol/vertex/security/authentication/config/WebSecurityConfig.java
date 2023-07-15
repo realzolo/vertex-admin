@@ -1,5 +1,7 @@
 package com.onezol.vertex.security.authentication.config;
 
+import com.onezol.vertex.common.annotation.Anonymous;
+import com.onezol.vertex.common.util.ControllerPathUtils;
 import com.onezol.vertex.security.authentication.fillter.JwtAuthenticationTokenFilter;
 import com.onezol.vertex.security.authentication.handler.AuthenticationEntryPointIHandler;
 import com.onezol.vertex.security.authentication.handler.UserAccessDeniedHandler;
@@ -15,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Set;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -56,25 +60,26 @@ public class WebSecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        // 获取匿名访问路径并转换为 MvcMatcher 放行
+        Set<String> anonymousPaths = ControllerPathUtils.getControllerPaths(Anonymous.class);
+        Set<String> mvcMatchers = ControllerPathUtils.convertPathToMvcMatcher(anonymousPaths);
+        httpSecurity.authorizeRequests().mvcMatchers(mvcMatchers.toArray(new String[0])).permitAll();
+
         return httpSecurity
                 // 禁用 csrf
                 .csrf().disable()
                 // 禁用 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 授权请求
-                .authorizeRequests()
-                // 放行请求
-                .antMatchers("/auth/*", "/dictionary", "/**/**").permitAll()
-                // 其他请求需要认证
-                .anyRequest().authenticated().and()
+                // 所有请求需要认证
+                .authorizeRequests().anyRequest().authenticated().and()
                 // Logout 处理器
                 .logout().logoutUrl("/logout").logoutSuccessHandler(userLogoutSuccessHandler).and()
                 // JWT 认证过滤器
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 认证失败处理器
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPointIHandler).and()
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPointIHandler)
                 // 权限不足处理器
-                .exceptionHandling().accessDeniedHandler(userAccessDeniedHandler).and()
+                .accessDeniedHandler(userAccessDeniedHandler).and()
                 .build();
     }
 

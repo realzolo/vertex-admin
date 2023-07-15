@@ -2,6 +2,7 @@ package com.onezol.vertex.security.management.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.onezol.vertex.common.annotation.Anonymous;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
@@ -11,6 +12,7 @@ import com.onezol.vertex.security.management.model.dto.Menu;
 import com.onezol.vertex.security.management.model.entity.MenuEntity;
 import com.onezol.vertex.security.management.model.payload.MenuPayload;
 import com.onezol.vertex.security.management.service.MenuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -29,8 +31,9 @@ public class MenuController extends GenericController<MenuService> {
      *
      * @param userId 用户ID
      */
+    @Anonymous
     @GetMapping("/list-by-user/{userId}")
-    protected List<Menu> queryUserMenuList(@PathVariable Long userId) {
+    public List<Menu> queryUserMenuList(@PathVariable Long userId) {
         if (Objects.isNull(userId) || userId <= 0) {
             return Collections.emptyList();
         }
@@ -65,7 +68,6 @@ public class MenuController extends GenericController<MenuService> {
      * 菜单管理：根据父级ID查询子项菜单列表
      */
     @GetMapping("/list-by-page/{parentId}/{page}/{pageSize}")
-//    @PreAuthorize("hasAuthority('system:menu:list')")
     protected HashMap<String, Object> queryListByParentId(@PathVariable Long parentId, @PathVariable Long page, @PathVariable Long pageSize) {
         Page<MenuEntity> objectPage = new Page<>(page, pageSize);
 
@@ -114,7 +116,7 @@ public class MenuController extends GenericController<MenuService> {
      * @param payload 保存参数
      */
     @PostMapping("/save")
-//    @PreAuthorize("hasAuthority('system:menu:save')")
+    @PreAuthorize("hasAnyAuthority('menu:create', 'menu:write')")
     protected void save(@RequestBody MenuPayload payload) {
         Long parentId = payload.getParentId();
         String menuType = payload.getMenuType();
@@ -164,6 +166,7 @@ public class MenuController extends GenericController<MenuService> {
      */
     @Override
     @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('menu:delete')")
     protected void delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
     }
