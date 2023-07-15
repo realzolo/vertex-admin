@@ -68,11 +68,6 @@ spring:
     expiration-time: 3600  # token有效期, 1小时
     renew-threshold: 900   # token续期的阈值, 15分钟
 
-
-# Frp配置
-frp:
-  enable: false
-
 # 加密配置 TODO: 即将废弃
 encryption:
   password: FA1F437D388544B8B848F1AAD8BF52F0
@@ -83,6 +78,28 @@ logging:
   level:
     root: info
 
+# 应用配置
+vertex:
+  log:
+    access-log:
+      enable: true
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# SpringDoc(Swagger)配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.onezol.vertex
+# Knife4j配置
+knife4j:
+  enable: true
+  basic:
+    enable: true
+    username: vertex
+    password: vertex

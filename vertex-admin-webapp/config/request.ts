@@ -2,7 +2,7 @@ import {AxiosError, history, RequestConfig} from "@umijs/max";
 import {message as Message} from "antd";
 
 Message.config({
-  maxCount: 2,
+  maxCount: 1,
 });
 
 /**
@@ -61,6 +61,8 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
       switch (code) {
         case 10001: // 操作失败
         case 10003: // 无访问权限
+          Message.error(message);
+          break;
         case 10004: // 禁止访问
           history.replace('/403');
           break;

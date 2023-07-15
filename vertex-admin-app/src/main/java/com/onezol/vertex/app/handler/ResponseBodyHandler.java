@@ -77,6 +77,10 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
                 return body;
             }
         }
+        // swagger请求过滤
+        if (request.getURI().getPath().contains("/v3/api-docs")) {
+            return body;
+        }
         return AjaxResult.success(body);
     }
 }

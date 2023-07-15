@@ -36,6 +36,7 @@
         <spring-file-storage.version>0.7.0</spring-file-storage.version>
         <aws-java-sdk-s3.version>1.12.502</aws-java-sdk-s3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <knife4j.version>4.1.0</knife4j.version>
     </properties>
 
     <dependencyManagement>
@@ -103,11 +104,17 @@
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <!-- commons-beanutils(Bean转换工具类): https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
+            </dependency>
+            <!-- Knife4j: https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
 
 

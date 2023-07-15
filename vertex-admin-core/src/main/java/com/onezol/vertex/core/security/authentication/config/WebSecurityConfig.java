@@ -7,6 +7,7 @@ import com.onezol.vertex.core.security.authentication.handler.AuthenticationEntr
 import com.onezol.vertex.core.security.authentication.handler.UserAccessDeniedHandler;
 import com.onezol.vertex.core.security.authentication.handler.UserLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -70,8 +71,13 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 // 禁用 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 所有请求需要认证
-                .authorizeRequests().anyRequest().authenticated().and()
+                // 配置请求
+                .authorizeRequests()
+                // 静态资源，可匿名访问
+                .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs/**", "/druid/**").permitAll()
+                // 其它请求需要认证
+                .anyRequest().authenticated().and()
                 // Logout 处理器
                 .logout().logoutUrl("/logout").logoutSuccessHandler(userLogoutSuccessHandler).and()
                 // JWT 认证过滤器

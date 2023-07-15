@@ -3,6 +3,7 @@ package com.onezol.vertex.core.security.management.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.onezol.vertex.common.annotation.Anonymous;
+import com.onezol.vertex.common.annotation.Loggable;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
@@ -12,11 +13,15 @@ import com.onezol.vertex.core.security.management.model.entity.MenuEntity;
 import com.onezol.vertex.core.security.management.model.payload.MenuPayload;
 import com.onezol.vertex.core.security.management.service.MenuService;
 import com.onezol.vertex.core.util.ModelUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Tag(name = "菜单管理")
+@Loggable
 @RestController
 @RequestMapping("/menu")
 public class MenuController extends GenericController<MenuService> {
@@ -32,6 +37,7 @@ public class MenuController extends GenericController<MenuService> {
      * @param userId 用户ID
      */
     @Anonymous
+    @Operation(summary = "查询用户菜单列表", description = "查询用户菜单列表")
     @GetMapping("/list-by-user/{userId}")
     public List<Menu> queryUserMenuList(@PathVariable Long userId) {
         if (Objects.isNull(userId) || userId <= 0) {
@@ -43,6 +49,7 @@ public class MenuController extends GenericController<MenuService> {
     /**
      * 菜单管理：查询菜单列表
      */
+    @Operation(summary = "查询菜单列表", description = "查询菜单列表")
     @GetMapping("/list/{menuTypes}")
     protected List<Menu> queryMenuList(@PathVariable String menuTypes) {
         String[] types = menuTypes.toUpperCase().split(",");
@@ -56,6 +63,7 @@ public class MenuController extends GenericController<MenuService> {
     /**
      * 角色管理：根据角色查询所拥有的菜单/权限
      */
+    @Operation(summary = "查询角色菜单列表", description = "查询角色菜单列表")
     @GetMapping("/list-by-role/{roleId}")
     public List<Menu> listBYRole(@PathVariable Long roleId) {
         if (Objects.isNull(roleId) || roleId <= 0) {
@@ -67,6 +75,7 @@ public class MenuController extends GenericController<MenuService> {
     /**
      * 菜单管理：根据父级ID查询子项菜单列表
      */
+    @Operation(summary = "查询子项菜单列表", description = "查询子项菜单列表")
     @GetMapping("/list-by-page/{parentId}/{page}/{pageSize}")
     protected HashMap<String, Object> queryListByParentId(@PathVariable Long parentId, @PathVariable Long page, @PathVariable Long pageSize) {
         Page<MenuEntity> objectPage = new Page<>(page, pageSize);
@@ -115,6 +124,7 @@ public class MenuController extends GenericController<MenuService> {
      *
      * @param payload 保存参数
      */
+    @Operation(summary = "菜单创建/更新", description = "菜单创建/更新")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('menu:create', 'menu:write')")
     protected void save(@RequestBody MenuPayload payload) {
@@ -165,6 +175,7 @@ public class MenuController extends GenericController<MenuService> {
      * @param payload 删除参数
      */
     @Override
+    @Operation(summary = "菜单删除", description = "菜单删除")
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('menu:delete')")
     protected void delete(@RequestBody GenericPayload payload) {

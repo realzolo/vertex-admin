@@ -1,4 +1,4 @@
-package com.onezol.vertex.common.handler.async;
+package com.onezol.vertex.core.manager.async;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class ShutdownManager {
      */
     private void shutdownAsyncManager() {
         try {
+            AsyncTaskManager.getInstance().shutdown();
             logger.info("关闭后台任务任务线程池");
-            AsyncManager.asyncManager().shutdown();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

@@ -226,3 +226,31 @@ CREATE TABLE sys_role_menu
     UNIQUE KEY idx_sys_role_menu_role_id_menu_id (`role_id`, `menu_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色菜单关联表';
+
+-- sys_access_log
+DROP TABLE IF EXISTS sys_access_log;
+CREATE TABLE sys_access_log
+(
+    id             BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    user_id        BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '用户ID',
+    user_type      VARCHAR(50)         DEFAULT NULL COMMENT '用户类型',
+    user_name      VARCHAR(50)         DEFAULT NULL COMMENT '用户名称',
+    module         VARCHAR(50)         DEFAULT NULL COMMENT '模块名称',
+    action         VARCHAR(50)         DEFAULT NULL COMMENT '操作名称',
+    description    VARCHAR(500)        DEFAULT NULL COMMENT '操作描述',
+    url            VARCHAR(500)        DEFAULT NULL COMMENT '请求地址',
+    method         VARCHAR(255)        DEFAULT NULL COMMENT '请求方式',
+    params         VARCHAR(1024)       DEFAULT NULL COMMENT '请求参数',
+    ip             VARCHAR(50)         DEFAULT NULL COMMENT 'IP地址',
+    location       VARCHAR(100)        DEFAULT NULL COMMENT '地理位置',
+    browser        VARCHAR(50)         DEFAULT NULL COMMENT '浏览器类型',
+    os             VARCHAR(50)         DEFAULT NULL COMMENT '操作系统',
+    success        TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否成功（true成功 false失败）',
+    failure_reason VARCHAR(500)        DEFAULT NULL COMMENT '失败原因',
+    time           BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '耗时（毫秒）',
+    created_at     DATETIME COMMENT '创建时间',
+    updated_at     DATETIME COMMENT '更新时间',
+    deleted        TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='访问日志表';

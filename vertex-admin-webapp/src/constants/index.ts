@@ -23,7 +23,7 @@ export const FILE_TYPE_MAP = {
 }
 
 /** 默认的最小加载时间 */
-export const DEFAULT_MIN_LOADER_TIME = 500;
+export const DEFAULT_MIN_LOADER_TIME = 400;
 
 /** 是否选项枚举 */
 export const YES_OR_NO_OPTIONS = {

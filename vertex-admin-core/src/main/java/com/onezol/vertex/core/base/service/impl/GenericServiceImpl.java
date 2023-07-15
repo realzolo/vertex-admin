@@ -78,10 +78,9 @@ public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends Base
             String[] vars = orderBy.split(",");
             for (String var : vars) {
                 String[] split = var.trim().split(" ");
-                // 字段加上"`", 防止字段名与数据库关键字冲突
-                String column = "`" + split[0] + "`";
+                String column = StringUtils.camelCaseToUnderline(split[0]);
                 String order = split.length > 1 ? split[1] : "asc";
-                wrapper.orderBy(true, "desc".equalsIgnoreCase(order), column);
+                wrapper.orderBy(true, "asc".equalsIgnoreCase(order), column);
             }
         }
 
