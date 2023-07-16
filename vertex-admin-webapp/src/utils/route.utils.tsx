@@ -21,6 +21,9 @@ export const patchRoutes = (defaultRoutes: Route[], userRoutes: Route[]) => {
 export const buildRoutes = (menus: Menu[], parentId = 0): Route[] => {
   const routes: Route[] = [];
 
+  // 根据orderNum对菜单数据进行排序
+  menus.sort((a, b) => b.orderNum - a.orderNum);
+
   // 遍历菜单数据
   for (const menu of menus) {
     // 匹配父级菜单ID

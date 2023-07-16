@@ -29,7 +29,7 @@ export default {
    * @param pageSize 页大小
    */
   getMenuListByParentId: async (parentId: number, page: number, pageSize: number) => {
-    const res = await request<API.AjaxResult<Record<string, any>>>('/api/menu/page', {
+    const res = await request<API.AjaxResult<API.ListWrapper<Menu> & { type: string }>>('/api/menu/page', {
       params: {
         parentId,
         page,

@@ -1,10 +1,12 @@
-import {Button, Modal} from "antd";
+import {Button, Modal, Typography} from "antd";
 import {ActionType, FooterToolbar, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import React, {useEffect, useRef, useState} from "react";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import service from "@/services/security";
-import MenuCreateForm from "@/pages/security/menu/components/MenuCreateForm";
+import MenuForm from "@/pages/security/menu/components/MenuForm";
 import GenericService from "@/services/common";
+
+const {Text, Link} = Typography;
 
 interface Props {
   parentItem: any;
@@ -14,11 +16,9 @@ interface Props {
 const genericService = new GenericService('menu');
 const MenuTable: React.FC<Props> = (props) => {
   let {parentItem, update} = props;
-  const [createFormVisible, setCreateFormVisible] = useState<boolean>(false);
-  const [editFormVisible, setEditFormVisible] = useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+  const [menuFormVisible, setMenuFormVisible] = useState<boolean>(false);
+  const [stepFormValues, setStepFormValues] = useState<Menu>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [menuList, setMenuList] = useState<Menu[]>([]);
   const actionRef = useRef<ActionType>();
   const [columns, setColumns] = useState<ProDescriptionsItemProps<Menu>[]>([]);
   const [title, setTitle] = useState<string>('菜单');
@@ -33,23 +33,31 @@ const MenuTable: React.FC<Props> = (props) => {
   const fetchData = async (params: any) => {
     const {current: page, pageSize} = params;
     const res = await service.getMenuListByParentId(parentItem.id, page, pageSize);
-    if (res.type === 'M') {
-      setColumns(columnsForM);
-      setTitle('菜单')
-    } else {
-      setColumns(columnsForF);
-      setTitle('权限')
-    }
+    const isMenuType = res.type === 'M';
+    const columns = isMenuType ? columnsForM : columnsForF;
+    const title = isMenuType ? '菜单' : '权限';
+
+    setColumns(columns);
+    setTitle(title);
     setMenuType(res.type);
+
+    sortItems(res.items);
+
     return {
       data: res.items,
       total: res.total,
-    }
-  }
+    };
+  };
+
+  /** 排序 */
+  const sortItems = (items: Menu[]) => {
+    items.sort((a, b) => b.orderNum - a.orderNum);
+  };
 
   /** 隐藏创建表单 */
   const hideCreateForm = (refresh?: boolean) => {
-    setCreateFormVisible(false);
+    setMenuFormVisible(false);
+    setStepFormValues(undefined);
     if (refresh) {
       actionRef.current?.reload();
       update();
@@ -70,6 +78,12 @@ const MenuTable: React.FC<Props> = (props) => {
         return true;
       }
     });
+  }
+
+  /** 创建/编辑菜单 */
+  const editMenu = (record: Menu) => {
+    setStepFormValues(record);
+    setMenuFormVisible(true);
   }
 
   /** 目录显示列 */
@@ -126,6 +140,20 @@ const MenuTable: React.FC<Props> = (props) => {
       }
     },
     {
+      title: '状态',
+      dataIndex: 'status',
+      render: (_, record) => (
+        <>
+          {record.status ? <Text type="success" children="启用"/> : <Text type="warning" children="禁用"/>}
+        </>
+      )
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      valueType: 'text',
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdAt',
       valueType: 'text',
@@ -138,7 +166,7 @@ const MenuTable: React.FC<Props> = (props) => {
       key: 'option',
       render: (_, record) => (
         <>
-          <a>
+          <a onClick={() => editMenu(record)}>
             编辑
           </a>
         </>
@@ -184,11 +212,23 @@ const MenuTable: React.FC<Props> = (props) => {
       }
     },
     {
+      title: '状态',
+      dataIndex: 'status',
+      render: (_, record) => (
+        <>
+          {record.status ? <Text type="success" children="启用"/> : <Text type="warning" children="禁用"/>}
+        </>
+      )
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      valueType: 'text',
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdAt',
       valueType: 'text',
-      hideInSearch: true,
-      hideInForm: true,
     },
     {
       title: '操作',
@@ -196,7 +236,7 @@ const MenuTable: React.FC<Props> = (props) => {
       key: 'option',
       render: (_, record) => (
         <>
-          <a>
+          <a onClick={() => editMenu(record)}>
             编辑
           </a>
         </>
@@ -210,7 +250,6 @@ const MenuTable: React.FC<Props> = (props) => {
         {...DEFAULT_PRO_TABLE_PROPS}
         headerTitle={`${title}列表`}
         actionRef={actionRef}
-        style={{width: '100%'}}
         search={false}
         columns={columns}
         rowKey="id"
@@ -221,7 +260,7 @@ const MenuTable: React.FC<Props> = (props) => {
         toolBarRender={() => [
           <Button
             type="primary"
-            onClick={() => setCreateFormVisible(true)}
+            onClick={() => setMenuFormVisible(true)}
           >
             新建{title}
           </Button>
@@ -234,10 +273,10 @@ const MenuTable: React.FC<Props> = (props) => {
           <Button onClick={handleRemove}>删除所选项</Button>
         </FooterToolbar>
       )}
-      <MenuCreateForm
-        visible={createFormVisible}
+      <MenuForm
+        visible={menuFormVisible}
         hide={hideCreateForm}
-        itemKey={-1}
+        itemKey={stepFormValues?.id}
         data={{
           menuType: menuType,
           parentId: parentItem.id,
@@ -245,7 +284,8 @@ const MenuTable: React.FC<Props> = (props) => {
         }}
       />
     </>
-  )
+  );
+
 }
 
 export default MenuTable;

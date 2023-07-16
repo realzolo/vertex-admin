@@ -8,15 +8,14 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     public static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
      * BusinessException 用于处理业务异常
-     *
-     * @param e 异常
-     * @return AjaxResult
      */
     @ExceptionHandler(BusinessException.class)
     public AjaxResult<?> businessExceptionHandler(BusinessException e) {
@@ -24,10 +23,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * SQLException 用于处理数据库异常
+     */
+    @ExceptionHandler(SQLException.class)
+    public AjaxResult<?> sqlExceptionHandler(SQLException e) {
+        logger.error("数据库异常：{}", e.getLocalizedMessage());
+        return AjaxResult.failure(HttpStatus.DATABASE_ERROR, e.getMessage());
+    }
+
+    /**
      * HttpMessageNotReadableException 用于处理请求参数格式错误
-     *
-     * @param e 异常
-     * @return AjaxResult
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public AjaxResult<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {

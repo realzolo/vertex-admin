@@ -9,6 +9,7 @@ declare namespace AntTree {
     title: string;
     key: string;
     parentId: number;
+    orderNum: number;
     children?: TreeNode[];
   }
 

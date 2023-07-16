@@ -9,7 +9,8 @@ export function defaultTreeData(rootTitle: string): AntTree.TreeNode[] {
       title: rootTitle,
       key: 'root',
       parentId: 0,
-      children: [],
+      orderNum: 0,
+      children: []
     }
   ];
 }
@@ -25,6 +26,9 @@ export function buildTree(nodes: AntTree.TreeNode[], rootTitle?: string): AntTre
   nodes.forEach(node => {
     nodeMap[node.id] = node;
   });
+
+  // 根据orderNum对节点进行排序
+  nodes.sort((a, b) => b.orderNum - a.orderNum);
 
   // 检查是否存在需要生成最底层的根节点
   if (rootTitle) {

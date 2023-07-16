@@ -29,6 +29,16 @@ public class MenuController extends GenericController<MenuService> {
         this.menuService = menuService;
     }
 
+    /**
+     * 查询: /xxx/query
+     */
+    @Override
+    @Operation(summary = "查询菜单列表", description = "根据ID查询菜单")
+    @PostMapping("/query")
+    protected DTO queryById(@RequestBody GenericPayload payload) {
+        return super.queryById(payload);
+    }
+
     @Anonymous
     @Operation(summary = "查询用户菜单列表", description = "查询用户菜单列表")
     @GetMapping("/user-menu")

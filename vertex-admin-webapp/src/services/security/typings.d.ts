@@ -9,7 +9,7 @@ declare interface Menu {
   status: boolean;
   perms: string;
   parentId: number;
-  orderNum?: number;
+  orderNum: number;
   isFrame: boolean;
   isCache: boolean;
   query: string;

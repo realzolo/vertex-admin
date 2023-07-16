@@ -138,9 +138,10 @@ public class MenuService extends GenericServiceImpl<MenuMapper, MenuEntity> {
         }
 
         MenuEntity entity = new MenuEntity();
+        entity.setId(payload.getId());
         entity.setMenuName(payload.getMenuName());
-        entity.setVisible(true);
-        entity.setStatus(true);
+        entity.setVisible(Objects.isNull(payload.getVisible()) || payload.getVisible());
+        entity.setStatus(Objects.isNull(payload.getStatus()) || payload.getStatus());
         entity.setParentId(parentId);
         entity.setOrderNum(payload.getOrderNum());
         entity.setRemark(payload.getRemark());
@@ -149,8 +150,8 @@ public class MenuService extends GenericServiceImpl<MenuMapper, MenuEntity> {
             entity.setPath(payload.getPath());
             entity.setIcon(payload.getIcon());
             entity.setMenuType(menuType);
-            entity.setCache(payload.getCache());
-            entity.setFrame(payload.getFrame());
+            entity.setIsCache(payload.getIsCache());
+            entity.setIsFrame(payload.getIsFrame());
             entity.setQuery(payload.getQuery());
         }
         // 创建菜单：menuType = C
@@ -159,8 +160,8 @@ public class MenuService extends GenericServiceImpl<MenuMapper, MenuEntity> {
             entity.setComponent(payload.getComponent());
             entity.setIcon(payload.getIcon());
             entity.setMenuType(menuType);
-            entity.setCache(payload.getCache());
-            entity.setFrame(payload.getFrame());
+            entity.setIsCache(payload.getIsCache());
+            entity.setIsFrame(payload.getIsFrame());
             entity.setQuery(payload.getQuery());
         }
         // 创建按钮(权限)：menuType = F

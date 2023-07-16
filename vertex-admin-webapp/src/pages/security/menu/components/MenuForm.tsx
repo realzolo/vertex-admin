@@ -11,36 +11,63 @@ import {
   ProFormText
 } from '@ant-design/pro-components';
 import service from "@/services/security";
+import GenericService from "@/services/common";
 
-const MenuCreateForm: FC<SubPageProps> = (props) => {
+interface ParentMenu {
+  menuType: string;
+  parentId: number;
+  parentName: string
+}
+
+const genericService = new GenericService('menu');
+const MenuForm: FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
   const formRef = useRef<ProFormInstance>();
   const [selectedFrame, setSelectedFrame] = useState<number>(0);
   const [options, setOptions] = useState<any[]>([]);
   const [currentType, setCurrentType] = useState<string>('');
 
+  if (!data) return <></>;
+  const parentMenu = data as ParentMenu;
+
   useEffect(() => {
-    if (!data) return;
-    const menu = data as Record<string, any>;
-    const menuType = menu.menuType;
-    if (menuType === 'M') {
-      setCurrentType('C');
-    }
-    if (menuType === 'C') {
-      setCurrentType('F');
-    }
+    const menuType = parentMenu.menuType;
+    if (menuType === 'M') setCurrentType('C');
+    if (menuType === 'C') setCurrentType('F');
+
     const options = [
       {label: '目录', value: 'M', disabled: menuType === 'C'},
       {label: '菜单', value: 'C', disabled: menuType === 'C'},
       {label: '按钮(权限)', value: 'F', disabled: menuType !== 'C'},
     ];
+
     setOptions(options);
-  }, [data]);
+  }, [parentMenu]);
+
+  useEffect(() => {
+    fetchData().finally();
+  }, [itemKey]);
+
+  /** 查询菜单详情 */
   const fetchData = async () => {
-    return {
-      success: true,
-      data: {},
-    }
+    if (!itemKey) return;
+
+    const menu = await genericService.query(itemKey as number) as Menu;
+    const menuType = menu.menuType;
+    setCurrentType(menu.menuType);
+    const options = [
+      {label: '目录', value: 'M', disabled: menuType !== 'M'},
+      {label: '菜单', value: 'C', disabled: menuType !== 'C'},
+      {label: '按钮(权限)', value: 'F', disabled: menuType !== 'F'},
+    ];
+    setOptions(options);
+    formRef.current?.setFieldsValue({
+      ...menu,
+      status: Number(menu.status),
+      isCache: Number(menu.isCache),
+      isFrame: Number(menu.isFrame),
+      visible: Number(menu.visible),
+    })
   }
 
   /** 保存 */
@@ -48,7 +75,8 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
     let values = await formRef.current?.validateFields();
     values = {
       ...values,
-      parentId: (data as Record<string, any>).parentId,
+      id: itemKey,
+      parentId: parentMenu.parentId,
       menuType: currentType,
     }
     await service.createMenu(values as Menu);
@@ -92,7 +120,6 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
     >
       <ProForm
         formRef={formRef}
-        request={fetchData}
         layout='horizontal'
         submitter={{
           render: (_, dom) => null,
@@ -160,7 +187,6 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
                 width="md"
                 name="orderNum"
                 label="排序序号"
-                initialValue={0}
               />
             </>
           )}
@@ -207,4 +233,4 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
   );
 }
 
-export default MenuCreateForm;
+export default MenuForm;

@@ -34,6 +34,7 @@ const MenuTree: FC<Props> = (props) => {
       title: item.menuName,
       key: item.id?.toString(),
       parentId: item.parentId,
+      orderNum: item.orderNum,
     }) as AntTree.TreeNode);
     const treeData = buildTree(treeNode, '菜单管理');
     const allKeys = getAllKeys(treeData);

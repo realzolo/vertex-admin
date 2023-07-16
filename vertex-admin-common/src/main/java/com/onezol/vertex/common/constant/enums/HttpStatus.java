@@ -36,7 +36,15 @@ public enum HttpStatus implements EnumService {
      * 请求参数错误或输入无效<br>
      * 当请求中包含无效参数、缺少必需的参数或参数格式不正确时，可以使用此异常来指示参数错误。
      */
-    PARAM_ERROR("请求参数错误", 10006);
+    PARAM_ERROR("请求参数错误", 10006),
+    /**
+     * 数据库异常<br>
+     * 当数据库操作失败时，可以使用此异常来指示数据库异常。
+     */
+    DATABASE_ERROR("数据库异常", 10007),
+
+
+    ;
 
 
     private final String value;
