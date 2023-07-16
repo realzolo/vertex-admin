@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {Spin, Tree} from "antd";
 import {DownOutlined} from "@ant-design/icons";
-import {buildTree, getAllKeys} from "@/utils/treeify";
+import {buildTree, getAllKeys} from "@/utils/treeify.utils";
 import service from "@/services/security";
 import {DEFAULT_MIN_LOADER_TIME} from "@/constants";
 
@@ -22,7 +22,7 @@ const MenuTree: FC<Props> = (props) => {
 
   /** 获取菜单数据 */
   const fetchData = async () => {
-    const res = await service.getMenuList(['M', 'C']);
+    const res = await service.getMenuListByType(['M', 'C']);
     buildMenuTree(res as Menu[])
   }
 

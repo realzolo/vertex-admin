@@ -131,15 +131,15 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
           />
           {currentType !== 'F' && (
             <>
+              <ProFormText
+                width="md"
+                name="path"
+                label="路由地址"
+                placeholder={currentType === 'C' ? '请输入路由地址, 如/system/user' : '请输入父级路由地址, 如/system'}
+                rules={[{required: true, message: '请输入路由地址'}]}
+              />
               {currentType === 'C' && (
                 <>
-                  <ProFormText
-                    width="md"
-                    name="path"
-                    label="路由地址"
-                    placeholder="请输入路由地址"
-                    rules={[{required: true, message: '请输入路由地址'}]}
-                  />
                   <ProFormItem name="isFrame" label="是否外链">
                     <Radio.Group defaultValue={0} options={[
                       {label: '是', value: 1},
@@ -151,7 +151,7 @@ const MenuCreateForm: FC<SubPageProps> = (props) => {
                     width="md"
                     name="component"
                     label={selectedFrame === 1 ? '外链地址' : '组件路径'}
-                    placeholder={selectedFrame === 1 ? '请输入外链地址' : '请输入组件路径'}
+                    placeholder={selectedFrame === 1 ? '请输入外部链接' : '请输入组件路径, 默认前缀为@/pages'}
                     rules={[{required: true, message: selectedFrame === 1 ? '请输入外链地址' : '请输入组件路径'}]}
                   />
                 </>

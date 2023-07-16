@@ -1,8 +1,7 @@
-// 示例方法，没有实际意义
-export function trim(str: string) {
-  return str.trim();
-}
-
+/**
+ * 字节转换
+ * @param bytes 字节数
+ */
 export const bytesToSize = (bytes: number) => {
   if (bytes === 0) return '0 B';
   const k = 1024;

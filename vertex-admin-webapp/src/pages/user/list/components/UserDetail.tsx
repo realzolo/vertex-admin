@@ -41,20 +41,19 @@ const UserDetail: FC<SubPageProps> = (props) => {
   const formRef = useRef<ProFormInstance>();
 
   const fetchData = async () => {
-    const res = await genericService.query(itemKey as number) as User;
+    const user = await genericService.query(itemKey as number) as User;
     // 解析角色
     const roleData = (data as SelectOption[]) || [];
-    const roleKeys = res.roles;
+    console.log(roleData)
+    const roleKeys = user.roles;
     const roles = roleData.map(item => {
-      if (roleKeys.includes(item.key!) && !IGNORE_ROLE.includes(item.key!)) {
+      if (roleKeys?.includes(item.key!) && !IGNORE_ROLE.includes(item.key!)) {
         return item.label;
       }
     });
-    res.roles = roles.filter(item => !!item) as string[];
-    setUser(res);
-    return {
-      ...res
-    };
+    user.roles = roles.filter(item => !!item) as string[];
+    setUser(user);
+    return user;
   }
 
   /**
@@ -116,7 +115,7 @@ const UserDetail: FC<SubPageProps> = (props) => {
             size={{xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100}}
             icon={<AntDesignOutlined/>}
           />
-          <Typography.Text type='warning' style={{marginTop: 10}}>{user?.roles.join(',')}</Typography.Text>
+          <Typography.Text type='warning' style={{marginTop: 10}}>{user?.roles?.join(',')}</Typography.Text>
           <Typography.Title level={4}
                             style={{marginTop: 10}}>{`${user?.nickname}(${user?.username})`}</Typography.Title>
         </div>

@@ -1,7 +1,7 @@
 import service from "@/services/security";
 import {FC, useEffect, useState} from "react";
 import {Button, Checkbox, message, Space, Spin, Typography} from 'antd';
-import {buildTree} from "@/utils/treeify";
+import {buildTree} from "@/utils/treeify.utils";
 import {DEFAULT_MIN_LOADER_TIME} from "@/constants";
 
 const {Text, Link} = Typography;
@@ -71,7 +71,7 @@ const MenuList: FC<Props> = (props) => {
    */
   const getMenuData = async () => {
     setLoading(true);
-    const res = await service.getMenuList(['M', 'C', 'F']);
+    const res = await service.getMenuListByType(['M', 'C', 'F']);
     const menuItems = res.map((item: Menu) => ({
       id: item.id,
       title: item.menuName,

@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import {ActionType, PageContainer, ProDescriptionsItemProps, ProTable} from "@ant-design/pro-components";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import {GenericPayload} from "@/services/common";
-import service, {AccessLog} from "@/services/monitor";
+import service from "@/services/monitor";
 import {Typography} from "antd";
 import LogDetail from "@/pages/monitor/access-log/components/LogDetail";
 
@@ -13,7 +13,6 @@ const AccessLogPage = () => {
   const actionRef = useRef<ActionType>();
 
   const fetchData = async (params: any) => {
-    console.log(params)
     const {current: page, pageSize, module, description, success} = params;
     const payload: GenericPayload = {
       page,

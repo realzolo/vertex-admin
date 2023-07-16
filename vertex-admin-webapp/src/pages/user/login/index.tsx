@@ -8,12 +8,12 @@ import {
 } from '@ant-design/icons';
 import type {ProFormInstance} from '@ant-design/pro-components';
 import {LoginFormPage, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
-import {Alert, Button, Divider, message, Space, Tabs} from 'antd';
+import {Alert, Button, Divider, message, Space, Tabs, TabsProps} from 'antd';
 import type {CSSProperties} from 'react';
 import {useRef, useState} from 'react';
-import service, {LoginResult} from "@/services/user";
-import {useNavigate} from "@umijs/max";
+import service from "@/services/user";
 import {useModel} from "@@/plugin-model";
+import styles from './style/index.less';
 
 type LoginType = 'account' | 'email';
 
@@ -23,11 +23,25 @@ const iconStyles: CSSProperties = {
   verticalAlign: 'middle',
   cursor: 'pointer',
 };
+const activityStyles: CSSProperties = {
+  boxShadow: '0px 2px 20px rgba(0, 0, 0, 0.1)',
+  color: 'rgba(0, 0, 0, 0.8)',
+  borderRadius: 12,
+  backgroundColor: '#fff',
+  backgroundImage: `url(src/pages/user/login/asset/card-bg.svg)`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  backgroundSize: 'contain',
+};
+
+const loginTabs: TabsProps['items'] = [
+  {key: 'account', label: `账号密码登录`},
+  {key: 'email', label: `邮箱登录`},
+];
 
 const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const [loginMsg, setLoginMsg] = useState<string>('');
-  const navigate = useNavigate();
   const formRef = useRef<ProFormInstance>();
   const {initialState, setInitialState} = useModel('@@initialState')
 
@@ -40,9 +54,8 @@ const LoginPage = () => {
     await service.sendEmailCode(email);
     message.success('验证码发送成功');
   }
-  /**
-   * 提交表单
-   */
+
+  /** 提交表单 */
   const onSubmit = async (values: any) => {
     const params = {
       ...values,
@@ -55,61 +68,50 @@ const LoginPage = () => {
       return;
     }
     // 登录成功
-    afterSuccess(res.data);
+    await afterSuccess(res.data);
   }
 
-  /**
-   * 登录成功后的操作
-   * @param values
-   */
-  const afterSuccess = (values: LoginResult) => {
+  /** 登录成功后的操作 */
+  const afterSuccess = async (values: LoginResult) => {
     setLoginMsg('');
     const {jwt, user} = values;
     message.success('登录成功');
+
+    // 保存token和用户信息
     localStorage.setItem('token', jwt.token);
-    localStorage.setItem('userInfo', JSON.stringify(user));
-    setInitialState({
+    localStorage.setItem('userinfo', JSON.stringify(user));
+    await setInitialState({
       ...initialState,
       currentUser: user,
     });
 
-    // 是否需要redirect
+    // 是否需要跳转到登录前的页面
+    // 此处不要使用useNavigate或useHistory, 这两种方式只会重新渲染组件, 不会刷新页面, 无法触发全局render, 所有无法根据用户角色动态获取路由表
     const redirect = new URLSearchParams(window.location.search).get('redirect');
     if (redirect) {
-      navigate(redirect);
+      location.href = redirect;
       return;
     }
-
-    // 跳转到首页
-    navigate('/home');
+    location.href = '/home';
   }
 
-  /**
-   * 登录失败后的操作
-   * @param values
-   */
+  /** 登录失败后的操作 */
   const afterFailure = (values: API.AjaxResult<LoginResult>) => {
     const {code, message} = values;
     setLoginMsg(message);
   }
 
   return (
-    <div
-      style={{
-        backgroundColor: 'white',
-        height: 'calc(100vh - 48px)',
-        margin: -24,
-      }}
-    >
+    <div className={styles.wrapper}>
       <LoginFormPage
-        backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
+        backgroundImageUrl="src/pages/user/login/asset/bg.jpg"
         logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
-        title="Github"
+        title="Vertex"
         onFinish={onSubmit}
         formRef={formRef}
-        subTitle="全球最大的代码托管平台"
+        subTitle="一套现代化操作界面的后台管理解决方案"
         message={
-          loginMsg ? (
+          loginMsg && (
             <Alert
               showIcon
               message={loginMsg}
@@ -117,89 +119,42 @@ const LoginPage = () => {
               closable
               onClose={() => setLoginMsg('')}
             />
-          ) : null
+          )
         }
         activityConfig={{
-          style: {
-            boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
-            color: '#fff',
-            borderRadius: 8,
-            backgroundColor: '#1677FF',
-          },
-          title: '活动标题，可配置图片',
-          subTitle: '活动介绍说明文字',
+          style: activityStyles,
+          title: 'Vertex Admin',
+          subTitle: '一套现代化操作界面的后台管理解决方案',
           action: (
             <Button
               size="large"
+              type='primary'
               style={{
                 borderRadius: 20,
-                background: '#fff',
-                color: '#1677FF',
                 width: 120,
               }}
+              onClick={() => location.href = 'https://github.com/realzolo/vertex-admin'}
             >
-              去看看
+              GitHub
             </Button>
           ),
         }}
         actions={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
+          <div className={styles.actions}>
             <Divider plain>
-              <span
-                style={{color: '#CCC', fontWeight: 'normal', fontSize: 14}}
-              >
+              <span className={styles['action-title']}>
                 其他登录方式
               </span>
             </Divider>
             <Space align="center" size={24}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  height: 40,
-                  width: 40,
-                  border: '1px solid #D4D8DD',
-                  borderRadius: '50%',
-                }}
-              >
+              <div className={styles['action-item']}>
                 <AlipayOutlined style={{...iconStyles, color: '#1677FF'}}/>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  height: 40,
-                  width: 40,
-                  border: '1px solid #D4D8DD',
-                  borderRadius: '50%',
-                }}
-              >
+              <div className={styles['action-item']}>
                 <TaobaoOutlined style={{...iconStyles, color: '#FF6A10'}}/>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  height: 40,
-                  width: 40,
-                  border: '1px solid #D4D8DD',
-                  borderRadius: '50%',
-                }}
-              >
-                <WeiboOutlined style={{...iconStyles, color: '#333333'}}/>
+              <div className={styles['action-item']}>
+                <WeiboOutlined style={{...iconStyles, color: '#E6162D'}}/>
               </div>
             </Space>
           </div>
@@ -209,10 +164,8 @@ const LoginPage = () => {
           centered
           activeKey={loginType}
           onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-        >
-          <Tabs.TabPane key={'account'} tab={'账号密码登录'}/>
-          <Tabs.TabPane key={'email'} tab={'邮箱登录'}/>
-        </Tabs>
+          items={loginTabs}
+        />
         {loginType === 'account' && (
           <>
             <ProFormText

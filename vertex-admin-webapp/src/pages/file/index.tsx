@@ -5,7 +5,7 @@ import {DEFAULT_PRO_TABLE_PROPS, FILE_TYPE_MAP} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import GenericService, {GenericPayload} from "@/services/common";
 import FileDetail from "./components/FileDetail";
-import {bytesToSize} from "@/utils/format";
+import {bytesToSize} from "@/utils/format.utils";
 
 const {Paragraph, Text} = Typography;
 const genericService = new GenericService('file');

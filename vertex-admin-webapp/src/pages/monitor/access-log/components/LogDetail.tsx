@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import service, {AccessLog} from "@/services/monitor";
+import service from "@/services/monitor";
 import {DEFAULT_DRAWER_PROPS, DEFAULT_MIN_LOADER_TIME} from "@/constants";
 import {Descriptions, Drawer, Result, Spin, Typography} from "antd";
 import {ProCard, ProDescriptions} from "@ant-design/pro-components";

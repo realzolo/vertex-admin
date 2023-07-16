@@ -1,7 +1,7 @@
 import {PageContainer} from "@ant-design/pro-components";
 import {Col, Row} from "antd";
 import React, {useEffect, useState} from "react";
-import service, {SystemInfo} from "@/services/monitor";
+import service from "@/services/monitor";
 import ServerInfoCard from "./components/ServerInfoCard";
 import CPUInfoCard from "@/pages/monitor/server/components/CPUInfoCard";
 import MemoryInfoCard from "@/pages/monitor/server/components/MemoryInfoCard";

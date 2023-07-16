@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {Descriptions} from "antd";
 import {ProCard} from "@ant-design/pro-components";
-import {bytesToSize} from "@/utils/format";
+import {bytesToSize} from "@/utils/format.utils";
 import {FILE_TYPE_MAP} from "@/constants";
 
 interface Props {

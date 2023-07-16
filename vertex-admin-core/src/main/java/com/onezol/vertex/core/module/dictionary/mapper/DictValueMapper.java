@@ -12,7 +12,7 @@ import java.util.Map;
 public interface DictValueMapper extends BaseMapper<DictValueEntity> {
     @Select("SELECT " +
             "DE.ENTRY_KEY,DV.DICT_KEY,DV.CODE,DV.VALUE " +
-            "FROM PF_DICT_VALUE DV LEFT JOIN PF_DICT_ENTRY DE ON DV.ENTRY_ID = DE.ID " +
+            "FROM SYS_DICT_VALUE DV LEFT JOIN SYS_DICT_ENTRY DE ON DV.ENTRY_ID = DE.ID " +
             "WHERE DV.DELETED = FALSE"
     )
     List<Map<String, Object>> getDictionary();

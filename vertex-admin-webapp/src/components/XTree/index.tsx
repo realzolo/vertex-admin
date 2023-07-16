@@ -1,6 +1,6 @@
 import {Card, Tree} from "antd";
 import {useEffect, useState} from "react";
-import {buildTree, defaultTreeData} from "@/utils/treeify";
+import {buildTree, defaultTreeData} from "@/utils/treeify.utils";
 import styles from './style.less';
 
 interface Props {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import service, {CacheInfo} from "@/services/monitor";
+import service from "@/services/monitor";
 import {PageContainer} from "@ant-design/pro-components";
 import CommentCountChart from "@/pages/monitor/cache/components/CommentCountChart";
 import BasicInfoCard from "@/pages/monitor/cache/components/BasicInfoCard";

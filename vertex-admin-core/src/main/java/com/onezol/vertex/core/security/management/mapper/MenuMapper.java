@@ -17,7 +17,7 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
     /**
      * 查询用户菜单列表
      */
-    List<MenuEntity> selectMenuListByUserId(Long userId);
+    List<MenuEntity> selectMenuListByUserId(Long userId, boolean isAdmin);
 
     /**
      * 根据角色id获取菜单列表

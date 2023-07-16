@@ -2,38 +2,6 @@ import {request} from "@@/plugin-request";
 
 export default {
   /**
-   * 权限组创建
-   * @param values 权限组信息
-   * @param autoGeneratePermission 是否自动生成默认权限
-   */
-  createPermissionGroup: async (values: PermissionGroup, autoGeneratePermission: boolean): Promise<PermissionGroup | undefined> => {
-    const res = await request<API.AjaxResult<PermissionGroup>>('/api/permission-group/save', {
-      method: 'POST',
-      data: {
-        ...values,
-        autoGeneratePermission
-      }
-    });
-    return res.data;
-  },
-
-  /**
-   * 权限分配
-   * @param roleId 角色ID
-   * @param permissionIds 权限ID
-   */
-  assignPermission: async (roleId: number, permissionIds: number[]): Promise<void> => {
-    const res = await request<API.AjaxResult<void>>(`/api/role/assign-permission/${roleId}`, {
-      method: 'POST',
-      data: {
-        permissionIds
-      }
-    });
-    return res.data;
-  },
-
-
-  /**
    * 获取角色选项
    */
   getRoleOptions: async () => {
@@ -42,20 +10,18 @@ export default {
   },
 
   /**
-   * 获取菜单树
+   * 根据菜单类型获取菜单列表
    */
-  getMenuList: async (menuTypes: string[]) => {
+  getMenuListByType: async (menuTypes: string[]) => {
     const types = menuTypes.map(item => item.toUpperCase()).join(',');
-    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/list/${types}`);
+    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/type-menu`, {
+      params: {
+        types
+      }
+    });
     return res.data;
   },
-  /**
-   * 获取菜单权限树
-   */
-  getMenuPermTree: async (roleId: number) => {
-    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/menu-perm-tree/${roleId}`);
-    return res.data;
-  },
+
   /**
    * 根据父级菜单ID获取菜单列表
    * @param parentId 父级菜单ID
@@ -63,7 +29,13 @@ export default {
    * @param pageSize 页大小
    */
   getMenuListByParentId: async (parentId: number, page: number, pageSize: number) => {
-    const res = await request<API.AjaxResult<Record<string, any>>>(`/api/menu/list-by-page/${parentId}/${page}/${pageSize}`);
+    const res = await request<API.AjaxResult<Record<string, any>>>('/api/menu/page', {
+      params: {
+        parentId,
+        page,
+        pageSize
+      }
+    });
     return res.data;
   },
 
@@ -84,7 +56,11 @@ export default {
    * @param roleId 角色ID
    */
   getMenuListByRoleId: async (roleId: number) => {
-    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/list-by-role/${roleId}`);
+    const res = await request<API.AjaxResult<Menu[]>>('/api/menu/role-menu', {
+      params: {
+        roleId
+      }
+    });
     return res.data;
   },
 
@@ -102,5 +78,5 @@ export default {
       }
     });
     return res.data;
-  }
+  },
 }

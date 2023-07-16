@@ -10,9 +10,10 @@ interface SubPageProps {
 interface ModalProps extends SubPageProps {
 }
 
+// 路由
 declare interface Route {
-  id: string;
-  parentId: string;
+  id: number;
+  parentId: number;
   name: string;
   path: string;
   element?: ReactNode;

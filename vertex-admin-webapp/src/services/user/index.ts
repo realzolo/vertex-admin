@@ -1,33 +1,5 @@
 import {request} from "@umijs/max";
 
-interface LoginPayload {
-  type: string;
-  username?: string;
-  password?: string;
-  email?: string;
-  captcha?: string;
-}
-
-export interface LoginResult {
-  jwt: {
-    token: string;
-    expire: number;
-  },
-  user: any;
-}
-
-interface UserUpdateParam {
-  id: number;
-  nickname: string;
-  name: string;
-  introduction: string;
-  gender: number;
-  birthday: string;
-  phone: string;
-  email: string;
-  status: number;
-}
-
 export default {
   /**
    * 账号密码登录
@@ -63,5 +35,6 @@ export default {
       }
     });
     return res.data;
-  }
+  },
+
 }

@@ -16,6 +16,8 @@ export function defaultTreeData(rootTitle: string): AntTree.TreeNode[] {
 
 /**
  * 树形结构化
+ * @param nodes 节点列表
+ * @param rootTitle 根节点标题
  */
 export function buildTree(nodes: AntTree.TreeNode[], rootTitle?: string): AntTree.TreeNode[] {
   // 创建一个键值对映射，将节点ID作为键，节点本身作为值
@@ -63,6 +65,7 @@ export function buildTree(nodes: AntTree.TreeNode[], rootTitle?: string): AntTre
 
 /**
  * 获取树形结构中所有节点key
+ * @param treeData 树形结构
  */
 export const getAllKeys = (treeData: AntTree.TreeNode[]): string[] => {
   const keys: string[] = [];

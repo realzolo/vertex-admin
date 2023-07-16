@@ -1,85 +1,47 @@
-import {RequestConfig} from '@umijs/max';
-import {RunTimeLayoutConfig} from "@@/plugin-layout/types";
+import React, {ReactNode} from 'react';
+import 'nprogress/nprogress.css';
+import '@/styles/index.less';
+import App from '@/pages/app';
 import requestConfig from '../config/request';
-import {patchRoutes} from "@/utils";
-import {getRoutes} from "@/services/common/global";
+import layoutConfig from '../config/layout';
+import {patchRoutes} from '@/utils/route.utils';
+import {getRoutes} from '@/services/common/global';
 
-// 运行时配置
-
-/**
- * 全局初始化数据配置，用于 Layout 用户信息和权限初始化
- * 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
- */
+/** 全局初始化数据配置，用于 Layout 用户信息和权限初始化 */
 export const getInitialState = (): Record<string, any> => {
-  return {
-    name: '@umijs/max',
-    currentUser: JSON.parse(localStorage.getItem('userInfo') || '{}'),
-  };
+  return {};
 }
 
-
-/**
- * 修改被 react-router 渲染前的树状路由表
- * @param routes
- */
+/** 在路由配置加载之前修改和拦截路由配置 */
 let extraRoutes: Route[] = []
 export const patchClientRoutes = ({routes}: any) => {
+  // 构建路由表
   patchRoutes(routes, extraRoutes);
 }
 
-/**
- * render 复写
- * @param oldRender
- */
-export const render = async (oldRender: () => () => void) => {
-  const {currentUser} = await getInitialState();
-  // 用于改写把上面的路由表写入到路由配置中
-  getRoutes(currentUser.id).then((res) => {
-    extraRoutes = res;
-    oldRender();
-  })
+/** 页面的根容器 */
+export const rootContainer = (container: ReactNode) => {
+  return React.createElement(App, null, container);
 }
 
-/**
- * Layout 全局配置
- */
-export const layout: RunTimeLayoutConfig = () => {
-  return {
-    title: 'Vertex Admin',
-    layout: 'mix',
-    logo: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
-    // header 配置
-    headerContentRender: (props = {}) => {
-      return null;
-    },
-    // 面包屑配置
-    breadcrumbRender: (routers = []) => {
-      return routers
-    },
-    // Layout 内容区样式
-    contentStyle: {
-      height: 'calc(100vh - 56px)',
-    },
-    // 是否固定 header 到顶部
-    fixedHeader: true,
-    // 跨站点导航列表
-    appList: [
-      {
-        title: 'GitHub',
-        desc: 'Vertex Admin',
-        url: 'https://github.com/realzolo/vertex-admin',
-        target: '_blank'
-      }
-    ],
-    menu: {
-      locale: false,
-    },
-  };
-};
+/** 渲染函数 */
+export const render = async (oldRender: Function) => {
+  // 根据用户信息获取路由
+  const userinfo = localStorage.getItem('userinfo');
+  if (!userinfo) {
+    if (!location.pathname.includes('/login')) {
+      location.href = '/login';
+    }
+    oldRender();
+    return;
+  }
+  const user = JSON.parse(userinfo) as User;
+  extraRoutes = await getRoutes(user.id);
+  oldRender();
+}
 
-/**
- * request 全局配置
- */
-export const request: RequestConfig = {
-  ...requestConfig
-};
+/** Layout页面布局 */
+export const layout = layoutConfig;
+
+/** request请求配置 */
+export const request = requestConfig;

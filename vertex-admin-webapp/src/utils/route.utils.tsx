@@ -1,35 +1,42 @@
-import {request} from "@@/plugin-request";
 import React, {Fragment} from "react";
 
-export const getRoutes = async (userId: number) => {
-  const res = await request<any>(`/api/menu/list-by-user/${userId}`);
-  return buildRoutes(res.data, '0');
-};
+/**
+ * 路由处理
+ * @param defaultRoutes 静态路由
+ * @param userRoutes 用户路由
+ */
+export const patchRoutes = (defaultRoutes: Route[], userRoutes: Route[]) => {
+  const layoutRoute = defaultRoutes.find((route: any) => route.path === '/');
+  if (!layoutRoute) {
+    return;
+  }
+  layoutRoute.children = [...layoutRoute.children, ...userRoutes];
+}
 
 /**
  * 构建路由表
- * @param menuData 菜单数据
+ * @param menus 菜单数据
  * @param parentId 父级菜单ID
  */
-const buildRoutes = (menuData: Menu[], parentId = '0'): Route[] => {
+export const buildRoutes = (menus: Menu[], parentId = 0): Route[] => {
   const routes: Route[] = [];
 
   // 遍历菜单数据
-  for (const menu of menuData) {
+  for (const menu of menus) {
     // 匹配父级菜单ID
-    if (menu.parentId.toString() === parentId) {
+    if (menu.parentId === parentId) {
       const route: Route = {
-        id: menu.id?.toString() || '',
-        parentId: menu.parentId === 0 ? 'ant-design-pro-layout' : menu.parentId.toString(),
+        id: menu.id,
+        parentId: menu.parentId,
         name: menu.menuName,
-        path: menu.path!,
-        children: [],
+        path: menu.path,
+        children: []
       };
 
       if (menu.component) {
         let Page: React.ComponentType<any> | undefined;
         try {
-          Page = React.lazy(() => import(/* @vite-ignore */`../../pages/${menu.component}`));
+          Page = React.lazy(() => import(/* @vite-ignore */`../pages${menu.component}`));
         } catch (e) {
           console.error(`页面组件${menu.component}加载失败, 请检查路径是否正确`);
         }
@@ -41,7 +48,7 @@ const buildRoutes = (menuData: Menu[], parentId = '0'): Route[] => {
       }
 
       // 递归处理子菜单
-      const childRoutes = buildRoutes(menuData, menu.id?.toString());
+      const childRoutes = buildRoutes(menus, menu.id);
       if (childRoutes.length > 0) {
         route.children = childRoutes;
       }

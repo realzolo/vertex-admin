@@ -119,7 +119,12 @@ public class LoggableAspect implements InitializingBean {
         if (Objects.isNull(authentication)) {
             return;
         }
-        UserIdentity userIdentity = (UserIdentity) authentication.getPrincipal();
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserIdentity)) {
+            return;
+        }
+        UserIdentity userIdentity = (UserIdentity) principal;
         UserEntity user = userIdentity.getUser();
         if (Objects.isNull(user)) {
             return;
