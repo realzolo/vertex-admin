@@ -1,5 +1,6 @@
 package com.onezol.vertex.app.controller;
 
+import com.onezol.vertex.common.annotation.Anonymous;
 import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
@@ -26,6 +27,7 @@ public class DictValueController extends GenericController<DictValueService> {
     }
 
     @GetMapping
+    @Anonymous
     public Object get() {
         // 枚举
         Map<String, Object> enums = redisCache.getCacheMap(RedisKey.ENUM);
