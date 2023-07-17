@@ -9,9 +9,11 @@ export default () => {
   const [dictionary, setDictionary] = useState<DictEntryMap>({});
 
   useEffect(() => {
+    if (location.href.includes('/login')) return;
+
     service.getDictionary().then((res) => {
       setDictionary(res);
-    })
+    });
   }, []);
 
   const getDictionary = (entryKey: string) => {

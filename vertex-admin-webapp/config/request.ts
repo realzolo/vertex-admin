@@ -1,5 +1,5 @@
 import {AxiosError, history, RequestConfig} from "@umijs/max";
-import {message as Message} from "antd";
+import {message as Message, Modal} from "antd";
 
 Message.config({
   maxCount: 1,
@@ -60,25 +60,18 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
       const {code, success, message, data} = error.info as API.AjaxResult<null>;
       switch (code) {
         case 10001: // 操作失败
+        // TODO: (冗余, 即将废弃)
         case 10003: // 无访问权限
           Message.error(message);
           break;
-        case 10004: // 禁止访问
+        case 10004: // 禁止访问(403, 无权限)
           history.replace('/403');
           break;
         case 10006: // 请求参数错误
           Message.error(message);
           break;
-        case 10005: // 未授权
-          if (window.location.pathname.startsWith('/login')) break;
-          if (localStorage.getItem('token')) {
-            Message.error("您的身份已过期，请重新登录。");
-          } else {
-            Message.error(message);
-          }
-          setTimeout(() => {
-            window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
-          }, 1000);
+        case 10005: // 未授权(401, 未登录)
+          handleUnauthorized();
           break;
         default:
           Message.error(message);
@@ -90,11 +83,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
     const {response} = error as AxiosError;
     switch (response?.status) {
       case 401:
-        Message.error('未登录或登录已过期，请重新登录。');
-        if (window.location.pathname.startsWith('/login')) break;
-        setTimeout(() => {
-          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
-        }, 1000);
+        handleUnauthorized();
         break;
       case 403:
         Message.error('您没有权限访问，请联系管理员。');
@@ -116,6 +105,40 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
   },
 };
 
+
+/** 未登录弹窗 */
+let isModalShow = false;
+const handleUnauthorized = () => {
+  // 登录页无需处理
+  if (location.pathname.includes('/login')) return;
+
+  // 存在token, 但是请求失败, 说明token过期
+  if (localStorage.getItem('token')) {
+    if (isModalShow) return;
+    isModalShow = true;
+    Modal.confirm({
+      title: '提示',
+      content: '您的身份已过期，请重新登录。',
+      okText: '重新登录',
+      getContainer: false,
+      centered: true,
+      onCancel: () => {
+        isModalShow = false;
+      },
+      onOk: () => {
+        isModalShow = false;
+        window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+      }
+    });
+    return;
+  }
+
+  // 不存在token, 说明未登录
+  Message.error("您还未登录，请登录后再试。");
+  setTimeout(() => {
+    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+  }, 1000);
+}
 
 const requestConfig: RequestConfig = {
   timeout: 10000,

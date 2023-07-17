@@ -26,17 +26,18 @@ export const rootContainer = (container: ReactNode) => {
 
 /** 渲染函数 */
 export const render = async (oldRender: Function) => {
-  // 根据用户信息获取路由
   const userinfo = localStorage.getItem('userinfo');
-  if (!userinfo) {
-    if (!location.pathname.includes('/login')) {
-      location.href = '/login';
-    }
-    oldRender();
-    return;
+  const isLoginPath = location.pathname.includes('/login');
+
+  if (isLoginPath) return oldRender();
+
+  if (!isLoginPath) {
+    if (!userinfo) return location.href = '/login';
+
+    const user = JSON.parse(userinfo!) as User;
+    extraRoutes = await getRoutes(user.id);
   }
-  const user = JSON.parse(userinfo) as User;
-  extraRoutes = await getRoutes(user.id);
+
   oldRender();
 }
 
