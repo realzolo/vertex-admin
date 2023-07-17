@@ -3,7 +3,7 @@ package com.onezol.vertex.core.security.management.service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.model.record.OptionType;
 import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.security.management.mapper.RoleMapper;
 import com.onezol.vertex.core.security.management.model.dto.Role;
@@ -111,16 +111,15 @@ public class RoleService extends GenericServiceImpl<RoleMapper, RoleEntity> {
      *
      * @return options
      */
-    public List<SelectOption> getRoleOptions() {
+    public List<OptionType> getRoleOptions() {
         List<RoleEntity> list = this.list(
                 Wrappers.<RoleEntity>lambdaQuery()
                         .select(RoleEntity::getId, RoleEntity::getName, RoleEntity::getKey)
         );
         return list.stream().map(roleEntity -> {
-            SelectOption option = new SelectOption();
+            OptionType option = new OptionType();
             option.setLabel(roleEntity.getName());
-            option.setValue(roleEntity.getId());
-            option.setKey(roleEntity.getKey());
+            option.setValue(Math.toIntExact(roleEntity.getId()));
             return option;
         }).collect(Collectors.toList());
     }

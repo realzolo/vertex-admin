@@ -3,7 +3,7 @@ import 'nprogress/nprogress.css';
 import '@/styles/index.less';
 import App from '@/pages/app';
 import requestConfig from '../config/request';
-import layoutConfig from '../config/layout';
+import layoutConfig from './layout';
 import {isLoginPage, patchRoutes} from '@/utils/route.utils';
 import {getRoutes} from '@/services/common/global';
 

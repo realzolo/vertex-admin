@@ -6,7 +6,7 @@ import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
-import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.model.record.OptionType;
 import com.onezol.vertex.core.base.controller.GenericController;
 import com.onezol.vertex.core.security.management.model.dto.Role;
 import com.onezol.vertex.core.security.management.model.payload.RoleMenuPayload;
@@ -46,7 +46,7 @@ public class RoleController extends GenericController<RoleService> {
 
     @Operation(summary = "查询角色", description = "查询角色详情")
     @GetMapping("/select-options")
-    public List<SelectOption> selectOptions() {
+    public List<OptionType> selectOptions() {
         return roleService.getRoleOptions();
     }
 

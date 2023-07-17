@@ -25,11 +25,6 @@ public class UserController extends GenericController<UserService> {
         this.userService = userService;
     }
 
-    /**
-     * 查询: /xxx/query
-     *
-     * @param payload 查询参数
-     */
     @Override
     @Operation(summary = "查询用户", description = "查询用户详情")
     @PostMapping("/query")
@@ -37,11 +32,6 @@ public class UserController extends GenericController<UserService> {
         return super.queryById(payload);
     }
 
-    /**
-     * 查询列表： /xxx/list
-     *
-     * @param payload 查询参数
-     */
     @Override
     @Operation(summary = "查询用户", description = "查询用户列表")
     @PostMapping("/list")
@@ -49,9 +39,6 @@ public class UserController extends GenericController<UserService> {
         return super.queryList(payload);
     }
 
-    /**
-     * 更新： /xxx/save
-     */
     @Operation(summary = "更新用户", description = "更新用户")
     @PutMapping("/save")
     protected boolean save(@RequestBody UserUpdatePayload payload) {
@@ -59,11 +46,6 @@ public class UserController extends GenericController<UserService> {
         return userService.updateById(user);
     }
 
-    /**
-     * 删除： /xxx/delete
-     *
-     * @param payload 删除参数
-     */
     @Override
     @Operation(summary = "删除用户", description = "删除用户")
     @PostMapping("/delete")
@@ -71,11 +53,6 @@ public class UserController extends GenericController<UserService> {
         super.delete(payload);
     }
 
-    /**
-     * 获取DTO的Class(返回给前端的数据类型, 避免Entity直接暴露给前端)
-     *
-     * @return DTO Class
-     */
     @Override
     protected Class<? extends DTO> getDtoClass() {
         return User.class;

@@ -5,7 +5,7 @@ import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
-import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.model.record.OptionType;
 import com.onezol.vertex.core.base.controller.GenericController;
 import com.onezol.vertex.core.cache.RedisCache;
 import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
@@ -32,7 +32,7 @@ public class DictValueController extends GenericController<DictValueService> {
         // 枚举
         Map<String, Object> enums = redisCache.getCacheMap(RedisKey.ENUM);
         // 字典
-        Map<String, List<SelectOption>> dictionary = dictValueService.getDictionary();
+        Map<String, List<OptionType>> dictionary = dictValueService.getDictionary();
 
         enums.putAll(dictionary);
         return enums;

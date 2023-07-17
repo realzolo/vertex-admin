@@ -17,20 +17,20 @@ export default () => {
     });
   }, []);
 
-  const getDictionary = (entryKey: string) => {
-    entryKey = entryKey.toUpperCase();
+  /** 获取字典项 */
+  const getEntry = (entryKey: string) => {
+    entryKey = toUpperUnderscore(entryKey);
     if (!dictionary) {
       return [];
     }
     return dictionary[entryKey] || [];
   }
 
+  /** @deprecated */
   const getOptions = (entryKey: string) => {
-    entryKey = entryKey
-      .replace(/([A-Z])/g, "_$1")
-      .replace(/^_/, "")
-      .toUpperCase();
-    return getDictionary(entryKey).map((item) => {
+    console.warn("getOptions 已经废弃，请使用 buildOptions");
+    entryKey = toUpperUnderscore(entryKey);
+    return getEntry(entryKey).map((item) => {
       return {
         label: item.label,
         value: item.label
@@ -38,9 +38,43 @@ export default () => {
     });
   }
 
+  /** 字符串转大写下划线格式 */
+  const toUpperUnderscore = (str: string) => {
+    return str
+      .replace(/([A-Z])/g, "_$1")
+      .replace(/^_/, "")
+      .toUpperCase();
+  }
+
+  /** 构建选项 */
+  const buildOptions = (entryKey: string, ...ignoreFields: string[]): OptionType[] => {
+    ignoreFields = ignoreFields.map((item) => toUpperUnderscore(item));
+    const options = getEntry(entryKey).map((item) => {
+      if (!ignoreFields.includes(item.label)) {
+        return {
+          label: item.label,
+          value: item.value
+        } as OptionType;
+      }
+    });
+    return options.filter((item) => !!item) as OptionType[];
+  }
+
+  /**
+   * 根据entryKey和value获取label
+   * @param entryKey
+   * @param value
+   */
+  const getLabel = (entryKey: string, value: number): string => {
+    const entry = getEntry(entryKey).find((item) => item.value === value);
+    return entry ? entry.label : "";
+  }
+
   return {
     dictionary,
-    getDictionary,
-    getOptions
+    getEntry,
+    getOptions,
+    buildOptions,
+    getLabel
   }
 }

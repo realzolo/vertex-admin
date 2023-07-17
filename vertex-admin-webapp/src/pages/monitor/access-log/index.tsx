@@ -55,7 +55,7 @@ const AccessLogPage = () => {
     },
     {
       title: '操作内容',
-      dataIndex: 'description',
+      dataIndex: 'action',
       hideInSearch: true,
     },
     {

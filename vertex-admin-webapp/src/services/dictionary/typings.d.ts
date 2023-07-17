@@ -21,5 +21,9 @@ declare interface DictValue {
 declare interface SelectOption {
   label: string;
   value: number;
-  key?: string;
+}
+
+declare interface OptionType {
+  label: string;
+  value: number;
 }

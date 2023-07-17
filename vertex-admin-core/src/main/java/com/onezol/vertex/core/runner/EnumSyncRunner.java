@@ -2,7 +2,7 @@ package com.onezol.vertex.core.runner;
 
 import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.constant.enums.EnumService;
-import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.model.record.OptionType;
 import com.onezol.vertex.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class EnumSyncRunner implements ApplicationRunner {
         List<Class<?>> implementationClasses = findInterfaceImplementations(EnumService.class);
         logger.info("枚举类扫描完成, 共扫描到 {} 个枚举类", implementationClasses.size() - 1);
 
-        Map<String, List<SelectOption>> optionMap = new HashMap<>(implementationClasses.size());
+        Map<String, List<OptionType>> optionMap = new HashMap<>(implementationClasses.size());
         int total = 0;
         for (Class<?> clazz : implementationClasses) {
             if (!clazz.isEnum()) {
@@ -38,14 +38,14 @@ public class EnumSyncRunner implements ApplicationRunner {
             // 获取枚举类的所有枚举值
             Object[] enumConstants = clazz.getEnumConstants();
 
-            List<SelectOption> options = new ArrayList<>();
+            List<OptionType> options = new ArrayList<>();
             for (Object enumConstant : enumConstants) {
                 ++total;
                 // 获取枚举值的code和value
                 EnumService enumService = (EnumService) enumConstant;
-                SelectOption option = new SelectOption();
+                OptionType option = new OptionType();
                 option.setLabel(enumService.getValue());
-                option.setValue((long) enumService.getCode());
+                option.setValue(enumService.getCode());
                 options.add(option);
             }
 

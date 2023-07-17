@@ -2,7 +2,7 @@ package com.onezol.vertex.core.module.dictionary.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.constant.RedisKey;
-import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.model.record.OptionType;
 import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.module.dictionary.mapper.DictValueMapper;
 import com.onezol.vertex.core.module.dictionary.model.dto.DictValue;
@@ -79,15 +79,15 @@ public class DictValueService extends GenericServiceImpl<DictValueMapper, DictVa
      *
      * @return 字典列表
      */
-    public Map<String, List<SelectOption>> getDictionary() {
-        Map<String, List<SelectOption>> dictMap = new HashMap<>();
+    public Map<String, List<OptionType>> getDictionary() {
+        Map<String, List<OptionType>> dictMap = new HashMap<>();
         List<Map<String, Object>> mapList = dictValueMapper.getDictionary();
         for (Map<String, Object> map : mapList) {
             String entryKey = (String) map.get("ENTRY_KEY");
-            List<SelectOption> m = dictMap.getOrDefault(entryKey, new ArrayList<>());
-            SelectOption option = new SelectOption() {{
+            List<OptionType> m = dictMap.getOrDefault(entryKey, new ArrayList<>());
+            OptionType option = new OptionType() {{
                 setLabel(map.get("VALUE").toString());
-                setValue(Long.valueOf(map.get("CODE").toString()));
+                setValue(Integer.parseInt(map.get("CODE").toString()));
             }};
             m.add(option);
             dictMap.put(entryKey, m);

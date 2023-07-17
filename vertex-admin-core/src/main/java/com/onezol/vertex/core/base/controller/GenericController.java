@@ -46,6 +46,7 @@ public abstract class GenericController<S extends GenericService<? extends Entit
     /**
      * 保存/更新： /xxx/save
      */
+    @Deprecated
     protected DTO save(GenericPayload payload) {
         Map<String, Object> data = payload.getData();
         if (Objects.isNull(data) || data.isEmpty()) {

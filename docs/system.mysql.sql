@@ -254,3 +254,24 @@ CREATE TABLE sys_access_log
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='访问日志表';
+
+-- sys_message
+DROP TABLE IF EXISTS sys_message;
+CREATE TABLE sys_message
+(
+    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    user_id     BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '用户ID',
+    type        TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '消息类型',
+    title       VARCHAR(50)         DEFAULT NULL COMMENT '标题',
+    content     VARCHAR(500)        DEFAULT NULL COMMENT '内容',
+    all_visible TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否全部可见',
+    receiver_id BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '接收者ID',
+    timing      TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '定时发布',
+    send_time   DATETIME COMMENT '发送时间',
+    visible     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否可见',
+    created_at  DATETIME COMMENT '创建时间',
+    updated_at  DATETIME COMMENT '更新时间',
+    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='消息表';
