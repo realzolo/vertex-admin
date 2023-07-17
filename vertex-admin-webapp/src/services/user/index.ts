@@ -37,4 +37,25 @@ export default {
     return res.data;
   },
 
+  /**
+   * 获取用户信息
+   * @param id 用户id
+   */
+  getUserInfo: async (id: number): Promise<User> => {
+    const res = await request<API.AjaxResult<User>>(`/api/user/query`, {
+      method: 'POST',
+      data: {id}
+    });
+    return res.data;
+  },
+
+  /**
+   * 退出登录
+   */
+  logout: async (): Promise<void> => {
+    await request<API.AjaxResult<void>>(`/api/logout`, {
+      method: 'POST'
+    });
+  },
+
 }

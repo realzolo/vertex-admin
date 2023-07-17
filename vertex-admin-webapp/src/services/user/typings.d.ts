@@ -1,7 +1,9 @@
 declare interface User {
   id: number;
+  username: string;
   nickname: string;
   name: string;
+  avatar: string;
   introduction: string;
   gender: number;
   birthday: string;
