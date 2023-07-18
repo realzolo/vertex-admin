@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
 import service from '@/services/user';
+import {isLoginPage} from "@/utils/route.utils";
 
 const useUser = () => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    if (location.href.includes('/login')) return;
+    if (isLoginPage()) return;
 
     const userinfo = JSON.parse(localStorage.getItem('userinfo') || '{}');
     if (userinfo.id) {

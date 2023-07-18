@@ -1,5 +1,6 @@
 import {AxiosError, history, RequestConfig} from "@umijs/max";
 import {message as Message, Modal} from "antd";
+import {clearUserInfo, isLoginPage} from "@/utils/route.utils";
 
 Message.config({
   maxCount: 1,
@@ -110,23 +111,21 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
 let isModalShow = false;
 const handleUnauthorized = () => {
   // 登录页无需处理
-  if (location.pathname.includes('/login')) return;
+  if (isLoginPage()) return;
 
   // 存在token, 但是请求失败, 说明token过期
   if (localStorage.getItem('token')) {
     if (isModalShow) return;
     isModalShow = true;
-    Modal.confirm({
+    Modal.warn({
       title: '提示',
       content: '您的身份已过期，请重新登录。',
       okText: '重新登录',
-      getContainer: false,
       centered: true,
-      onCancel: () => {
-        isModalShow = false;
-      },
+      keyboard: false,
       onOk: () => {
         isModalShow = false;
+        clearUserInfo();
         window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
       }
     });
@@ -135,6 +134,7 @@ const handleUnauthorized = () => {
 
   // 不存在token, 说明未登录
   Message.error("您还未登录，请登录后再试。");
+  clearUserInfo();
   setTimeout(() => {
     window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
   }, 1000);

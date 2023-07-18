@@ -3,6 +3,7 @@ import {Dropdown, MenuProps, Modal} from "antd";
 import {GithubFilled, InfoCircleFilled, LogoutOutlined, QuestionCircleFilled} from "@ant-design/icons";
 import service from '@/services/user';
 import {HeaderProps} from "@ant-design/pro-components";
+import {clearUserInfo} from "@/utils/route.utils";
 
 const userinfo: User = JSON.parse(localStorage.getItem('userinfo') || '{}');
 
@@ -128,8 +129,7 @@ const logout = () => {
     content: '确定退出登录吗？',
     onOk: async () => {
       await service.logout();
-      localStorage.removeItem('token');
-      localStorage.removeItem('userinfo');
+      clearUserInfo();
       history.go(0);
     }
   });

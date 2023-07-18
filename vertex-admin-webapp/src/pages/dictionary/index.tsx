@@ -4,7 +4,7 @@ import {Button, message, Modal} from "antd";
 import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import DictValueTable from "@/pages/dictionary/components/DictValueTable";
-import GenericService, {GenericParam} from "@/services/common";
+import GenericService, {GenericPayload} from "@/services/common";
 
 const genericService = new GenericService('dictKey');
 const DictionaryPage: React.FC = () => {
@@ -16,7 +16,7 @@ const DictionaryPage: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
     const {current: page, pageSize, name, key} = params;
-    const param: GenericParam = {
+    const param: GenericPayload = {
       page,
       pageSize,
       condition: {

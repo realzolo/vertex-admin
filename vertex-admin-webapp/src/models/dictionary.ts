@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import service from "@/services/dictionary";
+import {isLoginPage} from "@/utils/route.utils";
 
 interface DictEntryMap {
   [key: string]: SelectOption[];
@@ -9,7 +10,7 @@ export default () => {
   const [dictionary, setDictionary] = useState<DictEntryMap>({});
 
   useEffect(() => {
-    if (location.href.includes('/login')) return;
+    if (isLoginPage()) return;
 
     service.getDictionary().then((res) => {
       setDictionary(res);

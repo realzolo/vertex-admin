@@ -14,6 +14,22 @@ export const patchRoutes = (defaultRoutes: Route[], userRoutes: Route[]) => {
 }
 
 /**
+ * 删除本地用户信息
+ */
+export const clearUserInfo = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('userinfo');
+}
+
+/**
+ * 判断当前页面是否非登录页面
+ */
+export const isLoginPage = () => {
+  const pathname = window.location.pathname;
+  return /^\/login(\?redirect=.*)?$|^\/$/.test(pathname);
+}
+
+/**
  * 构建路由表
  * @param menus 菜单数据
  * @param parentId 父级菜单ID
