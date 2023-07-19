@@ -1,5 +1,6 @@
 package com.onezol.vertex.core.security.authentication.fillter;
 
+import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.util.JwtUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.cache.RedisCache;
@@ -25,7 +26,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.onezol.vertex.common.constant.Constants.AUTHORIZATION_HEADER;
-import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 
 /**
@@ -35,7 +35,6 @@ import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     public static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
     private final RedisCache redisCache;
-
     /**
      * token过期时间: 默认1小时 （单位秒）
      */
@@ -69,7 +68,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
             // 从Redis中获取用户信息, 并验证用户信息是否存在
             String subject = JwtUtils.getSubjectFromToken(token);
-            UserIdentity user = redisCache.getCacheObject(USER_PREFIX + subject);
+            String redisKey = RedisKey.ONLINE_USERINFO + subject;
+            UserIdentity user = redisCache.getCacheObject(redisKey);
             if (Objects.isNull(user)) {
                 filterChain.doFilter(request, response);
                 return;
@@ -83,7 +83,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 String renewedToken = renewToken(claims);
                 response.setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_HEADER + renewedToken);
                 // 续期Redis中的用户信息
-                redisCache.expire(USER_PREFIX + subject, expirationTime, TimeUnit.SECONDS);
+                redisCache.expire(redisKey, expirationTime, TimeUnit.SECONDS);
                 logger.info("用户[{}]的token已续期", subject);
             }
 

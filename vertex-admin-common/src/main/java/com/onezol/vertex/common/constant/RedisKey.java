@@ -7,7 +7,8 @@ public interface RedisKey {
     /**
      * 用户信息前缀
      */
-    String USER_PREFIX = "user:";
+    String ONLINE_USERID_SET = "online_userid_set";
+    String ONLINE_USERINFO = "online_userinfo:";
 
     /**
      * 字典

@@ -36,7 +36,7 @@ public class LoggableAspect implements InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(LoggableAspect.class);
     public final AccessLogService accessLogService;
 
-    @Value("${vertex.log.access-log.enable:true}")
+    @Value("${app.log.access-log.enable:true}")
     private boolean enable;
 
     public LoggableAspect(AccessLogService accessLogService) {

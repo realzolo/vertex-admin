@@ -5,7 +5,7 @@ import com.onezol.vertex.common.util.JsonUtils;
 import com.onezol.vertex.common.util.JwtUtils;
 import com.onezol.vertex.common.util.ResponseUtils;
 import com.onezol.vertex.common.util.StringUtils;
-import com.onezol.vertex.core.cache.RedisCache;
+import com.onezol.vertex.core.security.management.common.OnlineUserManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.onezol.vertex.common.constant.Constants.AUTHORIZATION_HEADER;
-import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 
 /**
@@ -24,10 +23,10 @@ import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
  */
 @Component
 public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
-    private final RedisCache redisCache;
+    private final OnlineUserManager onlineUserManager;
 
-    public UserLogoutSuccessHandler(RedisCache redisCache) {
-        this.redisCache = redisCache;
+    public UserLogoutSuccessHandler(OnlineUserManager onlineUserManager) {
+        this.onlineUserManager = onlineUserManager;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
             String subject = JwtUtils.getSubjectFromToken(token);
 
             // 清除Redis缓存
-            redisCache.deleteObject(USER_PREFIX + subject);
+            onlineUserManager.removeOnlineUser(subject);
         }
         // 清除上下文
         SecurityContextHolder.clearContext();

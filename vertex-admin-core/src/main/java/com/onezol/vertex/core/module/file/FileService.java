@@ -165,7 +165,7 @@ public class FileService extends GenericServiceImpl<FileDetailMapper, FileDetail
      */
     private String generateTempKey(FileDetailEntity fileDetail) {
         String arg = fileDetail.toString() + System.currentTimeMillis();
-        return EncryptionUtils.encryptMd5(arg);
+        return EncryptionUtils.encryptMD5(arg);
     }
 
 }

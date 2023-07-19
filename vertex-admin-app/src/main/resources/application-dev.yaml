@@ -68,21 +68,19 @@ spring:
     expiration-time: 3600  # token有效期, 1小时
     renew-threshold: 900   # token续期的阈值, 15分钟
 
-# 加密配置 TODO: 即将废弃
-encryption:
-  password: FA1F437D388544B8B848F1AAD8BF52F0
-  iterations: 1000
-
 # 日志配置
 logging:
   level:
     root: info
 
 # 应用配置
-vertex:
+app:
   log:
     access-log:
       enable: true
+  encrypt:
+    secret-key: FA1F437D388544B8B848F1AAD8BF52F0
+
 
 mybatis-plus:
   configuration:

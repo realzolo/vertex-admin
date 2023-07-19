@@ -5,6 +5,7 @@ import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.base.controller.GenericController;
+import com.onezol.vertex.core.security.authentication.model.UserIdentity;
 import com.onezol.vertex.core.security.management.model.dto.User;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import com.onezol.vertex.core.security.management.model.payload.UserUpdatePayload;
@@ -52,6 +53,12 @@ public class UserController extends GenericController<UserService> {
     protected boolean delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
         return false;
+    }
+
+    @Operation(summary = "获取在线用户", description = "获取在线用户列表")
+    @GetMapping("/online-users")
+    public ListResultWrapper<UserIdentity> getOnlineUsers(@RequestParam Long page, @RequestParam Long pageSize) {
+        return userService.getOnlineUsers(page, pageSize);
     }
 
     @Override

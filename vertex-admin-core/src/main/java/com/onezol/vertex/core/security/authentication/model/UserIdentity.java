@@ -2,6 +2,7 @@ package com.onezol.vertex.core.security.authentication.model;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
+import com.onezol.vertex.common.util.EncryptionUtils;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,11 +14,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserIdentity implements UserDetails {
-    /**
-     * 身份标识
-     */
-    private String uuid;
-
     /**
      * 登录时间
      */
@@ -113,12 +109,8 @@ public class UserIdentity implements UserDetails {
         return user.getStatus() != AccountStatus.DISABLED;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public String getKey() {
+        return EncryptionUtils.encryptMD5(user.getId().toString());
     }
 
     public LocalDateTime getLoginTime() {

@@ -1,14 +1,13 @@
 package com.onezol.vertex.core.security.authentication.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.onezol.vertex.common.util.JwtUtils;
-import com.onezol.vertex.common.util.NetUtils;
-import com.onezol.vertex.common.util.RequestUtils;
-import com.onezol.vertex.common.util.StringUtils;
+import com.onezol.vertex.common.constant.RedisKey;
+import com.onezol.vertex.common.util.*;
 import com.onezol.vertex.core.base.service.impl.BaseServiceImpl;
 import com.onezol.vertex.core.cache.RedisCache;
 import com.onezol.vertex.core.security.authentication.exception.LoginException;
 import com.onezol.vertex.core.security.authentication.model.UserIdentity;
+import com.onezol.vertex.core.security.management.common.OnlineUserManager;
 import com.onezol.vertex.core.security.management.mapper.UserMapper;
 import com.onezol.vertex.core.security.management.model.dto.User;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
@@ -24,22 +23,21 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import static com.onezol.vertex.common.constant.RedisKey.USER_PREFIX;
 
 @Service
 public class UserAuthService extends BaseServiceImpl<UserMapper, UserEntity> {
     private final RedisCache redisCache;
     private final AuthenticationManager authenticationManager;
+    private final OnlineUserManager onlineUserManager;
 
     @Value("${spring.jwt.expiration-time}")
     private Integer expirationTime;
 
-    public UserAuthService(RedisCache redisCache, AuthenticationManager authenticationManager) {
+    public UserAuthService(RedisCache redisCache, AuthenticationManager authenticationManager, OnlineUserManager onlineUserManager) {
         this.redisCache = redisCache;
         this.authenticationManager = authenticationManager;
+        this.onlineUserManager = onlineUserManager;
     }
 
     /**
@@ -116,11 +114,11 @@ public class UserAuthService extends BaseServiceImpl<UserMapper, UserEntity> {
         this.recordLoginDetails(userIdentity);
 
         // 生成token
-        String uuid = userIdentity.getUuid();
-        String token = JwtUtils.generateToken(uuid);
+        String subject = userIdentity.getKey();
+        String token = JwtUtils.generateToken(subject);
 
         // 将用户信息放入缓存
-        redisCache.setCacheObject(USER_PREFIX + uuid, userIdentity, expirationTime, TimeUnit.SECONDS);
+        onlineUserManager.addOnlineUser(userIdentity, expirationTime);
 
         // 处理返回信息
         UserEntity userEntity = userIdentity.getUser();
@@ -146,7 +144,6 @@ public class UserAuthService extends BaseServiceImpl<UserMapper, UserEntity> {
      */
     private void recordLoginDetails(final UserIdentity user) {
         LocalDateTime loginTime = LocalDateTime.now();
-        String uuid = UUID.randomUUID().toString().replace("-", "");
         String ip = NetUtils.getHostIp();
         String location = NetUtils.getRealAddressByIP(ip);
         String agentStr = RequestUtils.getRequest().getHeader("User-Agent");
@@ -154,7 +151,6 @@ public class UserAuthService extends BaseServiceImpl<UserMapper, UserEntity> {
         String browser = userAgent.getBrowser().getName();
         String os = userAgent.getOperatingSystem().getName();
 
-        user.setUuid(uuid);
         user.setLoginTime(loginTime);
         user.setIp(ip);
         user.setLocation(location);
@@ -182,13 +178,14 @@ public class UserAuthService extends BaseServiceImpl<UserMapper, UserEntity> {
     /**
      * 获取当前登录用户信息
      *
-     * @param token token
+     * @param userId 用户ID
      * @return 当前登录用户信息
      */
-    public UserIdentity getCurrentUser(String token) {
-        if (StringUtils.isBlank(token)) {
+    public UserIdentity getCurrentUser(Long userId) {
+        if (userId == null) {
             return null;
         }
-        return redisCache.getCacheObject(USER_PREFIX + token);
+        String key = RedisKey.ONLINE_USERINFO + EncryptionUtils.encryptMD5(String.valueOf(userId));
+        return redisCache.getCacheObject(key);
     }
 }

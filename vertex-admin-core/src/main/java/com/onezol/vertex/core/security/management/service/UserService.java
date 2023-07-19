@@ -1,21 +1,28 @@
 package com.onezol.vertex.core.security.management.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.security.authentication.model.UserIdentity;
+import com.onezol.vertex.core.security.management.common.OnlineUserManager;
 import com.onezol.vertex.core.security.management.mapper.UserMapper;
 import com.onezol.vertex.core.security.management.model.dto.User;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import com.onezol.vertex.core.util.ModelUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService extends GenericServiceImpl<UserMapper, UserEntity> {
     private final RoleService roleService;
     private final MenuService menuService;
+    private final OnlineUserManager onlineUserManager;
 
-    public UserService(RoleService roleService, MenuService menuService) {
+    public UserService(RoleService roleService, MenuService menuService, OnlineUserManager onlineUserManager) {
         this.roleService = roleService;
         this.menuService = menuService;
+        this.onlineUserManager = onlineUserManager;
     }
 
     /**
@@ -62,5 +69,18 @@ public class UserService extends GenericServiceImpl<UserMapper, UserEntity> {
         user.setRoles(roleService.getKeysByUserId(user.getId()));
         user.setPermissions(menuService.getPermsByUserId(user.getId()));
         return user;
+    }
+
+    /**
+     * 获取在线用户列表
+     *
+     * @param page     页码
+     * @param pageSize 每页数量
+     * @return 在线用户列表
+     */
+    public ListResultWrapper<UserIdentity> getOnlineUsers(Long page, Long pageSize) {
+        List<UserIdentity> users = onlineUserManager.getOnlineUsers(page, pageSize);
+        long count = onlineUserManager.getOnlineUserCount();
+        return new ListResultWrapper<>(users, count);
     }
 }

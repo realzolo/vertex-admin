@@ -1,9 +1,6 @@
 package com.onezol.vertex.core.cache;
 
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -168,6 +165,44 @@ public class RedisCache {
     }
 
     /**
+     * 缓存有序集合
+     *
+     * @param key    缓存键值
+     * @param values 缓存的数据及其分值
+     * @return 缓存数据的对象
+     */
+    public <T> BoundZSetOperations<String, T> setCacheZSet(final String key, final Map<T, Double> values) {
+        BoundZSetOperations<String, T> zSetOperation = redisTemplate.boundZSetOps(key);
+        for (Map.Entry<T, Double> entry : values.entrySet()) {
+            zSetOperation.add(entry.getKey(), entry.getValue());
+        }
+        return zSetOperation;
+    }
+
+    /**
+     * 获得缓存的有序集合
+     *
+     * @param key   键
+     * @param start ZRANGE 命令的开始索引
+     * @param end   ZRANGE 命令的结束索引
+     * @return 有序集合的成员和分值
+     */
+    public <T> Set<T> getCacheZSet(final String key, long start, long end) {
+        return redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+
+    /**
+     * 删除有序集合中的元素
+     *
+     * @param key    键
+     * @param values 值
+     */
+    public void deleteZSet(final String key, final Object... values) {
+        redisTemplate.opsForZSet().remove(key, values);
+    }
+
+    /**
      * 缓存Map
      *
      * @param key     键
@@ -242,5 +277,46 @@ public class RedisCache {
      */
     public Collection<String> keys(final String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+
+    /**
+     * 获取列表(List)的长度
+     *
+     * @param key 键
+     * @return 列表的长度
+     */
+    public Long getListSize(final String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    /**
+     * 获取集合(Set)的元素数量
+     *
+     * @param key 键
+     * @return 集合的元素数量
+     */
+    public Long getSetSize(final String key) {
+        return redisTemplate.opsForSet().size(key);
+    }
+
+    /**
+     * 获取有序集合(ZSet)的成员数量
+     *
+     * @param key 键
+     * @return 有序集合的成员数量
+     */
+    public Long getZSetSize(final String key) {
+        return redisTemplate.opsForZSet().size(key);
+    }
+
+    /**
+     * 获取Hash中的项数
+     *
+     * @param key 键
+     * @return Hash中的项数
+     */
+    public Long getMapSize(final String key) {
+        return redisTemplate.opsForHash().size(key);
     }
 }
