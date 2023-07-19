@@ -49,8 +49,8 @@ public class MessageController extends GenericController<MessageService> {
     @Override
     @Operation(summary = "删除消息")
     @PostMapping("/delete")
-    protected void delete(@RequestBody GenericPayload payload) {
-        super.delete(payload);
+    protected boolean delete(@RequestBody GenericPayload payload) {
+        return super.delete(payload);
     }
 
     @Override

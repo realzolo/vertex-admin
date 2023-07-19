@@ -95,8 +95,9 @@ public class MenuController extends GenericController<MenuService> {
     @Operation(summary = "菜单删除", description = "菜单删除")
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('system:menu:delete')")
-    protected void delete(@RequestBody GenericPayload payload) {
+    protected boolean delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
+        return false;
     }
 
     @Override

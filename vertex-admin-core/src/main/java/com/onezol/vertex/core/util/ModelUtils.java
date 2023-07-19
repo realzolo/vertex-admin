@@ -244,14 +244,14 @@ public class ModelUtils {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
-            if (StringUtils.isNotBlank(entryKey)) {
-                String value = DictUtils.getDictValue(entryKey, code);
-                try {
-                    targetField.set(target, value);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (StringUtils.isNotBlank(entryKey)) {
+//                String value = DictUtils.getDictValue(entryKey, code);
+//                try {
+//                    targetField.set(target, value);
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
     }
 
@@ -307,14 +307,14 @@ public class ModelUtils {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
-            if (StringUtils.isNotBlank(entryKey)) {
-                Integer code = DictUtils.getDictCode(entryKey, value);
-                try {
-                    targetField.set(target, code);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (StringUtils.isNotBlank(entryKey)) {
+//                Integer code = DictUtils.getDictCode(entryKey, value);
+//                try {
+//                    targetField.set(target, code);
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
     }
 

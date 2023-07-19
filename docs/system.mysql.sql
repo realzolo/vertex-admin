@@ -275,3 +275,20 @@ CREATE TABLE sys_message
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='消息表';
+
+-- sys_dictionary
+DROP TABLE IF EXISTS sys_dictionary;
+CREATE TABLE sys_dictionary
+(
+    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    dict_key   VARCHAR(50)  DEFAULT NULL COMMENT '字典键',
+    dict_value VARCHAR(50)  DEFAULT NULL COMMENT '字典值',
+    dict_code  INT          DEFAULT NULL COMMENT '字典码',
+    parent_id  BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '父ID',
+    remark     VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    created_at DATETIME COMMENT '创建时间',
+    updated_at DATETIME COMMENT '更新时间',
+    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (ID),
+    UNIQUE KEY IDX_SYS_DICTIONARY_DICT_KEY_DICT_VALUE_DICT_CODE (`DICT_KEY`, `DICT_VALUE`, `DICT_CODE`)
+)

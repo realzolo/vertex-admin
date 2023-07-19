@@ -58,14 +58,17 @@ public abstract class GenericController<S extends GenericService<? extends Entit
 
     /**
      * 删除： /xxx/delete
+     *
+     * @return
      */
-    protected void delete(GenericPayload payload) {
+    protected boolean delete(GenericPayload payload) {
         Long[] ids = payload.getIds();
         if (Objects.isNull(ids) || ids.length == 0) {
-            return;
+            return false;
         }
         boolean physicalDelete = !Objects.isNull(payload.getPhysicalDelete()) && payload.getPhysicalDelete();
         service.delete(ids, physicalDelete);
+        return physicalDelete;
     }
 
     /**

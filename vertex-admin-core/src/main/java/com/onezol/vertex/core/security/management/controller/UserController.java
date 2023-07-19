@@ -49,8 +49,9 @@ public class UserController extends GenericController<UserService> {
     @Override
     @Operation(summary = "删除用户", description = "删除用户")
     @PostMapping("/delete")
-    protected void delete(@RequestBody GenericPayload payload) {
+    protected boolean delete(@RequestBody GenericPayload payload) {
         super.delete(payload);
+        return false;
     }
 
     @Override

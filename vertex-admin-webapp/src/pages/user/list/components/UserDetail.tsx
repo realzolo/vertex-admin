@@ -44,7 +44,6 @@ const UserDetail: FC<SubPageProps> = (props) => {
     const user = await genericService.query(itemKey as number) as User;
     // 解析角色
     const roleData = (data as SelectOption[]) || [];
-    console.log(roleData)
     const roleKeys = user.roles;
     const roles = roleData.map(item => {
       if (roleKeys?.includes(item.key!) && !IGNORE_ROLE.includes(item.key!)) {

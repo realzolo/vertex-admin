@@ -4,9 +4,10 @@ import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import React, {useRef, useState} from "react";
 import GenericService, {GenericPayload} from "@/services/common";
+import service from '@/services/dictionary';
 
 const genericService = new GenericService('dictionary');
-const DictValueTable: React.FC<SubPageProps> = (props) => {
+const DictionaryTable: React.FC<SubPageProps> = (props) => {
   const {visible, hide, itemKey, data} = props;
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
@@ -16,24 +17,22 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
   const actionRef = useRef<ActionType>();
 
   const fetchData = async (params: any) => {
-    const {current: page, pageSize, value, key, code} = params;
+    const {current: page, pageSize, dictValue, dictKey, dictCode} = params;
     const payload: GenericPayload = {
       page,
       pageSize,
       condition: {
         like: {
-          value,
-          key,
-          code
+          dictValue, dictKey, dictCode
         },
         eq: {
-          entryId: itemKey
+          parentId: itemKey
         }
       }
     }
     const res = await genericService.queryList(payload);
     return {
-      data: res.items as DictValue[],
+      data: res.items as Dictionary[],
       total: res.total,
     }
   }
@@ -42,17 +41,17 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
    * 新建
    * @param values
    */
-  const doCreate = async (values: DictValue) => {
+  const doCreate = async (values: Dictionary) => {
     if (typeof itemKey !== "number") {
       message.error("字典项ID不能为空");
       return;
     }
     values = {
       ...values,
-      entryId: itemKey,
-      dictKey: (data as DictEntry).entryKey.toUpperCase() + "." + values.dictKey.toUpperCase(),
+      parentId: itemKey,
+      dictKey: (data as Dictionary).dictKey + "." + values.dictKey,
     }
-    const res = await genericService.save(values);
+    const res = await service.saveDictionary(values);
     if (res) {
       handleModalVisible(false);
       actionRef.current?.reloadAndRest?.();
@@ -78,14 +77,14 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
     });
   }
 
-  const columns: ProDescriptionsItemProps<DictValue>[] = [
+  const columns: ProDescriptionsItemProps<Dictionary>[] = [
     {
       title: '序号',
       valueType: 'index',
     },
     {
       title: '字典值',
-      dataIndex: 'value',
+      dataIndex: 'dictValue',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -116,8 +115,8 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
     },
     {
       title: '字典代码',
-      dataIndex: 'code',
-      valueType: 'text',
+      dataIndex: 'dictCode',
+      valueType: 'digit',
       formItemProps: {
         rules: [
           {
@@ -207,4 +206,4 @@ const DictValueTable: React.FC<SubPageProps> = (props) => {
   )
 }
 
-export default DictValueTable;
+export default DictionaryTable;

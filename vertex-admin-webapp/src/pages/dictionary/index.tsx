@@ -5,30 +5,33 @@ import {DEFAULT_PRO_TABLE_PROPS} from "@/constants";
 import CreateForm from "@/components/CreateForm";
 import DictValueTable from "@/pages/dictionary/components/DictValueTable";
 import GenericService, {GenericPayload} from "@/services/common";
+import service from '@/services/dictionary';
 
-const genericService = new GenericService('dictKey');
+const genericService = new GenericService('dictionary');
 const DictionaryPage: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValue, setStepFormValue] = useState<DictEntry>();
+  const [stepFormValue, setStepFormValue] = useState<Dictionary>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [dictValueVisible, setDictValueVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const fetchData = async (params: any) => {
-    const {current: page, pageSize, name, key} = params;
-    const param: GenericPayload = {
+    const {current: page, pageSize, dictKey, dictValue} = params;
+    const payload: GenericPayload = {
       page,
       pageSize,
       condition: {
         like: {
-          name,
-          key,
+          dictKey, dictValue
+        },
+        eq: {
+          parentId: 0
         }
       }
     }
-    const res = await genericService.queryList(param);
+    const res = await genericService.queryList(payload);
     return {
-      data: res.items as DictEntry[],
+      data: res.items as Dictionary[],
       total: res.total,
     }
   }
@@ -37,12 +40,9 @@ const DictionaryPage: React.FC = () => {
    * 新建
    * @param values
    */
-  const doCreate = async (values: DictEntry) => {
-    values = {
-      ...values,
-      entryKey: values.entryKey.toUpperCase()
-    }
-    const res = await genericService.save(values);
+  const doCreate = async (values: Dictionary) => {
+    values.parentId = 0;
+    const res = await service.saveDictionary(values);
     handleModalVisible(false);
     if (res) {
       actionRef.current?.reloadAndRest?.();
@@ -73,19 +73,19 @@ const DictionaryPage: React.FC = () => {
    * 查看字典值
    * @param record
    */
-  const onViewDictValue = (record: DictEntry) => {
+  const onViewDictValue = (record: Dictionary) => {
     setStepFormValue(record);
     setDictValueVisible(true);
   }
 
-  const columns: ProDescriptionsItemProps<DictEntry>[] = [
+  const columns: ProDescriptionsItemProps<Dictionary>[] = [
     {
       title: '序号',
       valueType: 'index',
     },
     {
       title: '字典名称',
-      dataIndex: 'entryName',
+      dataIndex: 'dictValue',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -100,7 +100,7 @@ const DictionaryPage: React.FC = () => {
     },
     {
       title: '唯一标识',
-      dataIndex: 'entryKey',
+      dataIndex: 'dictKey',
       valueType: 'text',
       copyable: true,
       formItemProps: {

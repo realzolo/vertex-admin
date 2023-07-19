@@ -14,7 +14,6 @@ import com.onezol.vertex.common.util.ConditionUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.base.mapper.BaseMapper;
 import com.onezol.vertex.core.base.service.GenericService;
-import com.onezol.vertex.core.util.DictUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,6 +140,7 @@ public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends Base
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Deprecated
     public T save(Map<String, Object> data) {
         if (Objects.isNull(data) || data.isEmpty()) {
             throw new BusinessException("保存失败, 无效的数据");
@@ -192,20 +192,6 @@ public abstract class GenericServiceImpl<M extends BaseMapper<T>, T extends Base
                         // 存在且被逻辑删除的数据, 则直接物理删除(此处不直接更新是因为某些实体类的字段并不会使用UNIQUE策略，需要数据库层面的唯一性校验)
                         this.deleteById(existEntity.getId());
                     }
-                }
-            }
-
-            // 字典转换
-            if (Objects.nonNull(dictDefinition)) {
-                String entryKey = dictDefinition.value();
-//                DictValue dictvalue = dictValueService.getByValue(entryKey, fieldValue.toString());
-                int code = DictUtils.getDictCode(entryKey, fieldValue.toString());
-                // 反射设置字典值
-                try {
-                    field.setAccessible(true);
-                    field.set(t, code);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }

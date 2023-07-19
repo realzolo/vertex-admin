@@ -21,7 +21,7 @@ const MessageEditForm: FC<SubPageProps> = (props) => {
   // const [value, setValue] = useState<string>('');
   const formRef = useRef<ProFormInstance>();
   const inputRef = createRef<ReactQuill>();
-  const {buildOptions} = useModel('dictionary');
+  const {getOptions} = useModel('dictionary');
 
   /** 提交表单 */
   const onSubmit = async (t: string) => {
@@ -82,7 +82,7 @@ const MessageEditForm: FC<SubPageProps> = (props) => {
         >
           <ProFormRadio.Group
             radioType='button'
-            options={buildOptions('messageType', '系统消息', '用户消息')}
+            options={getOptions('messageType', '系统消息', '用户消息')}
           />
         </ProFormItem>
         <ProFormGroup>
