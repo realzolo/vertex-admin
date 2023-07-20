@@ -41,3 +41,17 @@ declare interface UserUpdateParam {
   email: string;
   status: number;
 }
+
+declare interface OnlineUser {
+  uid: number;
+  username: string;
+  nickname: string;
+  avatar: string;
+  ip: string;
+  browser: string;
+  os: string;
+  location: string;
+  loginTime: string;
+  onlineTime: string;
+  isAdministrator: boolean;
+}

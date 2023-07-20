@@ -3,15 +3,15 @@ package com.onezol.vertex.core.security.management.service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
-import com.onezol.vertex.core.security.authentication.model.UserIdentity;
 import com.onezol.vertex.core.security.management.common.OnlineUserManager;
 import com.onezol.vertex.core.security.management.mapper.UserMapper;
+import com.onezol.vertex.core.security.management.model.dto.OnlineUser;
 import com.onezol.vertex.core.security.management.model.dto.User;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import com.onezol.vertex.core.util.ModelUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService extends GenericServiceImpl<UserMapper, UserEntity> {
@@ -78,9 +78,20 @@ public class UserService extends GenericServiceImpl<UserMapper, UserEntity> {
      * @param pageSize 每页数量
      * @return 在线用户列表
      */
-    public ListResultWrapper<UserIdentity> getOnlineUsers(Long page, Long pageSize) {
-        List<UserIdentity> users = onlineUserManager.getOnlineUsers(page, pageSize);
+    public ListResultWrapper<OnlineUser> getOnlineUsers(Long page, Long pageSize) {
+        Set<OnlineUser> users = onlineUserManager.getOnlineUsers(page, pageSize);
         long count = onlineUserManager.getOnlineUserCount();
         return new ListResultWrapper<>(users, count);
+    }
+
+    /**
+     * 强制用户下线
+     *
+     * @param userId 用户ID
+     * @return 是否成功
+     */
+    public boolean forceLogout(Long userId) {
+        onlineUserManager.removeOnlineUser(userId);
+        return true;
     }
 }

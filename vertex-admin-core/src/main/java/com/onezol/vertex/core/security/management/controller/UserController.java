@@ -5,7 +5,7 @@ import com.onezol.vertex.common.model.dto.DTO;
 import com.onezol.vertex.common.model.payload.GenericPayload;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
 import com.onezol.vertex.core.base.controller.GenericController;
-import com.onezol.vertex.core.security.authentication.model.UserIdentity;
+import com.onezol.vertex.core.security.management.model.dto.OnlineUser;
 import com.onezol.vertex.core.security.management.model.dto.User;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import com.onezol.vertex.core.security.management.model.payload.UserUpdatePayload;
@@ -57,8 +57,14 @@ public class UserController extends GenericController<UserService> {
 
     @Operation(summary = "获取在线用户", description = "获取在线用户列表")
     @GetMapping("/online-users")
-    public ListResultWrapper<UserIdentity> getOnlineUsers(@RequestParam Long page, @RequestParam Long pageSize) {
+    public ListResultWrapper<OnlineUser> getOnlineUsers(@RequestParam Long page, @RequestParam Long pageSize) {
         return userService.getOnlineUsers(page, pageSize);
+    }
+
+    @Operation(summary = "强制下线用户")
+    @DeleteMapping("/force-logout/{uid}")
+    public boolean forceLogout(@PathVariable("uid") Long userId) {
+        return userService.forceLogout(userId);
     }
 
     @Override

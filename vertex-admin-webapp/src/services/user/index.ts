@@ -58,4 +58,28 @@ export default {
     });
   },
 
+  /**
+   * 获取在线用户列表
+   */
+  getOnlineUserList: async (page: number, pageSize: number): Promise<API.ListWrapper<OnlineUser>> => {
+    const res = await request<API.AjaxResult<API.ListWrapper<OnlineUser>>>(`/api/user/online-users`, {
+      method: 'GET',
+      params: {
+        page,
+        pageSize
+      }
+    });
+    return res.data;
+  },
+
+  /**
+   * 强制下线
+   * @param uid 用户ID
+   */
+  forceLogout: async (uid: number): Promise<boolean> => {
+    const res = await request<API.AjaxResult<boolean>>(`/api/user/force-logout/${uid}`, {
+      method: 'DELETE',
+    });
+    return res.data;
+  }
 }

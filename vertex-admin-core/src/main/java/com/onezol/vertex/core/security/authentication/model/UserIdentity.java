@@ -1,6 +1,7 @@
 package com.onezol.vertex.core.security.authentication.model;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
 import com.onezol.vertex.common.util.EncryptionUtils;
 import com.onezol.vertex.core.security.management.model.entity.UserEntity;
@@ -17,6 +18,7 @@ public class UserIdentity implements UserDetails {
     /**
      * 登录时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime loginTime;
 
     /**

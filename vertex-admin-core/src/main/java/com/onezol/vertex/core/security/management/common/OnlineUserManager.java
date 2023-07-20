@@ -1,9 +1,12 @@
 package com.onezol.vertex.core.security.management.common;
 
 import com.onezol.vertex.common.constant.RedisKey;
+import com.onezol.vertex.common.util.DateUtils;
 import com.onezol.vertex.common.util.EncryptionUtils;
 import com.onezol.vertex.core.cache.RedisCache;
 import com.onezol.vertex.core.security.authentication.model.UserIdentity;
+import com.onezol.vertex.core.security.management.model.dto.OnlineUser;
+import com.onezol.vertex.core.security.management.model.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -76,15 +79,37 @@ public class OnlineUserManager {
      * @param pageSize 每页大小
      * @return 在线用户信息
      */
-    public List<UserIdentity> getOnlineUsers(Long page, Long pageSize) {
+    public Set<OnlineUser> getOnlineUsers(Long page, Long pageSize) {
         long startIndex = (page - 1) * pageSize;
         long endIndex = page * pageSize - 1;
         // 获取在线用户ID集合
         Set<Object> keySet = redisCache.getCacheZSet(RedisKey.ONLINE_USERID_SET, startIndex, endIndex);
         // 获取在线用户信息
-        List<UserIdentity> users = new ArrayList<>(keySet.size());
-        keySet.forEach(key -> users.add(redisCache.getCacheObject(RedisKey.ONLINE_USERINFO + key)));
-        return users;
+        List<UserIdentity> userIdentities = new ArrayList<>(keySet.size());
+        keySet.forEach(key -> userIdentities.add(redisCache.getCacheObject(RedisKey.ONLINE_USERINFO + key)));
+
+        // 用户信息转换
+        HashSet<OnlineUser> onlineUsers = new HashSet<>(userIdentities.size());
+        for (UserIdentity ui : userIdentities) {
+            UserEntity user = ui.getUser();
+            OnlineUser ou = OnlineUser.builder()
+                    .uid(user.getId())
+                    .username(user.getUsername())
+                    .nickname(user.getNickname())
+                    .avatar(user.getAvatar())
+                    .ip(ui.getIp())
+                    .browser(ui.getBrowser())
+                    .os(ui.getOs())
+                    .location(ui.getLocation())
+                    .loginTime(ui.getLoginTime())
+                    .onlineTime(ui.getLocation())
+                    .isAdministrator(ui.getRoles().contains("admin"))
+                    .onlineTime(DateUtils.shortTimeDifference(ui.getLoginTime(), LocalDateTime.now()))
+                    .build();
+            onlineUsers.add(ou);
+        }
+
+        return onlineUsers;
     }
 
     /**

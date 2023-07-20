@@ -2,26 +2,26 @@ package com.onezol.vertex.common.model.record;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.List;
+import java.util.Collection;
 
 public class ListResultWrapper<T> {
-    private List<T> items;
+    private Collection<T> items;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long total;
 
     public ListResultWrapper() {
     }
 
-    public ListResultWrapper(List<T> items, Long total) {
+    public ListResultWrapper(Collection<T> items, Long total) {
         this.items = items;
         this.total = total;
     }
 
-    public List<T> getItems() {
+    public Collection<T> getItems() {
         return items;
     }
 
-    public void setItems(List<T> items) {
+    public void setItems(Collection<T> items) {
         this.items = items;
     }
 
