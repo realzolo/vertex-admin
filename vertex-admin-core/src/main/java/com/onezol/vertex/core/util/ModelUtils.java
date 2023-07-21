@@ -14,6 +14,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+@Deprecated
 public class ModelUtils {
     /**
      * 将源对象转换为目标对象

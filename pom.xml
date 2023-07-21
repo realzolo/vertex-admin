@@ -35,7 +35,7 @@
         <fastjson2.version>2.0.34</fastjson2.version>
         <spring-file-storage.version>0.7.0</spring-file-storage.version>
         <aws-java-sdk-s3.version>1.12.502</aws-java-sdk-s3.version>
-        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <modelmapper.version>3.1.1</modelmapper.version>
         <knife4j.version>4.1.0</knife4j.version>
     </properties>
 
@@ -109,6 +109,12 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+                <version>${modelmapper.version}</version>
             </dependency>
             <!-- Knife4j: https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
             <dependency>

@@ -3,6 +3,7 @@ package com.onezol.vertex.core.security.management.service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.onezol.vertex.common.model.record.ListResultWrapper;
+import com.onezol.vertex.common.util.ObjectConverter;
 import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
 import com.onezol.vertex.core.security.management.mapper.MenuMapper;
 import com.onezol.vertex.core.security.management.model.dto.Menu;
@@ -118,7 +119,7 @@ public class MenuService extends GenericServiceImpl<MenuMapper, MenuEntity> {
         ListResultWrapper<MenuEntity> resultWrapper = new ListResultWrapper<>(records, pageResult.getTotal());
         return new HashMap<String, Object>() {{
             put("type", currentNode.getMenuType());
-            put("items", ModelUtils.convert(resultWrapper.getItems(), Menu.class));
+            put("items", ObjectConverter.convert(resultWrapper.getItems(), Menu.class));
             put("total", resultWrapper.getTotal());
         }};
     }
