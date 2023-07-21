@@ -1,4 +1,5 @@
 import React, {Fragment} from "react";
+import FourOhFourPage from "@/pages/error/404";
 
 /**
  * 路由处理
@@ -53,12 +54,11 @@ export const buildRoutes = (menus: Menu[], parentId = 0): Route[] => {
       };
 
       if (menu.component) {
-        let Page: React.ComponentType<any> | undefined;
-        try {
-          Page = React.lazy(() => import(/* @vite-ignore */`../pages${menu.component}`));
-        } catch (e) {
-          console.error(`页面组件${menu.component}加载失败, 请检查路径是否正确`);
-        }
+        const factory = () => import(/* @vite-ignore */`../pages${menu.component}`).catch(e => {
+          console.error(`页面组件'${menu.component}'加载失败, 请检查路径是否配置正确`);
+          return {default: FourOhFourPage};
+        });
+        const Page = React.lazy(factory);
         route.element = (
           <React.Suspense fallback={<Fragment/>}>
             {Page && <Page/>}

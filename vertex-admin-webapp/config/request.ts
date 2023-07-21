@@ -1,4 +1,4 @@
-import {AxiosError, history, RequestConfig} from "@umijs/max";
+import {AxiosError, RequestConfig} from "@umijs/max";
 import {message as Message, Modal} from "antd";
 import {clearUserInfo, isLoginPage} from "@/utils/route.utils";
 
@@ -61,12 +61,10 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
       const {code, success, message, data} = error.info as API.AjaxResult<null>;
       switch (code) {
         case 10001: // 操作失败
-        // TODO: (冗余, 即将废弃)
-        case 10003: // 无访问权限
           Message.error(message);
           break;
         case 10004: // 禁止访问(403, 无权限)
-          history.replace('/403');
+          Message.error(message);
           break;
         case 10006: // 请求参数错误
           Message.error(message);
