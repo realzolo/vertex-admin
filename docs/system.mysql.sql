@@ -40,41 +40,6 @@ CREATE TABLE sys_role
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色表';
 
--- sys_permission_group
-DROP TABLE IF EXISTS sys_permission_group;
-CREATE TABLE sys_permission_group
-(
-    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    name       VARCHAR(50)         DEFAULT NULL COMMENT '权限组名',
-    `key`      VARCHAR(50)         DEFAULT NULL COMMENT 'key',
-    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
-    created_at DATETIME COMMENT '创建时间',
-    updated_at DATETIME COMMENT '更新时间',
-    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id),
-    KEY idx_sys_permission_group_name (name),
-    UNIQUE KEY idx_sys_permission_group_key (`key`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='权限表';
-
--- sys_permission
-DROP TABLE IF EXISTS sys_permission;
-CREATE TABLE sys_permission
-(
-    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    group_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '权限组ID',
-    name       VARCHAR(50)         DEFAULT NULL COMMENT '权限名称',
-    `key`      VARCHAR(50)         DEFAULT NULL COMMENT '权限key',
-    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
-    created_at DATETIME COMMENT '创建时间',
-    updated_at DATETIME COMMENT '更新时间',
-    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id),
-    KEY idx_sys_permission_name (name),
-    UNIQUE KEY idx_sys_permission_key (`key`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='权限表';
-
 -- sys_user_role
 DROP TABLE IF EXISTS sys_user_role;
 CREATE TABLE sys_user_role
@@ -91,56 +56,47 @@ CREATE TABLE sys_user_role
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户角色关联表';
 
--- sys_role_permission
-DROP TABLE IF EXISTS sys_role_permission;
-CREATE TABLE sys_role_permission
+-- sys_menu
+DROP TABLE IF EXISTS sys_menu;
+CREATE TABLE sys_menu
 (
-    id            BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    role_id       BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
-    permission_id BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '权限ID',
-    created_at    DATETIME COMMENT '创建时间',
-    updated_at    DATETIME COMMENT '更新时间',
-    deleted       TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id),
-    KEY idx_sys_role_permission_role_id (role_id),
-    KEY idx_sys_role_permission_permission_id (permission_id)
+    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
+    menu_name   VARCHAR(50)  DEFAULT NULL COMMENT '菜单名称',
+    path        VARCHAR(500) DEFAULT NULL COMMENT '路由地址',
+    component   VARCHAR(500) DEFAULT NULL COMMENT '组件路径',
+    icon        VARCHAR(50)  DEFAULT NULL COMMENT '菜单图标',
+    menu_type   VARCHAR(50)  DEFAULT NULL COMMENT '类型（M目录 C菜单 F按钮）',
+    visible     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '显示状态（true显示 false隐藏）',
+    status      TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '菜单状态（true正常 false停用）',
+    perms       VARCHAR(500) DEFAULT NULL COMMENT '权限字符串',
+    parent_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '父菜单ID',
+    parent_name VARCHAR(50)  DEFAULT NULL COMMENT '父菜单名称',
+    order_num   INT          DEFAULT NULL COMMENT '显示顺序',
+    is_frame    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否为外链（true是 false否）',
+    is_cache    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否缓存（true缓存 false不缓存）',
+    query       VARCHAR(500) DEFAULT NULL COMMENT '路由参数',
+    remark      VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    created_at  DATETIME COMMENT '创建时间',
+    updated_at  DATETIME COMMENT '更新时间',
+    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
+    PRIMARY KEY (id)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='角色权限关联表';
+  DEFAULT CHARSET = utf8mb4 COMMENT ='菜单表';
 
--- sys_dict_entry
-DROP TABLE IF EXISTS sys_dict_entry;
-CREATE TABLE sys_dict_entry
-(
-    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键项ID',
-    entry_name VARCHAR(50)         DEFAULT NULL COMMENT '字典项名称',
-    entry_key  VARCHAR(50)         DEFAULT NULL COMMENT '字典项',
-    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
-    created_at DATETIME COMMENT '创建时间',
-    updated_at DATETIME COMMENT '更新时间',
-    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id),
-    UNIQUE KEY idx_sys_dict_entry_entry_key (`entry_key`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='字典项表';
-
--- sys_dict_value
-DROP TABLE IF EXISTS sys_dict_value;
-CREATE TABLE sys_dict_value
+-- sys_role_menu
+DROP TABLE IF EXISTS sys_role_menu;
+CREATE TABLE sys_role_menu
 (
     id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    entry_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '字典项ID',
-    dict_key   VARCHAR(50)         DEFAULT NULL COMMENT '字典值key',
-    code       INT                 DEFAULT NULL COMMENT '字典code',
-    value      VARCHAR(50)         DEFAULT NULL COMMENT '字典value',
-    remark     VARCHAR(500)        DEFAULT NULL COMMENT '备注',
+    role_id BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
+    menu_id BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '菜单ID',
     created_at DATETIME COMMENT '创建时间',
     updated_at DATETIME COMMENT '更新时间',
     deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
     PRIMARY KEY (id),
-    UNIQUE KEY idx_sys_dict_value_dict_key (`dict_key`)
-
+    UNIQUE KEY idx_sys_role_menu_role_id_menu_id (`role_id`, `menu_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='字典value表';
+  DEFAULT CHARSET = utf8mb4 COMMENT ='角色菜单关联表';
 
 DROP TABLE IF EXISTS sys_user_login_log;
 CREATE TABLE sys_user_login_log
@@ -184,48 +140,6 @@ CREATE TABLE sys_file_detail
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='文件详情表';
-
--- sys_menu
-DROP TABLE IF EXISTS sys_menu;
-CREATE TABLE sys_menu
-(
-    id          BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    menu_name   VARCHAR(50)  DEFAULT NULL COMMENT '菜单名称',
-    path        VARCHAR(500) DEFAULT NULL COMMENT '路由地址',
-    component   VARCHAR(500) DEFAULT NULL COMMENT '组件路径',
-    icon        VARCHAR(50)  DEFAULT NULL COMMENT '菜单图标',
-    menu_type   VARCHAR(50)  DEFAULT NULL COMMENT '类型（M目录 C菜单 F按钮）',
-    visible     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '显示状态（true显示 false隐藏）',
-    status      TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '菜单状态（true正常 false停用）',
-    perms       VARCHAR(500) DEFAULT NULL COMMENT '权限字符串',
-    parent_id   BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '父菜单ID',
-    parent_name VARCHAR(50)  DEFAULT NULL COMMENT '父菜单名称',
-    order_num   INT          DEFAULT NULL COMMENT '显示顺序',
-    is_frame    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否为外链（true是 false否）',
-    is_cache    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '是否缓存（true缓存 false不缓存）',
-    query       VARCHAR(500) DEFAULT NULL COMMENT '路由参数',
-    remark      VARCHAR(500) DEFAULT NULL COMMENT '备注',
-    created_at  DATETIME COMMENT '创建时间',
-    updated_at  DATETIME COMMENT '更新时间',
-    deleted     TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='菜单表';
-
--- sys_role_menu
-DROP TABLE IF EXISTS sys_role_menu;
-CREATE TABLE sys_role_menu
-(
-    id         BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '主键ID',
-    role_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '角色ID',
-    menu_id    BIGINT(20) UNSIGNED DEFAULT NULL COMMENT '菜单ID',
-    created_at DATETIME COMMENT '创建时间',
-    updated_at DATETIME COMMENT '更新时间',
-    deleted    TINYINT(1) UNSIGNED DEFAULT 0 COMMENT '删除标识',
-    PRIMARY KEY (id),
-    UNIQUE KEY idx_sys_role_menu_role_id_menu_id (`role_id`, `menu_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='角色菜单关联表';
 
 -- sys_access_log
 DROP TABLE IF EXISTS sys_access_log;

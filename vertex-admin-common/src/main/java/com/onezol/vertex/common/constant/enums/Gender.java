@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 账户状态枚举
+ * 人员性别
  */
 @Getter
 @AllArgsConstructor
-public enum AccountStatus implements EnumService {
-    ACTIVE(0, "正常"),
-    LOCKED(1, "锁定"),
-    DISABLED(2, "禁用"),
-    EXPIRED(3, "过期");
+public enum Gender implements EnumService {
+    FEMALE(0, "女"),
+    MALE(1, "男");
 
     @EnumValue
     private final int code;

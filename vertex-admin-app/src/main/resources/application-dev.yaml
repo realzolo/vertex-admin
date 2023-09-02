@@ -14,9 +14,9 @@ spring:
     time-zone: GMT+8
   # 数据源基本配置
   datasource:
-    username: wbp
-    password: wbp
-    url: jdbc:mysql://db.onezol.com:3306/wbp?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://db.onezol.com:3306/vertex?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: vertex
+    password: vertex
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -75,6 +75,9 @@ logging:
 
 # 应用配置
 app:
+  config:
+    username: admin
+    password: admin
   log:
     access-log:
       enable: true
