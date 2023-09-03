@@ -1,13 +1,13 @@
 package com.onezol.vertex.core.module.message.service;
 
-import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
+import com.onezol.vertex.common.service.impl.GenericServiceImpl;
+import com.onezol.vertex.core.common.util.ModelUtils;
 import com.onezol.vertex.core.module.message.endpoint.MessageSocketEndpoint;
 import com.onezol.vertex.core.module.message.mapper.MessageMapper;
 import com.onezol.vertex.core.module.message.model.Message;
 import com.onezol.vertex.core.module.message.model.MessageEntity;
 import com.onezol.vertex.core.module.message.model.MessagePayload;
-import com.onezol.vertex.core.security.authentication.model.UserIdentity;
-import com.onezol.vertex.core.util.ModelUtils;
+import com.onezol.vertex.security.api.model.UserIdentity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

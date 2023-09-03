@@ -1,6 +1,5 @@
 package com.onezol.vertex.common.util;
 
-import com.onezol.vertex.common.model.record.ListResultWrapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -32,7 +31,7 @@ public class ObjectConverter {
     }
 
     /**
-     * 将源对象集合换为目标对象List
+     * 将源对象集合换为目标对象集合
      *
      * @param source 源对象集合
      * @return 转换后的目标对象List
@@ -83,21 +82,5 @@ public class ObjectConverter {
         }
         return modelMapper.map(source, new TypeToken<Map<String, Object>>() {
         }.getType());
-    }
-
-    /**
-     * 将源对象换为目标对象
-     *
-     * @param source 源对象
-     * @param clazz  目标对象类型
-     * @return 转换后的目标对象
-     */
-    public static <S, T> ListResultWrapper<T> convert(ListResultWrapper<S> source, Class<T> clazz) {
-        if (source == null) {
-            return null;
-        }
-        Collection<S> items = source.getItems();
-        Collection<T> result = convert(items, clazz);
-        return new ListResultWrapper<>(result, source.getTotal());
     }
 }

@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.onezol</groupId>
+        <groupId>com.onezol.vertex</groupId>
         <artifactId>vertex-admin</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.onezol.vertex</groupId>
+    <groupId>com.onezol.vertex.business</groupId>
     <artifactId>vertex-admin-business</artifactId>
     <version>1.0.0</version>
 
@@ -18,12 +18,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-core</artifactId>
+            <groupId>com.onezol.vertex.common</groupId>
+            <artifactId>vertex-admin-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-common</artifactId>
+            <groupId>com.onezol.vertex.core</groupId>
+            <artifactId>vertex-admin-core</artifactId>
         </dependency>
     </dependencies>
 </project>

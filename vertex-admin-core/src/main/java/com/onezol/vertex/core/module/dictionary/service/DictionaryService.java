@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.exception.BusinessException;
 import com.onezol.vertex.common.model.record.OptionType;
-import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
+import com.onezol.vertex.common.service.impl.GenericServiceImpl;
+import com.onezol.vertex.common.util.StringUtils;
+import com.onezol.vertex.core.common.util.ModelUtils;
 import com.onezol.vertex.core.module.dictionary.mapper.DictionaryMapper;
 import com.onezol.vertex.core.module.dictionary.model.DictionaryEntity;
 import com.onezol.vertex.core.module.dictionary.model.DictionaryPayload;
-import com.onezol.vertex.core.util.ModelUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,5 +93,22 @@ public class DictionaryService extends GenericServiceImpl<DictionaryMapper, Dict
         }
         DictionaryEntity entity = ModelUtils.convert(payload, DictionaryEntity.class);
         return this.saveOrUpdate(entity);
+    }
+
+    /**
+     * 字典翻英
+     *
+     * @param dictKey  字典key
+     * @param dictCode 字典code
+     * @return 字典值
+     */
+    public String translate(String dictKey, int dictCode) {
+        Wrapper<DictionaryEntity> wrapper = Wrappers.<DictionaryEntity>lambdaQuery()
+                .select(DictionaryEntity::getDictValue)
+                .eq(DictionaryEntity::getDictKey, dictKey)
+                .eq(DictionaryEntity::getDictCode, dictCode);
+        DictionaryEntity entity = this.getOne(wrapper);
+
+        return Optional.ofNullable(entity).map(DictionaryEntity::getDictValue).orElse(StringUtils.EMPTY);
     }
 }

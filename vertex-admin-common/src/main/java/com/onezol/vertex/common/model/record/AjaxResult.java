@@ -8,6 +8,7 @@ import java.io.Serializable;
 /**
  * 统一返回结果类
  */
+@Deprecated
 public class AjaxResult<T> implements Serializable {
     private int code;
     private boolean success;

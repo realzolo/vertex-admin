@@ -3,6 +3,7 @@ package com.onezol.vertex.common.util;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ public class JsonUtils {
      * @return 对象的JSON表示形式
      */
     public static String toJson(Object object) {
-        return JSON.toJSONString(object);
+        return JSON.toJSONString(object, JSONWriter.Feature.WriteMapNullValue);
     }
 
     /**
@@ -93,7 +94,7 @@ public class JsonUtils {
      * @return JSON数组字符串
      */
     public static <T> String listToJsonArray(List<T> list) {
-        return JSON.toJSONString(list);
+        return JSON.toJSONString(list, JSONWriter.Feature.WriteMapNullValue);
     }
 
     /**

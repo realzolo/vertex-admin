@@ -1,3 +1,28 @@
+server:
+  port: 10240
+  servlet:
+    context-path: /api
 spring:
+  application:
+    name: vertex-admin-app
   profiles:
     active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+# SpringDoc(Swagger)配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.onezol.vertex
+# Knife4j配置
+knife4j:
+  enable: true
+  basic:
+    enable: true
+    username: vertex
+    password: vertex

@@ -1,24 +1,11 @@
 package com.onezol.vertex.common.model.dto;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
-public abstract class BaseDTO extends DTO {
+@Data
+public abstract class BaseDTO implements DTO {
     private Long id;
     private LocalDateTime createdAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

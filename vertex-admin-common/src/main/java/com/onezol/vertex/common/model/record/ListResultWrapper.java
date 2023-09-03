@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
 
+@Deprecated
 public class ListResultWrapper<T> {
     private Collection<T> items;
     @JsonInclude(JsonInclude.Include.NON_NULL)
