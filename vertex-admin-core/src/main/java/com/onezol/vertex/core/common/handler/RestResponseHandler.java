@@ -3,6 +3,7 @@ package com.onezol.vertex.core.common.handler;
 import com.onezol.vertex.common.annotation.RestResponse;
 import com.onezol.vertex.common.model.record.GenericResponse;
 import com.onezol.vertex.common.util.JsonUtils;
+import com.onezol.vertex.core.common.exception.ControllerReturnNullValueException;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,13 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.onezol.vertex.common.constant.Constants.SYMBOL_NULL;
 
 @RestControllerAdvice
 public class RestResponseHandler implements ResponseBodyAdvice<Object> {
@@ -60,10 +60,6 @@ public class RestResponseHandler implements ResponseBodyAdvice<Object> {
         }
         // controller 返回 String
         if (body instanceof String) {
-            // 返回 null
-            if (Objects.equals(body, SYMBOL_NULL)) {
-                return JsonUtils.toJson(GenericResponse.success(null));
-            }
             return JsonUtils.toJson(GenericResponse.success(body));
         }
         // 处理异常
@@ -76,5 +72,10 @@ public class RestResponseHandler implements ResponseBodyAdvice<Object> {
             }
         }
         return GenericResponse.success(body);
+    }
+
+    @ExceptionHandler(ControllerReturnNullValueException.class)
+    public GenericResponse<?> handleControllerReturnNullValueException(ControllerReturnNullValueException ignored) {
+        return GenericResponse.success();
     }
 }

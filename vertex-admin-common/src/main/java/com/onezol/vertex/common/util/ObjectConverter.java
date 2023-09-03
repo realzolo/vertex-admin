@@ -2,8 +2,13 @@ package com.onezol.vertex.common.util;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 
-import java.util.*;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * 对象转换工具类
@@ -40,21 +45,15 @@ public class ObjectConverter {
         if (source == null) {
             return null;
         }
-        Collection<T> target;
-        if (source instanceof List) {
-            target = new ArrayList<>();
-        } else if (source instanceof Set) {
-            target = new HashSet<>();
-        } else if (source instanceof Queue) {
-            target = new LinkedList<>();
-        } else {
-            target = new ArrayList<>();
+        if (targetType == null) {
+            throw new IllegalArgumentException("Target type must not be null");
         }
-        for (S s : source) {
-            target.add(modelMapper.map(s, targetType));
-        }
-        return target;
+
+        Type targetCollectionType = new TypeToken<Collection<T>>() {
+        }.getType();
+        return modelMapper.map(source, targetCollectionType);
     }
+
 
     /**
      * 将Map换为目标对象
@@ -80,7 +79,13 @@ public class ObjectConverter {
         if (source == null) {
             return null;
         }
-        return modelMapper.map(source, new TypeToken<Map<String, Object>>() {
-        }.getType());
+
+        // MatchingStrategies.STANDARD: 要求属性名称必须相同, 容忍属性类型不一致
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        modelMapper.map(source, resultMap);
+
+        return resultMap;
     }
 }
