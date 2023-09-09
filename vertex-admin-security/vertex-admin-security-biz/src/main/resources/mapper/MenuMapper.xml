@@ -30,7 +30,16 @@
             m.component,
             m.perms,
             m.icon,
-            m.order_num
+            m.order_num,
+            m.visible,
+            m.is_cache,
+            m.is_frame,
+            m.status,
+            m.icon,
+            m.menu_name,
+            m.perms,
+            m.parent_name,
+            m.query
         FROM
             sys_menu m
             <if test="isAdmin = false">
@@ -40,7 +49,6 @@
         WHERE
             m.menu_type != 'F'
             AND m.status = true
-            AND m.visible = true
             AND m.deleted = false
             <if test="isAdmin = false">
                 AND ur.user_id = #{userId}
@@ -66,4 +74,31 @@
             AND m.deleted = false
     </select>
 
+    <!-- 根据ID/查找路径批量删除菜单
+     boolean deleteMenus(
+            @Param("ids") Set<Long> rootIds,
+            @Param("set") Set<String> searchPaths  使用likeRight
+    );
+    需要判断rootIds是否为空，searchPaths是否为空
+
+    delete from sys_menu where id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) or (search_path like 'xx%' or search_path like 'yy%' or search_path like 'zz%')
+     -->
+    <delete id="deleteMenus">
+        DELETE
+        FROM
+            sys_menu m
+        WHERE
+            <if test="ids != null and ids.size() > 0">
+                OR m.id IN
+                <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="searchPaths != null and searchPaths.size() > 0">
+                OR
+                <foreach collection="paths" item="path" open="(" close=")" separator="or">
+                    m.search_path LIKE CONCAT(#{path}, '%')
+                </foreach>
+            </if>
+    </delete>
 </mapper>

@@ -3,6 +3,7 @@ package com.onezol.vertex.security.api.mapper;
 import com.onezol.vertex.common.mapper.BaseMapper;
 import com.onezol.vertex.security.api.model.entity.MenuEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
     /**
      * 查询用户菜单列表
      */
-    List<MenuEntity> selectMenuListByUserId(Long userId, boolean isAdmin);
+    List<MenuEntity> selectMenusByUserId(Long userId, boolean isAdmin);
 
     /**
      * 根据角色id获取菜单列表
@@ -25,5 +26,16 @@ public interface MenuMapper extends BaseMapper<MenuEntity> {
      * @param roleId 角色id
      * @return 菜单列表
      */
-    List<MenuEntity> selectMenuListByRoleId(Long roleId);
+    List<MenuEntity> selectMenusByRoleId(Long roleId);
+
+    /**
+     * 批量删除菜单
+     *
+     * @param searchPaths 路径列表
+     * @return 删除状态
+     */
+    boolean deleteMenus(
+            @Param("ids") Set<Long> rootIds,
+            @Param("paths") Set<String> searchPaths
+    );
 }

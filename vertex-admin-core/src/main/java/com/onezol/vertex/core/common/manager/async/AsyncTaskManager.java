@@ -2,6 +2,7 @@ package com.onezol.vertex.core.common.manager.async;
 
 import com.onezol.vertex.common.util.SpringUtils;
 import com.onezol.vertex.common.util.ThreadUtils;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,16 +15,13 @@ import java.util.concurrent.TimeUnit;
 public class AsyncTaskManager {
     public static final Logger logger = LoggerFactory.getLogger(AsyncTaskManager.class);
 
+    @Getter
     private final static AsyncTaskManager instance = new AsyncTaskManager();
     private final ScheduledExecutorService executorService;
 
     private AsyncTaskManager() {
         executorService = SpringUtils.getBean("scheduledExecutorService");
         logger.info("异步任务管理器初始化完成");
-    }
-
-    public static AsyncTaskManager getInstance() {
-        return instance;
     }
 
     /**

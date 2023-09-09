@@ -52,7 +52,7 @@ public class LoggableAspect implements InitializingBean {
     }
 
     @Pointcut(
-            "@within(com.onezol.vertex.common.annotation.Loggable)"
+            "@annotation(com.onezol.vertex.common.annotation.Loggable)"
     )
     public void pointcut() {
     }
@@ -136,8 +136,8 @@ public class LoggableAspect implements InitializingBean {
         // 方法名
         String methodName = joinPoint.getSignature().getName();
         String operateMethod = className + "." + methodName;
-        // 请求地址
-        String url = request.getRequestURI();
+        // 请求路径
+        String path = request.getRequestURI();
 
         // 获取异常信息
         String failureReason = "";
@@ -151,7 +151,7 @@ public class LoggableAspect implements InitializingBean {
         accessLog.setUserId(user.getId());
         accessLog.setUserName(user.getName());
         accessLog.setUserType("-");
-        accessLog.setUrl(url);
+        accessLog.setPath(path);
         accessLog.setMethod(operateMethod);
         accessLog.setParams(params);
         accessLog.setIp(userIdentity.getIp());

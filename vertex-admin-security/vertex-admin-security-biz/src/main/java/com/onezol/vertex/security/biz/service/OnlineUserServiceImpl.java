@@ -144,6 +144,5 @@ public class OnlineUserServiceImpl implements OnlineUserService {
                 count.getAndIncrement();
             }
         });
-        log.info("清除过期用户: {} 个", count);
     }
 }

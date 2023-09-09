@@ -10,21 +10,19 @@ const devConfig = {
   monorepoRedirect: {},
   mfsu: true,
 };
-console.log(devConfig);
 const proConfig = {};
+
 export default defineConfig({
   antd: {},
   access: {},
   model: {},
   initialState: {},
   request: {},
-  layout: {
-    title: '@umijs/max',
-  },
+  layout: {},
   routes: routes,
   npmClient: 'pnpm',
   // 更换打包路径：web/dist -> web/src/main/resources/static
-  outputPath: '../src/main/resources/static',
+  // outputPath: '../src/main/resources/static',
   // 更换打包方式：webpack -> vite
   vite: {},
   hash: true,

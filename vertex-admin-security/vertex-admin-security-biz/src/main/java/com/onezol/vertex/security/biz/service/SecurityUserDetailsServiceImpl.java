@@ -7,10 +7,10 @@ import com.onezol.vertex.security.api.service.MenuService;
 import com.onezol.vertex.security.api.service.RoleService;
 import com.onezol.vertex.security.api.service.SecurityUserDetailsService;
 import com.onezol.vertex.security.api.service.UserAuthService;
-import com.onezol.vertex.security.biz.exception.LoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -41,12 +41,12 @@ public class SecurityUserDetailsServiceImpl implements SecurityUserDetailsServic
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userAuthService.getUserByUsername(username);
         if (userEntity == null) {
-            throw new LoginException("用户名或密码错误");
+            throw new BadCredentialsException("用户名或密码错误");
         }
 
         UserIdentity user = new UserIdentity(userEntity);
-        Set<String> roles = roleService.getKeysByUserId(userEntity.getId());
-        Set<String> perms = menuService.getPermsByUserId(userEntity.getId());
+        Set<String> roles = roleService.getUserRoleKeys(userEntity.getId());
+        Set<String> perms = menuService.getUserPermKeys(userEntity.getId());
         user.setRoles(roles);
         user.setPermissions(perms);
 

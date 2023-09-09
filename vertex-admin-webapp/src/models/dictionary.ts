@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import service from "@/services/dictionary";
-import {isLoginPage} from "@/utils/route.utils";
+import {isLoginPage} from "@/utils/security.utils";
 
 interface DictionaryMap {
-  [key: string]: OptionType[];
+  [key: string]: SelectOption[];
 }
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
   useEffect(() => {
     if (isLoginPage()) return;
 
-    service.getDictionary().then((res) => {
+    service.fetchDictionary().then((res) => {
       setDictionary(res);
     });
   }, []);
@@ -46,17 +46,17 @@ export default () => {
    * @param ignoreFields 忽略的字段
    * @returns
    */
-  const getOptions = (dictKey: string, ...ignoreFields: string[]): OptionType[] => {
+  const getOptions = (dictKey: string, ...ignoreFields: string[]): SelectOption[] => {
     ignoreFields = ignoreFields.map((field) => toLowerUnderscore(field));
     const options = getItems(dictKey).map((item) => {
       if (!ignoreFields.includes(item.label)) {
         return {
           label: item.label,
           value: item.value
-        } as OptionType;
+        } as SelectOption;
       }
     });
-    return options.filter((item) => !!item) as OptionType[];
+    return options.filter((item) => !!item) as SelectOption[];
   }
 
   /**

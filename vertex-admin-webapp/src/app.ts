@@ -1,15 +1,17 @@
 import React, {ReactNode} from 'react';
-import 'nprogress/nprogress.css';
-import '@/styles/index.less';
 import App from '@/pages/app';
+import layoutConfig from '@/layout';
 import requestConfig from '../config/request';
-import layoutConfig from './layout';
-import {isLoginPage, patchRoutes} from '@/utils/route.utils';
-import {getRoutes} from '@/services/common/global';
+import settingConfig from '../config/setting';
+import {buildRoutes, getUserinfo, isLoginPage, patchRoutes} from '@/utils/security.utils';
+import service from '@/services/security';
+import '@/styles/index.less';
 
 /** 全局初始化数据配置，用于 Layout 用户信息和权限初始化 */
 export const getInitialState = (): Record<string, any> => {
-  return {};
+  return {
+    setting: settingConfig
+  };
 }
 
 /** 在路由配置加载之前修改和拦截路由配置 */
@@ -26,23 +28,25 @@ export const rootContainer = (container: ReactNode) => {
 
 /** 渲染函数 */
 export const render = async (oldRender: Function) => {
-  const userinfo = localStorage.getItem('userinfo');
+  const userinfo = getUserinfo();
   const isLoginPath = isLoginPage();
 
-  if (isLoginPath)
+  if (isLoginPath) {
     return oldRender();
-
-  if (!userinfo)
-    return location.href = '/login';
-
-  try {
-    const user: User = JSON.parse(userinfo);
-    extraRoutes = await getRoutes(user.id);
-  } catch (e) {
-    console.log(e);
-  } finally {
-    oldRender();
   }
+
+  if (!userinfo) {
+    return location.href = '/login';
+  }
+
+  let routes: Menu[] = [];
+  try {
+    routes = await service.fetchUserRoutes();
+  } catch (e) {
+  }
+  extraRoutes = buildRoutes(routes);
+
+  oldRender();
 }
 
 /** Layout页面布局 */

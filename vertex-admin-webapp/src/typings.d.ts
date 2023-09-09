@@ -18,4 +18,5 @@ declare interface Route {
   path: string;
   element?: ReactNode;
   children: Route[],
+  hideInMenu: boolean;
 }

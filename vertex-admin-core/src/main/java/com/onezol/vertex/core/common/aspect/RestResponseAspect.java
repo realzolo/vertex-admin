@@ -18,7 +18,7 @@ import java.util.Objects;
 @Aspect
 @Component
 public class RestResponseAspect {
-    @Pointcut("@within(com.onezol.vertex.common.annotation.RestResponse)")
+    @Pointcut("@annotation(com.onezol.vertex.common.annotation.RestResponse)")
     public void pointcut() {
     }
 

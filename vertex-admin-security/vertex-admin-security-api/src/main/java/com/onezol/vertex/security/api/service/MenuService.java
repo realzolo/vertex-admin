@@ -1,5 +1,6 @@
 package com.onezol.vertex.security.api.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.onezol.vertex.common.service.BaseService;
 import com.onezol.vertex.security.api.model.dto.Menu;
 import com.onezol.vertex.security.api.model.entity.MenuEntity;
@@ -11,43 +12,56 @@ import java.util.Set;
 
 public interface MenuService extends BaseService<MenuEntity> {
     /**
-     * 根据用户id获取权限列表
-     *
-     * @param userId 用户id
-     * @return permissions
-     */
-    Set<String> getPermsByUserId(Long userId);
-
-    /**
-     * 查询用户菜单列表
+     * 获取用户菜单列表
      *
      * @param userId 用户ID
      * @return 菜单列表
      */
-    List<Menu> getMenuListByUserId(Long userId);
+    List<Menu> getUserMenus(long userId);
 
     /**
-     * 根据角色id获取菜单列表
+     * 获取用户权限列表
      *
-     * @param roleId 角色id
+     * @param userId 用户id
+     * @return 权限keys
+     */
+    Set<String> getUserPermKeys(long userId);
+
+    /**
+     * 获取菜单列表
+     *
+     * @param parentId 父ID
      * @return 菜单列表
      */
-    List<Menu> getMenuListByRoleId(Long roleId);
+    Map<String, Object> getSublist(IPage<MenuEntity> page, Long parentId);
 
     /**
-     * 根据父级菜单获取子菜单列表
-     *
-     * @param parentId 父级ID
-     * @param page     页码
-     * @param pageSize 页大小
-     * @return 子菜单列表
+     * 获取菜单树
      */
-    Map<String, Object> queryListByParentId(Long parentId, Long page, Long pageSize);
+    List<Menu> getMenuTree();
 
     /**
-     * 保存或更新菜单
+     * 创建或更新菜单
      *
      * @param payload 菜单信息
+     * @return 创建/保存状态
      */
-    void saveOrUpdate(MenuPayload payload);
+    boolean saveOrUpdate(MenuPayload payload);
+
+    /**
+     * 获取角色菜单列表
+     *
+     * @param roleId 角色ID
+     * @return 菜单列表
+     */
+    List<Menu> getRoleMenus(long roleId);
+
+    /**
+     * 删除菜单
+     *
+     * @param ids 菜单ID
+     * @return 删除状态
+     */
+    boolean deleteMenus(long[] ids);
+
 }

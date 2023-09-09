@@ -2,8 +2,7 @@ package com.onezol.vertex.core.common.runner;
 
 import com.onezol.vertex.common.constant.RedisKey;
 import com.onezol.vertex.common.constant.enums.EnumService;
-import com.onezol.vertex.common.model.record.OptionType;
-import com.onezol.vertex.common.util.StringUtils;
+import com.onezol.vertex.common.model.record.SelectOption;
 import com.onezol.vertex.core.common.cache.RedisCache;
 import com.onezol.vertex.core.module.dictionary.service.DictionaryService;
 import org.slf4j.Logger;
@@ -23,7 +22,8 @@ public class DictionarySyncRunner implements ApplicationRunner {
             "com.onezol.vertex.business",
             "com.onezol.vertex.common",
             "com.onezol.vertex.core",
-            "com.onezol.vertex.scheduler"
+            "com.onezol.vertex.scheduler",
+            "com.onezol.vertex.security"
     );
     private final RedisCache redisCache;
     private final DictionaryService dictionaryService;
@@ -35,8 +35,8 @@ public class DictionarySyncRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        Map<String, List<OptionType>> enumMap = this.getEnumMap();
-        Map<String, List<OptionType>> dictMap = this.getDictMap();
+        Map<String, List<SelectOption>> enumMap = this.getEnumMap();
+        Map<String, List<SelectOption>> dictMap = this.getDictMap();
         int enumSize = enumMap.size();
         int dictSize = dictMap.size();
         dictMap.putAll(enumMap);
@@ -50,18 +50,18 @@ public class DictionarySyncRunner implements ApplicationRunner {
     /**
      * 获取字典类的Map
      */
-    private Map<String, List<OptionType>> getDictMap() {
+    private Map<String, List<SelectOption>> getDictMap() {
         return dictionaryService.getDictionaryMap();
     }
 
     /**
      * 获取枚举类的Map
      */
-    private Map<String, List<OptionType>> getEnumMap() {
+    private Map<String, List<SelectOption>> getEnumMap() {
         // 获取EnumService的实现类
         List<Class<?>> implementationClasses = findInterfaceImplementations(EnumService.class);
 
-        Map<String, List<OptionType>> enumMap = new HashMap<>(implementationClasses.size());
+        Map<String, List<SelectOption>> enumMap = new HashMap<>(implementationClasses.size());
         for (Class<?> clazz : implementationClasses) {
             if (!clazz.isEnum()) {
                 continue;
@@ -69,15 +69,15 @@ public class DictionarySyncRunner implements ApplicationRunner {
             // 获取枚举类的所有枚举值
             Object[] enumConstants = clazz.getEnumConstants();
 
-            List<OptionType> options = new ArrayList<>();
+            List<SelectOption> options = new ArrayList<>();
             for (Object enumConstant : enumConstants) {
                 // 获取枚举值的code和value
                 EnumService aEnum = (EnumService) enumConstant;
-                OptionType option = new OptionType(aEnum.getValue(), aEnum.getCode());
+                SelectOption option = new SelectOption(aEnum.getValue(), aEnum.getCode());
                 options.add(option);
             }
 
-            String name = StringUtils.camelCaseToUnderline(clazz.getSimpleName()).toLowerCase();
+            String name = clazz.getSimpleName();
             enumMap.put(name, options);
         }
         return enumMap;
@@ -92,7 +92,7 @@ public class DictionarySyncRunner implements ApplicationRunner {
         for (String packageName : ENUM_PACKAGE) {
             try {
                 // 获取当前项目的根包目录
-                String rootPath = Objects.requireNonNull(classLoader.getResource(packageName.replace('.', '/'))).getPath();
+                String rootPath = Objects.requireNonNull(classLoader.getResource(packageName.replace('.', File.separatorChar))).getPath();
                 File rootDir = new File(rootPath);
 
                 // 递归扫描根包下的所有类文件

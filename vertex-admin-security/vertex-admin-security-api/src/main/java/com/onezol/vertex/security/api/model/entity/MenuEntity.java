@@ -83,4 +83,9 @@ public class MenuEntity extends BaseEntity {
      * 备注
      */
     private String remark;
+
+    /**
+     * 查找路径
+     */
+    private String searchPath;
 }

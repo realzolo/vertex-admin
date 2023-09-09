@@ -8,13 +8,13 @@ import java.util.Objects;
 import static com.onezol.vertex.common.constant.Constants.DEFAULT_PAGE_SIZE;
 import static com.onezol.vertex.common.constant.Constants.MAX_PAGE_SIZE;
 
-public abstract class BaseController {
-    protected IPage<Object> getPage(Integer pageNo, Integer pageSize) {
+public abstract class BaseController<T> {
+    protected IPage<T> getPage(Long pageNo, Long pageSize) {
         if (Objects.isNull(pageNo)) {
-            pageNo = 1;
+            pageNo = 1L;
         }
         if (Objects.isNull(pageSize)) {
-            pageSize = DEFAULT_PAGE_SIZE;
+            pageSize = Integer.valueOf(DEFAULT_PAGE_SIZE).longValue();
         }
         pageSize = Math.min(pageSize, MAX_PAGE_SIZE);
 

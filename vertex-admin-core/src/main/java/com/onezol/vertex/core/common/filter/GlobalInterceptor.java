@@ -1,8 +1,10 @@
 package com.onezol.vertex.core.common.filter;
 
+import com.onezol.vertex.common.util.ObjectConverter;
 import com.onezol.vertex.security.api.context.UserContext;
 import com.onezol.vertex.security.api.context.UserContextHolder;
 import com.onezol.vertex.security.api.model.UserIdentity;
+import com.onezol.vertex.security.api.model.dto.User;
 import lombok.NonNull;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
@@ -20,9 +22,11 @@ public class GlobalInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserIdentity) {
-            UserIdentity user = (UserIdentity) principal;
+            UserIdentity userIdentity = (UserIdentity) principal;
+            User user = ObjectConverter.convert(userIdentity.getUser(), User.class);
+
             UserContext userContext = new UserContext();
-            userContext.setUser(user);
+            userContext.setUserDetails(user);
             UserContextHolder.setContext(userContext);
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
