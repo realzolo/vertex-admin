@@ -3,7 +3,9 @@ package com.onezol.vertex.security.api.model;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.onezol.vertex.common.constant.enums.AccountStatus;
-import com.onezol.vertex.common.util.EncryptionUtils;
+import com.onezol.vertex.common.util.CodecUtils;
+import com.onezol.vertex.common.util.ObjectConverter;
+import com.onezol.vertex.security.api.model.dto.User;
 import com.onezol.vertex.security.api.model.entity.UserEntity;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -116,7 +118,7 @@ public class UserIdentity implements UserDetails {
     }
 
     public String getKey() {
-        return EncryptionUtils.encryptMD5(user.getId().toString());
+        return CodecUtils.encodeBase64(user.getId().toString() + "@" + user.getUsername());
     }
 
     public void setLoginTime(LocalDateTime loginTime) {
@@ -145,6 +147,10 @@ public class UserIdentity implements UserDetails {
 
     public void setPermissions(Set<String> permissions) {
         this.permissions = Objects.isNull(permissions) ? Collections.emptySet() : permissions;
+    }
+
+    public User getUser() {
+        return ObjectConverter.convert(user, User.class);
     }
 
     public void setUser(UserEntity user) {

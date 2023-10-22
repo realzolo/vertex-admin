@@ -120,8 +120,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
         onlineUserService.addOnlineUser(userIdentity, expirationTime);
 
         // 处理返回信息
-        UserEntity userEntity = userIdentity.getUser();
-        User user = ObjectConverter.convert(userEntity, User.class);
+        User user = userIdentity.getUser();
         assert user != null;
         user.setRoles(userIdentity.getRoles());
         user.setPermissions(userIdentity.getPermissions());
@@ -184,7 +183,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserMapper, UserEntity>
         if (userId == null) {
             return null;
         }
-        String key = RedisKey.ONLINE_USERINFO + EncryptionUtils.encryptMD5(String.valueOf(userId));
+        String key = RedisKey.ONLINE_USER + EncryptionUtils.encryptMD5(String.valueOf(userId));
         return redisCache.getCacheObject(key);
     }
 }

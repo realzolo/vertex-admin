@@ -1,7 +1,12 @@
 export default [
   {
     path: '/',
-    redirect: '/login',
+    redirect: '/websocket',
+  },
+  {
+    name: 'WebSocket测试',
+    path: '/websocket',
+    component: '@/pages/login/UseWebSocket',
   },
   {
     name: '登录',

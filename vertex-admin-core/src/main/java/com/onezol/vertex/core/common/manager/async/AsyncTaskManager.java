@@ -35,6 +35,16 @@ public class AsyncTaskManager {
     }
 
     /**
+     * 执行任务
+     *
+     * @param task  任务
+     * @param delay 延迟时间(毫秒)
+     */
+    public void execute(Runnable task, long delay) {
+        executorService.schedule(task, delay, TimeUnit.MILLISECONDS);
+    }
+
+    /**
      * 停止任务线程池
      */
     public void shutdown() {

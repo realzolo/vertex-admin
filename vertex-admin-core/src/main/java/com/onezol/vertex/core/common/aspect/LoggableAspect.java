@@ -7,7 +7,7 @@ import com.onezol.vertex.core.common.manager.async.AsyncTaskManager;
 import com.onezol.vertex.core.module.log.model.entity.AccessLogEntity;
 import com.onezol.vertex.core.module.log.service.AccessLogService;
 import com.onezol.vertex.security.api.model.UserIdentity;
-import com.onezol.vertex.security.api.model.entity.UserEntity;
+import com.onezol.vertex.security.api.model.dto.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +123,7 @@ public class LoggableAspect implements InitializingBean {
             return;
         }
         UserIdentity userIdentity = (UserIdentity) principal;
-        UserEntity user = userIdentity.getUser();
+        User user = userIdentity.getUser();
         if (Objects.isNull(user)) {
             return;
         }

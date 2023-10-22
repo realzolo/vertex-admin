@@ -1,3 +1,5 @@
+import moment from "moment";
+
 /**
  * 计算给定时间与当前时间的时间差，返回一个可读的时间描述
  * @param time 时间
@@ -22,4 +24,13 @@ export const getTimeAgo = (time: string | number | Date) => {
   } else {
     return '刚刚';
   }
+}
+
+/**
+ * 日期格式化
+ * @param time 时间
+ * @param format 格式
+ */
+export const formatDate = (time: string | number | Date, format: string = 'YYYY-MM-DD HH:mm:ss') => {
+  return moment(time).format(format);
 }

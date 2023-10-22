@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.model.record.PlainPage;
 import com.onezol.vertex.common.service.impl.BaseServiceImpl;
 import com.onezol.vertex.core.common.util.ModelUtils;
-import com.onezol.vertex.core.module.message.endpoint.MessageSocketEndpoint;
 import com.onezol.vertex.core.module.message.mapper.MessageMapper;
 import com.onezol.vertex.core.module.message.model.Message;
 import com.onezol.vertex.core.module.message.model.MessageEntity;
@@ -62,7 +61,7 @@ public class MessageService extends BaseServiceImpl<MessageMapper, MessageEntity
         // 如果是新增消息，则发送广播
         if (payload.getId() == null && ok) {
             Message message = ModelUtils.convert(entity, Message.class);
-            MessageSocketEndpoint.sendBroadcast(message);
+//            WebSocketEndpoint.sendBroadcast(message);
         }
         return ok;
     }

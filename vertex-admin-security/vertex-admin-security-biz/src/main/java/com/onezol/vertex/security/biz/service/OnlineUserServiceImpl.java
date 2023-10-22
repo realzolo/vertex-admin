@@ -6,7 +6,7 @@ import com.onezol.vertex.common.util.EncryptionUtils;
 import com.onezol.vertex.core.common.cache.RedisCache;
 import com.onezol.vertex.security.api.model.UserIdentity;
 import com.onezol.vertex.security.api.model.dto.OnlineUser;
-import com.onezol.vertex.security.api.model.entity.UserEntity;
+import com.onezol.vertex.security.api.model.dto.User;
 import com.onezol.vertex.security.api.service.OnlineUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -42,7 +42,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         long loginTimeMillis = loginTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
         // 存储用户信息
-        redisCache.setCacheObject(RedisKey.ONLINE_USERINFO + key, userIdentity, expirationTime, TimeUnit.SECONDS);
+        redisCache.setCacheObject(RedisKey.ONLINE_USER + key, userIdentity, expirationTime, TimeUnit.SECONDS);
         // 存储用户ID(key为MD5加密后的用户ID, value为登录时间)
         Map<String, Double> zSet = new HashMap<String, Double>() {{
             put(key, (double) loginTimeMillis);
@@ -70,7 +70,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     @Override
     public void removeOnlineUser(String key) {
         // 移除用户信息
-        redisCache.deleteObject(RedisKey.ONLINE_USERINFO + key);
+        redisCache.deleteObject(RedisKey.ONLINE_USER + key);
         // 移除用户ID
         redisCache.deleteZSet(RedisKey.ONLINE_USERID_SET, key);
     }
@@ -91,12 +91,12 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         Set<Object> keySet = redisCache.getCacheZSet(RedisKey.ONLINE_USERID_SET, startIndex, endIndex);
         // 获取在线用户信息
         List<UserIdentity> userIdentities = new ArrayList<>(keySet.size());
-        keySet.forEach(key -> userIdentities.add(redisCache.getCacheObject(RedisKey.ONLINE_USERINFO + key)));
+        keySet.forEach(key -> userIdentities.add(redisCache.getCacheObject(RedisKey.ONLINE_USER + key)));
 
         // 用户信息转换
         HashSet<OnlineUser> onlineUsers = new HashSet<>(userIdentities.size());
         for (UserIdentity ui : userIdentities) {
-            UserEntity user = ui.getUser();
+            User user = ui.getUser();
             OnlineUser ou = OnlineUser.builder()
                     .uid(user.getId())
                     .username(user.getUsername())
@@ -138,7 +138,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         // 清除过期用户
         AtomicInteger count = new AtomicInteger();
         keySet.forEach(key -> {
-            UserIdentity userIdentity = redisCache.getCacheObject(RedisKey.ONLINE_USERINFO + key);
+            UserIdentity userIdentity = redisCache.getCacheObject(RedisKey.ONLINE_USER + key);
             if (userIdentity == null) {  // 用户信息不存在, 表示用户信息已过期/被删除
                 redisCache.deleteZSet(RedisKey.ONLINE_USERID_SET, key);
                 count.getAndIncrement();
