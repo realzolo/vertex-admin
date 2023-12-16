@@ -20,15 +20,15 @@ export default [
     redirect: '/console/home',
   },
   {
-    name: '欢迎页',
-    path: '/console/home',
-    component: '@/pages/console/home',
-  },
-  {
-    name: '无权限',
-    path: '/console/403',
-    component: '@/pages/status/403',
-    menu: false,
+    name: '项目测试',
+    path: '/test',
+    routes: [
+      {
+        name: 'iframe',
+        path: '/test/iframe',
+        component: '@/pages/test/iframe',
+      }
+    ]
   },
   {
     name: '404',

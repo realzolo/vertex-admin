@@ -23,7 +23,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (location.pathname !== "/") {
-      connectToWebsocket();
+      // connectToWebsocket();
       fetchMessage().finally();
     }
   }, []);
