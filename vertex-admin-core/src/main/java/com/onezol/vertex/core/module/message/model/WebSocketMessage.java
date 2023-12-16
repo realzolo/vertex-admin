@@ -1,8 +1,8 @@
 package com.onezol.vertex.core.module.message.model;
 
 import com.onezol.vertex.common.constant.DatePattern;
-import com.onezol.vertex.common.constant.enums.MessageGroup;
-import com.onezol.vertex.common.constant.enums.WebSocketEventType;
+import com.onezol.vertex.common.constant.enums.WebSocketMessageGroup;
+import com.onezol.vertex.common.constant.enums.WebSocketMessageType;
 import com.onezol.vertex.common.util.DateUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +17,12 @@ public class WebSocketMessage<T> {
      * 消息组
      */
     @Setter
-    private MessageGroup group;
+    private WebSocketMessageGroup group;
     /**
      * 消息事件类型
      */
     @Setter
-    private WebSocketEventType type;
+    private WebSocketMessageType type;
     /**
      * 消息内容
      */
@@ -34,14 +34,14 @@ public class WebSocketMessage<T> {
      */
     private LocalDateTime time = LocalDateTime.now();
 
-    public WebSocketMessage(WebSocketEventType type, T content) {
-        this.group = MessageGroup.DEFAULT;
+    public WebSocketMessage(WebSocketMessageType type, T content) {
+        this.group = WebSocketMessageGroup.DEFAULT;
         this.type = type;
         this.content = content;
         this.time = LocalDateTime.now();
     }
 
-    public WebSocketMessage(MessageGroup group, WebSocketEventType type, T content) {
+    public WebSocketMessage(WebSocketMessageGroup group, WebSocketMessageType type, T content) {
         this.group = group;
         this.type = type;
         this.content = content;
@@ -60,12 +60,12 @@ public class WebSocketMessage<T> {
         return (WebSocketMessage<T>) message;
     }
 
-    public String getGroup() {
-        return group.getValue();
+    public int getGroup() {
+        return group.getCode();
     }
 
-    public String getType() {
-        return type.getValue();
+    public int getType() {
+        return type.getCode();
     }
 
     public String getTime() {
