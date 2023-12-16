@@ -2,51 +2,98 @@ import {request} from "@@/plugin-request";
 
 export default {
   /**
-   * 获取角色选项
+   * 获取用户路由表
    */
-  getRoleOptions: async () => {
-    const res = await request<API.AjaxResult<SelectOption[]>>('/api/role/select-options');
-    return res.data;
+  fetchUserRoutes: async () => {
+    const resp = await request<API.RestResult<Menu[]>>("/menu/routes");
+    return resp.data;
   },
 
   /**
-   * 根据菜单类型获取菜单列表
+   * 账号密码登录
+   * @param values 登录参数
    */
-  getMenuListByType: async (menuTypes: string[]) => {
-    const types = menuTypes.map(item => item.toUpperCase()).join(',');
-    const res = await request<API.AjaxResult<Menu[]>>(`/api/menu/type-menu`, {
-      params: {
-        types
-      }
+  requestLogin: (values: LoginPayload): Promise<API.RestResult<LoginResult>> => {
+    return request<API.RestResult<LoginResult>>('/auth/login', {
+      method: 'POST',
+      data: values
     });
-    return res.data;
   },
 
   /**
-   * 根据父级菜单ID获取菜单列表
-   * @param parentId 父级菜单ID
-   * @param page 页码
+   * 邮箱发送验证码
+   * @param email 邮箱
+   */
+  sendEmailCode: async (email: string): Promise<null> => {
+    const res = await request<API.RestResult<null>>(`/user/send-email-code/${email}`, {
+      method: 'POST'
+    });
+    return res.data
+  },
+
+  /**
+   * 退出登录
+   */
+  logout: async (): Promise<void> => {
+    await request<API.RestResult<void>>(`/logout`, {
+      method: 'POST'
+    });
+  },
+
+  /**
+   * 获取下级菜单列表
+   * @param parentId 上级ID
+   * @param pageNo 页码
    * @param pageSize 页大小
    */
-  getMenuListByParentId: async (parentId: number, page: number, pageSize: number) => {
-    const res = await request<API.AjaxResult<API.ListWrapper<Menu> & { type: string }>>('/api/menu/page', {
+  fetchMenuSublist: async (parentId = 0, pageNo = 1, pageSize = 10) => {
+    const resp = await request(`/menu/sublist`, {
       params: {
         parentId,
-        page,
+        pageNo,
         pageSize
       }
     });
-    return res.data;
+    return resp.data;
   },
 
   /**
-   * 创建目录/菜单/按钮(权限)
-   * @param values 菜单信息
+   * 获取菜单列表
    */
-  createMenu: async (values: Menu) => {
-    const res = await request<API.AjaxResult<void>>('/api/menu/save', {
+  fetchMenuList: async () => {
+    const resp = await request<API.RestResult<Menu[]>>('/menu/menu-list')
+    return resp.data;
+  },
+
+  /**
+   * 获取菜单树
+   */
+  fetchMenuTree: async () => {
+    const resp = await request<API.RestResult<Menu[]>>('/menu/menu-tree')
+    return resp.data;
+  },
+
+  /**
+   * 获取菜单详情
+   * @param id 菜单ID
+   */
+  fetchMenuDetails: async (id: number) => {
+    const resp = await request<API.RestResult<Menu>>(`/menu`, {
+      params: {
+        id
+      }
+    })
+    return resp.data;
+  },
+
+  /**
+   * 创建菜单
+   * @param menu 菜单信息
+   */
+  createMenu: async (menu: Menu) => {
+    const res = await request<API.RestResult<void>>('/menu/save', {
       method: 'POST',
-      data: values
+      data: menu
     });
     return res.data;
   },
@@ -55,8 +102,8 @@ export default {
    * 根据角色ID获取权限组列表
    * @param roleId 角色ID
    */
-  getMenuListByRoleId: async (roleId: number) => {
-    const res = await request<API.AjaxResult<Menu[]>>('/api/menu/role-menu', {
+  fetchRoleMenus: async (roleId: number) => {
+    const res = await request<API.RestResult<Menu[]>>('/menu/role-menu', {
       params: {
         roleId
       }
@@ -70,7 +117,7 @@ export default {
    * @param menuIds 菜单ID列表
    */
   saveRoleMenu: async (roleId: number, menuIds: number[]) => {
-    const res = await request<API.AjaxResult<void>>(`/api/role/save-role-menu`, {
+    const res = await request<API.RestResult<void>>(`/role/save-role-menu`, {
       method: 'POST',
       data: {
         roleId,
@@ -79,4 +126,31 @@ export default {
     });
     return res.data;
   },
+
+  /**
+   * 获取角色列表
+   * @param pageNo 页码
+   * @param pageSize 页大小
+   */
+  fetchRoleList: async (pageNo = 1, pageSize = 10) => {
+    const resp = await request<PageList<Role>>(`/role/list`, {
+      params: {
+        pageNo,
+        pageSize
+      }
+    });
+    return resp.data;
+  },
+
+  /**
+   * 删除菜单
+   * @param ids 菜单ID列表
+   */
+  deleteMenu: async (ids: number[]) => {
+    const res = await request<API.RestResult<void>>(`/menu`, {
+      method: 'DELETE',
+      data: ids
+    });
+    return res.data;
+  }
 }

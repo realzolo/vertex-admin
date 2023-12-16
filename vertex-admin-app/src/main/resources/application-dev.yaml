@@ -1,17 +1,5 @@
 # 当前配置文件环境为：dev
-server:
-  port: 10240
-  servlet:
-    context-path: /api
 spring:
-  application:
-    name: vertex-admin-app
-  config:
-    activate:
-      on-profile: dev
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
   # 数据源基本配置
   datasource:
     url: jdbc:mysql://db.onezol.com:3306/vertex?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
@@ -24,7 +12,7 @@ spring:
       min-idle: 5
       max-active: 20
       max-wait: 60000
-  # redis配置
+  # Redis配置
   redis:
     host: redis.onezol.com
     port: 6379
@@ -75,32 +63,14 @@ logging:
 
 # 应用配置
 app:
-  config:
+  security:
     username: admin
     password: admin
   log:
-    access-log:
-      enable: true
+    enable-access-log: true
   encrypt:
     secret-key: FA1F437D388544B8B848F1AAD8BF52F0
-
 
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-# SpringDoc(Swagger)配置
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.onezol.vertex
-# Knife4j配置
-knife4j:
-  enable: true
-  basic:
-    enable: true
-    username: vertex
-    password: vertex

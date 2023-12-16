@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.onezol</groupId>
+    <groupId>com.onezol.vertex</groupId>
     <artifactId>vertex-admin</artifactId>
     <version>1.0.0</version>
 
@@ -14,8 +14,9 @@
     <modules>
         <module>vertex-admin-app</module>
         <module>vertex-admin-common</module>
-        <module>vertex-admin-scheduler</module>
         <module>vertex-admin-core</module>
+        <module>vertex-admin-security</module>
+        <module>vertex-admin-scheduler</module>
         <module>vertex-admin-business</module>
     </modules>
 
@@ -124,33 +125,27 @@
             </dependency>
 
 
-            <!-- vertex-admin-app 程序入口 -->
-            <dependency>
-                <groupId>com.onezol.vertex</groupId>
-                <artifactId>vertex-admin-app</artifactId>
-                <version>${vertex.version}</version>
-            </dependency>
             <!-- vertex-admin-common 通用包 -->
             <dependency>
-                <groupId>com.onezol.vertex</groupId>
+                <groupId>com.onezol.vertex.common</groupId>
                 <artifactId>vertex-admin-common</artifactId>
                 <version>${vertex.version}</version>
             </dependency>
             <!-- vertex-admin-core 核心包 -->
             <dependency>
-                <groupId>com.onezol.vertex</groupId>
+                <groupId>com.onezol.vertex.core</groupId>
                 <artifactId>vertex-admin-core</artifactId>
                 <version>${vertex.version}</version>
             </dependency>
             <!-- vertex-admin-business 业务包 -->
             <dependency>
-                <groupId>com.onezol.vertex</groupId>
+                <groupId>com.onezol.vertex.business</groupId>
                 <artifactId>vertex-admin-business</artifactId>
                 <version>${vertex.version}</version>
             </dependency>
             <!-- vertex-admin-scheduler 定时任务包 -->
             <dependency>
-                <groupId>com.onezol.vertex</groupId>
+                <groupId>com.onezol.vertex.scheduler</groupId>
                 <artifactId>vertex-admin-scheduler</artifactId>
                 <version>${vertex.version}</version>
             </dependency>
@@ -174,7 +169,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

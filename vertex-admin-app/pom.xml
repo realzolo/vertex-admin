@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.onezol</groupId>
+        <groupId>com.onezol.vertex</groupId>
         <artifactId>vertex-admin</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -17,35 +17,32 @@
     <description>主入口</description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.onezol.vertex.common</groupId>
+            <artifactId>vertex-admin-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.onezol.vertex.core</groupId>
+            <artifactId>vertex-admin-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.onezol.vertex.scheduler</groupId>
+            <artifactId>vertex-admin-scheduler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.onezol.vertex.business</groupId>
+            <artifactId>vertex-admin-business</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.onezol.vertex.security.biz</groupId>
+            <artifactId>vertex-admin-security-biz</artifactId>
+            <version>${vertex.version}</version>
+        </dependency>
+
         <!-- Spring Boot Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- AOP -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-common</artifactId>
-            <version>${vertex.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-core</artifactId>
-            <version>${vertex.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-scheduler</artifactId>
-            <version>${vertex.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.onezol.vertex</groupId>
-            <artifactId>vertex-admin-business</artifactId>
-            <version>${vertex.version}</version>
         </dependency>
     </dependencies>
 </project>

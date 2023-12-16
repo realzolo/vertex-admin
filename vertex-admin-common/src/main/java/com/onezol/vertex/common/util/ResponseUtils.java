@@ -1,12 +1,13 @@
 package com.onezol.vertex.common.util;
 
 import com.onezol.vertex.common.exception.BusinessException;
+import com.onezol.vertex.common.model.record.GenericResponse;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 public class ResponseUtils {
 
@@ -17,20 +18,15 @@ public class ResponseUtils {
      * @param exception exception
      */
     public static void write(HttpServletResponse response, Exception exception) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", exception.getMessage());
-        map.put("success", false);
-
+        int code = 500;
         if (exception instanceof BusinessException) {
-            BusinessException ex = (BusinessException) exception;
-            map.put("code", ex.getCode());
-        } else {
-            map.put("code", 500);
+            code = ((BusinessException) exception).getCode();
         }
 
-        String json = JsonUtils.mapToJson(map);
+        GenericResponse<Void> genericResponse = GenericResponse.failure(code, exception.getMessage());
+        String data = JsonUtils.toJson(genericResponse);
 
-        doWrite(response, json);
+        doWrite(response, data);
     }
 
     /**
@@ -46,15 +42,15 @@ public class ResponseUtils {
      * 使用response输出信息
      *
      * @param response response
-     * @param json     json
+     * @param data     data
      */
-    private static void doWrite(HttpServletResponse response, String json) {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    private static void doWrite(HttpServletResponse response, String data) {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpServletResponse.SC_OK);
         try {
             PrintWriter writer = response.getWriter();
-            writer.write(json);
+            writer.write(data);
             writer.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

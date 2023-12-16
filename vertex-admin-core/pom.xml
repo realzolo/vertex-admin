@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.onezol</groupId>
+        <groupId>com.onezol.vertex</groupId>
         <artifactId>vertex-admin</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.onezol.vertex</groupId>
+    <groupId>com.onezol.vertex.core</groupId>
     <artifactId>vertex-admin-core</artifactId>
     <version>1.0.0</version>
 
@@ -19,14 +19,22 @@
     <dependencies>
         <!-- vertex-admin-common -->
         <dependency>
-            <groupId>com.onezol.vertex</groupId>
+            <groupId>com.onezol.vertex.common</groupId>
             <artifactId>vertex-admin-common</artifactId>
+        </dependency>
+        <!-- vertex-admin-security-api -->
+        <dependency>
+            <groupId>com.onezol.vertex.security.api</groupId>
+            <artifactId>vertex-admin-security-api</artifactId>
+            <version>${vertex.version}</version>
         </dependency>
         <!-- vertex-admin-scheduler -->
         <dependency>
-            <groupId>com.onezol.vertex</groupId>
+            <groupId>com.onezol.vertex.scheduler</groupId>
             <artifactId>vertex-admin-scheduler</artifactId>
+            <version>1.0.0</version>
         </dependency>
+
         <!-- MySQL -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -66,16 +74,6 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
-        </dependency>
-        <!-- UserAgentUtils(User-Agent解析工具) -->
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-        </dependency>
-        <!-- Spring Security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- AOP -->
         <dependency>

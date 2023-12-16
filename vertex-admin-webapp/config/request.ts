@@ -1,10 +1,8 @@
 import {AxiosError, RequestConfig} from "@umijs/max";
-import {message as Message, Modal} from "antd";
-import {clearUserInfo, isLoginPage} from "@/utils/route.utils";
+import {clearUserInfo, isLoginPage} from "@/utils/security.utils";
+import {message as Message, modal as Modal} from '@/shared/EscapeAntd';
 
-Message.config({
-  maxCount: 1,
-});
+const URL_PREFIX = '/api';
 
 /**
  * 请求拦截器
@@ -13,6 +11,8 @@ const requestInterceptors: any[] = [
   (url: string, options: any) => {
     // 携带 token
     const token = localStorage.getItem('token');
+
+    url = `${URL_PREFIX}${url}`;
     if (token) {
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const responseInterceptors: any[] = [
  * 异常处理: 当data.success为false时，会进入errorHandler (response.status一定为200)
  */
 const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } = {
-  errorThrower: (res: API.AjaxResult<null>) => {
+  errorThrower: (res: API.RestResult<null>) => {
     const {code, success, data, message} = res;
     if (!success && code !== 10002) {   // 10002: 登录失败, 不抛出异常
       const error: any = new Error(message);
@@ -58,7 +58,7 @@ const errorConfig: { errorHandler?: any, errorThrower?: ((res: any) => void) } =
     if (opts?.skipErrorHandler) throw error;
     // 业务异常处理
     if (error.name === 'BusinessError') {
-      const {code, success, message, data} = error.info as API.AjaxResult<null>;
+      const {code, success, message, data} = error.info as API.RestResult<null>;
       switch (code) {
         case 10001: // 操作失败
           Message.error(message);
@@ -115,7 +115,7 @@ const handleUnauthorized = () => {
   if (localStorage.getItem('token')) {
     if (isModalShow) return;
     isModalShow = true;
-    Modal.warn({
+    Modal.warning({
       title: '提示',
       content: '您的身份已过期，请重新登录。',
       okText: '重新登录',
@@ -131,11 +131,8 @@ const handleUnauthorized = () => {
   }
 
   // 不存在token, 说明未登录
-  Message.error("您还未登录，请登录后再试。");
   clearUserInfo();
-  setTimeout(() => {
-    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
-  }, 1000);
+  window.location.href = '/login';
 }
 
 const requestConfig: RequestConfig = {

@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.onezol.vertex.common.constant.enums.HttpStatus;
 import com.onezol.vertex.common.exception.BusinessException;
-import com.onezol.vertex.common.model.record.OptionType;
-import com.onezol.vertex.core.base.service.impl.GenericServiceImpl;
+import com.onezol.vertex.common.model.record.SelectOption;
+import com.onezol.vertex.common.service.impl.BaseServiceImpl;
+import com.onezol.vertex.common.util.StringUtils;
+import com.onezol.vertex.core.common.util.ModelUtils;
 import com.onezol.vertex.core.module.dictionary.mapper.DictionaryMapper;
 import com.onezol.vertex.core.module.dictionary.model.DictionaryEntity;
 import com.onezol.vertex.core.module.dictionary.model.DictionaryPayload;
-import com.onezol.vertex.core.util.ModelUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +18,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DictionaryService extends GenericServiceImpl<DictionaryMapper, DictionaryEntity> {
+public class DictionaryService extends BaseServiceImpl<DictionaryMapper, DictionaryEntity> {
 
     /**
-     * 将字典转换为Map<String, OptionType[]>
+     * 将字典转换为Map<String, SelectOption[]>
      */
-    public Map<String, List<OptionType>> getDictionaryMap() {
+    public Map<String, List<SelectOption>> getDictionaryMap() {
         Wrapper<DictionaryEntity> wrapper = Wrappers.<DictionaryEntity>lambdaQuery()
                 .select(
                         DictionaryEntity::getId,
@@ -33,7 +34,7 @@ public class DictionaryService extends GenericServiceImpl<DictionaryMapper, Dict
                 );
         List<DictionaryEntity> entities = this.list(wrapper);
         Map<Long, DictionaryEntity> keyMap = new HashMap<>();
-        Map<String, List<OptionType>> map = new HashMap<>();
+        Map<String, List<SelectOption>> map = new HashMap<>();
         entities.stream()
                 .filter(entity -> Objects.isNull(entity.getParentId()) || entity.getParentId() == 0L)
                 .forEach(entity -> {
@@ -46,8 +47,8 @@ public class DictionaryService extends GenericServiceImpl<DictionaryMapper, Dict
                 .forEach(entity -> {
                     DictionaryEntity parent = keyMap.get(entity.getParentId());
                     if (Objects.nonNull(parent)) {
-                        List<OptionType> options = map.get(parent.getDictKey());
-                        options.add(new OptionType(entity.getDictValue(), entity.getDictCode()));
+                        List<SelectOption> options = map.get(parent.getDictKey());
+                        options.add(new SelectOption(entity.getDictValue(), entity.getDictCode()));
                     }
                 });
 
@@ -92,5 +93,22 @@ public class DictionaryService extends GenericServiceImpl<DictionaryMapper, Dict
         }
         DictionaryEntity entity = ModelUtils.convert(payload, DictionaryEntity.class);
         return this.saveOrUpdate(entity);
+    }
+
+    /**
+     * 字典翻英
+     *
+     * @param dictKey  字典key
+     * @param dictCode 字典code
+     * @return 字典值
+     */
+    public String translate(String dictKey, int dictCode) {
+        Wrapper<DictionaryEntity> wrapper = Wrappers.<DictionaryEntity>lambdaQuery()
+                .select(DictionaryEntity::getDictValue)
+                .eq(DictionaryEntity::getDictKey, dictKey)
+                .eq(DictionaryEntity::getDictCode, dictCode);
+        DictionaryEntity entity = this.getOne(wrapper);
+
+        return Optional.ofNullable(entity).map(DictionaryEntity::getDictValue).orElse(StringUtils.EMPTY);
     }
 }

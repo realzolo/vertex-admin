@@ -1,11 +1,10 @@
 package com.onezol.vertex.core.module.monitor.service;
 
-import com.onezol.vertex.common.model.record.system.*;
 import com.onezol.vertex.common.util.MathUtils;
 import com.onezol.vertex.common.util.NetUtils;
 import com.onezol.vertex.common.util.StringUtils;
 import com.onezol.vertex.core.module.monitor.model.dto.SystemInfoWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.onezol.vertex.core.module.monitor.model.record.*;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,8 +26,11 @@ import java.util.*;
 public class MonitorService {
     private static WeakReference<SystemInfoWrapper> systemInfoWrapperCache = new WeakReference<>(null);
     private static LocalDateTime lastTime = LocalDateTime.now();
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
+
+    public MonitorService(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 获取当前系统监控信息
@@ -100,8 +102,7 @@ public class MonitorService {
         CPU cpu = new CPU();
 
         long[] prevTicks = processor.getSystemCpuLoadTicks();
-        int WAIT_SECOND = 1000;
-        Util.sleep(WAIT_SECOND);
+        Util.sleep(1000);
         long[] ticks = processor.getSystemCpuLoadTicks();
         long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
         long irq = ticks[CentralProcessor.TickType.IRQ.getIndex()] - prevTicks[CentralProcessor.TickType.IRQ.getIndex()];

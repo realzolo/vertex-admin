@@ -1,10 +1,14 @@
 package com.onezol.vertex.common.util;
 
-import com.onezol.vertex.common.model.record.ListResultWrapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 
-import java.util.*;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * 对象转换工具类
@@ -32,7 +36,7 @@ public class ObjectConverter {
     }
 
     /**
-     * 将源对象集合换为目标对象List
+     * 将源对象集合换为目标对象集合
      *
      * @param source 源对象集合
      * @return 转换后的目标对象List
@@ -41,21 +45,15 @@ public class ObjectConverter {
         if (source == null) {
             return null;
         }
-        Collection<T> target;
-        if (source instanceof List) {
-            target = new ArrayList<>();
-        } else if (source instanceof Set) {
-            target = new HashSet<>();
-        } else if (source instanceof Queue) {
-            target = new LinkedList<>();
-        } else {
-            target = new ArrayList<>();
+        if (targetType == null) {
+            throw new IllegalArgumentException("Target type must not be null");
         }
-        for (S s : source) {
-            target.add(modelMapper.map(s, targetType));
-        }
-        return target;
+
+        Type targetCollectionType = new TypeToken<Collection<T>>() {
+        }.getType();
+        return modelMapper.map(source, targetCollectionType);
     }
+
 
     /**
      * 将Map换为目标对象
@@ -81,23 +79,13 @@ public class ObjectConverter {
         if (source == null) {
             return null;
         }
-        return modelMapper.map(source, new TypeToken<Map<String, Object>>() {
-        }.getType());
-    }
 
-    /**
-     * 将源对象换为目标对象
-     *
-     * @param source 源对象
-     * @param clazz  目标对象类型
-     * @return 转换后的目标对象
-     */
-    public static <S, T> ListResultWrapper<T> convert(ListResultWrapper<S> source, Class<T> clazz) {
-        if (source == null) {
-            return null;
-        }
-        Collection<S> items = source.getItems();
-        Collection<T> result = convert(items, clazz);
-        return new ListResultWrapper<>(result, source.getTotal());
+        // MatchingStrategies.STANDARD: 要求属性名称必须相同, 容忍属性类型不一致
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        modelMapper.map(source, resultMap);
+
+        return resultMap;
     }
 }

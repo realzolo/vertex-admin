@@ -1,13 +1,8 @@
 package com.onezol.vertex.common.model.payload;
 
-public class BasePayload extends Payload {
+import lombok.Data;
+
+@Data
+public class BasePayload implements Payload {
     private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onezol.vertex.security.api.mapper.MenuMapper">
+
+    <!-- 根据用户id查询权限列表 -->
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        SELECT
+            DISTINCT m.perms
+        FROM
+            sys_menu m
+                INNER JOIN sys_role_menu rm ON m.id = rm.menu_id
+                INNER JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE
+            ur.user_id = #{userId}
+            AND m.menu_type = 'F'
+            AND m.status = true
+            AND m.deleted = false
+    </select>
+
+    <!-- 根据用户id查询菜单列表 -->
+    <select id="selectMenusByUserId" resultType="com.onezol.vertex.security.api.model.entity.MenuEntity">
+        SELECT
+            DISTINCT m.id,
+            m.parent_id,
+            m.menu_name,
+            m.path,
+            m.component,
+            m.perms,
+            m.icon,
+            m.order_num,
+            m.visible,
+            m.is_cache,
+            m.is_frame,
+            m.status,
+            m.icon,
+            m.menu_name,
+            m.perms,
+            m.parent_name,
+            m.query
+        FROM
+            sys_menu m
+            <if test="isAdmin = false">
+                INNER JOIN sys_role_menu rm ON m.id = rm.menu_id AND rm.deleted = false
+                INNER JOIN sys_user_role ur ON rm.role_id = ur.role_id AND ur.deleted = false
+            </if>
+        WHERE
+            m.menu_type != 'F'
+            AND m.status = true
+            AND m.deleted = false
+            <if test="isAdmin = false">
+                AND ur.user_id = #{userId}
+            </if>
+        ORDER BY
+            m.order_num
+    </select>
+
+    <!-- 根据角色id获取菜单列表 -->
+    <select id="selectMenusByRoleId" resultType="com.onezol.vertex.security.api.model.entity.MenuEntity">
+        SELECT
+            DISTINCT m.id,
+            m.parent_id,
+            m.menu_name,
+            m.menu_type
+        FROM
+            sys_menu m
+                INNER JOIN sys_role_menu rm ON m.id = rm.menu_id AND rm.deleted = false
+        WHERE
+            rm.role_id = #{roleId}
+            AND m.status = true
+            AND m.visible = true
+            AND m.deleted = false
+    </select>
+
+    <!-- 根据ID/查找路径批量删除菜单
+     boolean deleteMenus(
+            @Param("ids") Set<Long> rootIds,
+            @Param("set") Set<String> searchPaths  使用likeRight
+    );
+    需要判断rootIds是否为空，searchPaths是否为空
+
+    delete from sys_menu where id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) or (search_path like 'xx%' or search_path like 'yy%' or search_path like 'zz%')
+     -->
+    <delete id="deleteMenus">
+        DELETE
+        FROM
+            sys_menu m
+        WHERE
+            <if test="ids != null and ids.size() > 0">
+                OR m.id IN
+                <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="searchPaths != null and searchPaths.size() > 0">
+                OR
+                <foreach collection="paths" item="path" open="(" close=")" separator="or">
+                    m.search_path LIKE CONCAT(#{path}, '%')
+                </foreach>
+            </if>
+    </delete>
+</mapper>

@@ -1,54 +1,59 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {Avatar, Badge, Dropdown, List, MenuProps, Modal, Popover, Typography} from 'antd';
-import {BellOutlined, LogoutOutlined, QuestionCircleOutlined} from "@ant-design/icons";
+import {BellOutlined, LogoutOutlined, QuestionCircleOutlined, UserOutlined} from "@ant-design/icons";
 import {HeaderProps} from "@ant-design/pro-components";
-import {getMessages, getUserinfo} from "@/helpers/user.helper";
-import service from '@/services/user';
-import {getTimeAgo} from "@/utils/date.utils";
 import {useModel} from "@@/plugin-model";
+import {useLocation} from "@umijs/max";
+import securityService from '@/services/security';
+import messageService from '@/services/message';
+import {getTimeAgo} from "@/utils/date.utils";
+import {getUserinfo} from "@/utils/security.utils";
+import PlainPage = API.PlainPage;
 
-const {Text, Paragraph} = Typography;
+const {Paragraph} = Typography;
 
-type NewHeaderProps = HeaderProps & { messages: Message[] };
+type NewHeaderProps = HeaderProps & { message: PlainPage<Message> };
 
 const userinfo: User = getUserinfo();
 
-let websocket: WebSocket;
-if (userinfo.id) {
-  websocket = new WebSocket(`ws://localhost:10240/api/ws/notification/${userinfo.id}`);
-  websocket.onopen = (evt) => {
-    console.info('WebSocket has been opened.');
-  }
-  websocket.onerror = (evt) => {
-    console.error(evt);
-  };
-}
-
+const initializeMessage: PlainPage<Message> = {items: [], total: 0};
 const Layout = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [message, setMessage] = useState<PlainPage<Message>>(initializeMessage);
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const msgList = await getMessages();
-        setMessages(msgList);
-      } catch (error) {
-        console.error('Failed to fetch messages:', error);
-      }
-    };
-
-    fetchData().finally();
-  }, []);
-
-  useEffect(() => {
-    websocket.onmessage = (evt) => {
-      const message = JSON.parse(evt.data);
-      setMessages((messages) => [message, ...messages]);
+    if (location.pathname !== "/") {
+      connectToWebsocket();
+      fetchMessage().finally();
     }
   }, []);
 
+  const connectToWebsocket = () => {
+    if (userinfo.id) {
+      const websocket = new WebSocket(`ws://localhost:10240/api/ws/notification/${userinfo.id}`);
+      websocket.onopen = (evt) => {
+        console.info('WebSocket has been opened.');
+      }
+      websocket.onerror = (evt) => {
+        console.error(evt);
+      }
+      websocket.onmessage = (evt) => {
+        const msgItem = JSON.parse(evt.data);
+        setMessage((message) => ({
+          items: [msgItem, ...message.items],
+          total: message.total + 1
+        }));
+      }
+    }
+  }
+
+  const fetchMessage = async () => {
+    const res = await messageService.fetchMessages();
+    setMessage(res || initializeMessage);
+  }
+
   const actionsRender = () => [
-    <ActionsRender messages={messages}/>
+    <ActionsRender message={message}/>
   ];
 
   return {
@@ -76,14 +81,14 @@ const Layout = () => {
 
 /** 功能项 配置 */
 const ActionsRender = (props: NewHeaderProps) => {
-  const {messages} = props;
+  const {message} = props;
   const {getLabel} = useModel('dictionary');
   const card = (
     <>
       <List
         size="small"
         style={{width: 325, maxWidth: 325, maxHeight: 400, overflowY: 'scroll'}}
-        dataSource={messages || []}
+        dataSource={message.items || []}
         rowKey={(item) => item.id}
         renderItem={(item, index) => (
           <List.Item>
@@ -107,10 +112,11 @@ const ActionsRender = (props: NewHeaderProps) => {
       />
     </>
   );
+  // TODO: 消息处理
   return [
     <Popover placement='bottom' content={card} trigger='hover' key={1}
-             title={<>消息通知<span style={{color: '#888', fontSize: 13}}>（未读 {messages.length} 条）</span></>}>
-      <Badge count={messages.length} size={"small"}>
+             title={<>消息通知<span style={{color: '#888', fontSize: 13}}>（未读 {message.items.length} 条）</span></>}>
+      <Badge count={message.items.length} size={"small"}>
         <BellOutlined style={{...IconCssProperties, padding: 6}}/>
       </Badge>
     </Popover>,
@@ -120,7 +126,8 @@ const ActionsRender = (props: NewHeaderProps) => {
 
 /** 头像配置 */
 const avatarProps = {
-  src: userinfo.avatar,
+  ...(userinfo.avatar ? {src: userinfo.avatar} : {}),
+  icon: <UserOutlined/>,
   title: userinfo.name,
   render: (props: HeaderProps, dom: ReactNode) => {
     return (
@@ -155,10 +162,10 @@ const logout = () => {
     title: '退出登录',
     content: '确定退出登录吗？',
     onOk: async () => {
-      await service.logout();
+      await securityService.logout();
       localStorage.removeItem('token');
       localStorage.removeItem('userinfo');
-      history.go(0);
+      window.location.href = '/';
     }
   });
 };

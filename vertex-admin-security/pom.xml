@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.onezol.vertex</groupId>
+        <artifactId>vertex-admin</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <groupId>com.onezol.vertex.security</groupId>
+    <artifactId>vertex-admin-security</artifactId>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+    <description>安全模块</description>
+
+    <modules>
+        <module>vertex-admin-security-api</module>
+        <module>vertex-admin-security-biz</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- vertex-admin-security-api 安全接口包 -->
+            <dependency>
+                <groupId>com.onezol.vertex.security.api</groupId>
+                <artifactId>vertex-admin-security-api</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+            <!-- vertex-admin-security-biz 安全业务包 -->
+            <dependency>
+                <groupId>com.onezol.vertex.security.biz</groupId>
+                <artifactId>vertex-admin-security-biz</artifactId>
+                <version>${vertex.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

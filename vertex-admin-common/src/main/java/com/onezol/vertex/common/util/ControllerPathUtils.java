@@ -25,17 +25,24 @@ public class ControllerPathUtils {
      * 需要将Restful风格的路径转换为SpringSecurity的mvcMatchers格式，例如：/user/{id}转换为/user/{*}
      */
     public static String convertPathToMvcMatcher(String path) {
-        // 处理空路径
         if (StringUtils.isBlank(path)) {
             return "/";
         }
-        // 去掉首尾的斜杠
+        // 去掉前后的斜杠
         String trimmedPath = StringUtils.strip(path, "/");
-        // 将路径中的动态参数 {} 替换为 Spring Security 的占位符形式
-        String mvcMatcher = trimmedPath.replaceAll("\\{\\w+\\}", "{*}");
-        // 添加斜杠作为路径的前缀
-        mvcMatcher = "/" + mvcMatcher;
-        return mvcMatcher;
+        StringBuilder mvcMatcher = new StringBuilder();
+        // 拆分路径，处理动态参数
+        String[] pathSegments = trimmedPath.split("/");
+        for (String segment : pathSegments) {
+            if (segment.startsWith("{") && segment.endsWith("}")) {
+                // 处理动态参数
+                mvcMatcher.append("/{").append(segment, 1, segment.length() - 1).append("}");
+            } else {
+                // 普通路径段
+                mvcMatcher.append("/").append(segment);
+            }
+        }
+        return mvcMatcher.toString();
     }
 
     /**

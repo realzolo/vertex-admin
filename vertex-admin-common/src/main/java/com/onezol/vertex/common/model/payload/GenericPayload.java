@@ -3,6 +3,7 @@ package com.onezol.vertex.common.model.payload;
 
 import java.util.Map;
 
+@Deprecated
 public final class GenericPayload extends BasePayload {
     /**
      * 当前页码(查询操作)
