@@ -2,8 +2,8 @@ package com.onezol.vertex.core.security.authentication.runner;
 
 import com.onezol.vertex.common.constant.enums.AccountStatus;
 import com.onezol.vertex.common.constant.enums.Gender;
-import com.onezol.vertex.core.security.authentication.service.UserAuthService;
-import com.onezol.vertex.core.security.management.model.entity.UserEntity;
+import com.onezol.vertex.security.api.model.entity.UserEntity;
+import com.onezol.vertex.security.api.service.UserAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -31,7 +31,7 @@ public class AccountInitRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         UserEntity user = userAuthService.getUserByUsername(username);
         if (Objects.isNull(user)) {
             log.info("初始化系统用户[{}]", username);
@@ -42,7 +42,7 @@ public class AccountInitRunner implements ApplicationRunner {
             user.setName("系统管理员");
             user.setIntroduction("~");
             user.setAvatar("");
-            user.setGender(Gender.MALE.getCode());
+            user.setGender(Gender.MALE);
             user.setBirthday(LocalDate.now());
             user.setPwdExpDate(LocalDate.now().plusMonths(1));
             user.setStatus(AccountStatus.ACTIVE);
